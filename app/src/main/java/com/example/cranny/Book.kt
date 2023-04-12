@@ -12,7 +12,7 @@ data class Book(
     var thumbnail: String?,
     var journalEntry: String?,
     var userProgress: Int?,
-    var userFinished: Boolean?,
+    var userFinished: Boolean,
 
 
 )
