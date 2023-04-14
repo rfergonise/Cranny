@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "890129750167",
+    "project_id": "cranny-fs2023",
+    "storage_bucket": "cranny-fs2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890129750167:android:7ffa6b88e9aaa2e6de71d2",
+        "android_client_info": {
+          "package_name": "com.example.cranny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890129750167-gfngjca37udauqdgh4cnp420jn9kro9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cranny",
+            "certificate_hash": "638049d3f6ca344e996f17a2987d019318c9e65b"
+          }
+        },
+        {
+          "client_id": "890129750167-2a729eevj9hp0asrcmtff5l8qpd0305f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG_BRlT0yPthnagzSOLCaPhFQp_C5bP9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890129750167-2a729eevj9hp0asrcmtff5l8qpd0305f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
