@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Cranny"
         tools:targetApi="31">
         <activity
-            android:name=".AddBookScreen"
+            android:name=".AddBookPage"
             android:exported="false" />
         <activity
             android:name=".LibraryData"
