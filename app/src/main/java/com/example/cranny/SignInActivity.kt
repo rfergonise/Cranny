@@ -104,7 +104,8 @@ class SignInActivity : AppCompatActivity()
                         user.name = curUser.displayName.toString()
                         user.profile = curUser.photoUrl.toString()
 
-                        database.reference.child("Users").child(curUser.uid).setValue(user)
+                        // adds the user to the database and gives them a username of their google name + 9 random numbers on the end.
+                        addUserToDatabase(user.userId, user.name, createRandomUsername(user.name), user.profile)
 
                         val intent = Intent(this@SignInActivity, MainActivity::class.java)
                         startActivity(intent)
@@ -118,6 +119,27 @@ class SignInActivity : AppCompatActivity()
                     Toast.makeText(this@SignInActivity, "Error: firebaseAuth task was unsuccessful", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun addUserToDatabase(userId: String, name: String, username: String, pfpURL: String)
+    {
+        database.reference.child("UserData").child(userId).child("Profile").child("UserId").setValue(userId)
+        database.reference.child("UserData").child(userId).child("Profile").child("Username").setValue(username)
+        database.reference.child("UserData").child(userId).child("Profile").child("Name").setValue(name)
+        database.reference.child("UserData").child(userId).child("Profile").child("ProfilePictureURL").setValue(pfpURL)
+        database.reference.child("UserData").child(userId).child("Profile").child("FriendCount").setValue(0)
+        database.reference.child("UserData").child(userId).child("Profile").child("BookCount").setValue(0)
+    }
+
+    private fun createRandomUsername(s: String): String {
+        val maxChars = 15
+        val random = (0..999999999).random().toString().take(9)
+        val newString = "$s$random".replace(" ", "").toLowerCase()
+        return if (newString.length > maxChars) {
+            newString.take(maxChars)
+        } else {
+            newString
+        }
     }
 
 
