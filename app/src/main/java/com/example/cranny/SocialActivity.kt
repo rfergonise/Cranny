@@ -19,18 +19,17 @@ import com.bumptech.glide.Glide
 
 class SocialActivity : AppCompatActivity() {
 
-    private lateinit var tvPageTitle: TextView
+    // UI elements needed
     private lateinit var tvUsername: TextView
-    private lateinit var tvFriendsTitle: TextView
     private lateinit var tvFriendsCount: TextView
-    private lateinit var tvBooksTitle: TextView
     private lateinit var tvBooksCount: TextView
     private lateinit var ivProfilePicture: ImageView
 
-
+    // Firebase elements
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
 
+    // Used to store what will displayed in the social feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
 
 
@@ -38,21 +37,21 @@ class SocialActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social)
 
-        tvPageTitle = findViewById(R.id.tvTitle)
+        // link the ui elements
         tvUsername = findViewById(R.id.tvTitleUsername)
-        tvFriendsTitle = findViewById(R.id.tvTitleFriends)
         tvFriendsCount = findViewById(R.id.tvTotalFriends)
-        tvBooksTitle = findViewById(R.id.tvTitleBooks)
         tvBooksCount = findViewById(R.id.tvTotalBooks)
         ivProfilePicture = findViewById(R.id.ivProfilePicture)
 
+        // load user data from database into profile text views / image view
         setUpSocialProfile()
 
+        // load book data from database into friendSocialFeed then populate the recycler view adapter
         setUpSocialFeed()
 
     }
 
-    fun loadImageFromUrl(url: String, imageView: ImageView, context: Context) {
+    private fun loadImageFromUrl(url: String, imageView: ImageView, context: Context) {
         Glide.with(context)
             .load(url)
             .into(imageView)
@@ -74,7 +73,7 @@ class SocialActivity : AppCompatActivity() {
                 // Change the display username and friend/book count to the values stored in the database
                 tvUsername.text = "@" + username
                 tvBooksCount.text = bookCount.toString()
-                tvFriendsCount.text = bookCount.toString()
+                tvFriendsCount.text = friendCount.toString()
 
                 // Load the profile picture from the url stored in the database
                 loadImageFromUrl(pfpURL, ivProfilePicture, this)
@@ -82,7 +81,7 @@ class SocialActivity : AppCompatActivity() {
             }
             else
             {
-                Toast.makeText(this, "User does not exist.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "User profile does not exist.", Toast.LENGTH_SHORT).show()
             }
 
         }.addOnFailureListener {
@@ -154,11 +153,14 @@ class SocialActivity : AppCompatActivity() {
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Add this line to notify the adapter that the data set has changed
                 }
-                else {
+                else
+                {
                     Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "User does not exist.", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(this, "Recent data is missing.", Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()

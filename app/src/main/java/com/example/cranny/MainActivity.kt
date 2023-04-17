@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonDeleteAccount: Button
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
+    private var username: String = ""
 
 
 
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        getUserData() // retrieves the username from the database
 
         // Social Button On Click Event Handling
         buttonSocial = findViewById(R.id.bSocial)
@@ -41,21 +45,28 @@ class MainActivity : AppCompatActivity() {
         // Delete Account Button On Click Event Handling
         buttonDeleteAccount = findViewById(R.id.bDeleteAccount)
         buttonDeleteAccount.setOnClickListener{
-            currentUser?.delete()
-            val curUser = FirebaseAuth.getInstance().currentUser
-            if (curUser != null)
-            {
-                val database = FirebaseDatabase.getInstance()
-                val userRef = database.reference.child("UserData").child(curUser.uid)
-                userRef.removeValue()
-            }
-            signOut()
+            deleteUserInformation()
         }
 
         // if you dont have any book data you can uncomment this to fill your account with 10 random books
         // comment it out after running once
         generateDatabaseWith10RandomBooks()
 
+    }
+
+    private fun getUserData()
+    {
+        val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
+        userDatabase.child(currentUser!!.uid).get().addOnSuccessListener {
+
+            if(it.exists())
+            {
+                username = it.child("Profile").child("Username").value as String
+            }
+
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun signOut() {
@@ -385,6 +396,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteUserInformation()
+    {
+        val curUser = FirebaseAuth.getInstance().currentUser // get the current user
+        if (curUser != null)
+        {
+            // if the user isn't null
+            curUser.delete() // delete them from firebase
+            val database = FirebaseDatabase.getInstance()
+            val userRef = database.reference.child("UserData").child(curUser.uid) // get the path to their user data location in the database
+            val usernameRef = database.reference.child("ServerData").child("Usernames").child(username) // get the path to their username in the taken username list
 
+            usernameRef.removeValue() // clear their information from the database
+            userRef.removeValue() // clear the username from the taken username list
+        }
+        signOut() // sign the user out of the app
+    }
 
 }

@@ -1,10 +1,8 @@
 package com.example.cranny
 
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -12,73 +10,76 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity()
 {
-
+    // UI elements
     private lateinit var btnSignIn: Button
+
+    // Firebase stuff
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var progressDialog: ProgressDialog
+
+    // Custom RC Sign In number to handle our sign in intent
+    val RC_SIGN_IN = 40
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
+        // link the ui elements
         btnSignIn = findViewById(R.id.bGoogleSignIn)
 
+        // link the firebase stuff
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-        progressDialog = ProgressDialog(this@SignInActivity).apply {
-            setTitle("Creating account")
-            setMessage("Creating your account.")
-        }
 
+        // This code sets up a GoogleSignInOptions object with default sign-in options
+        // Such as requesting the user's information and ID token.
+
+        // The requestIdToken method sets the web client ID to authenticate the user with Google
+        // While the requestEmail method requests the user's email.
+
+        // The GoogleSignInOptions object is then used to create a GoogleSignInClient object.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build() // creates the gso object with the specified options^
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-
-        btnSignIn.setOnClickListener {
-            // code to be executed on button click
+        // OnClickListener that calls the signIn() function when clicked.
+        btnSignIn.setOnClickListener{
             signIn()
         }
 
     }
 
-    val RC_SIGN_IN = 40
-
     private fun signIn()
     {
+        // user wants to sign in so start our intent
         val intent = mGoogleSignInClient.signInIntent
         startActivityForResult(intent, RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
+        // This function is called after the user signs in with their Google account.
+        // It retrieves the user's signed-in account from the intent data and passes the user's ID token to the firebaseAuth() function to authenticate the user with Firebase.
+        // If the account retrieval is unsuccessful, it throws a RuntimeException with the caught ApiException as its cause.
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == RC_SIGN_IN)
         {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
             try
             {
                 val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
-
                 firebaseAuth(account.idToken)
             }
             catch (e: ApiException)
@@ -90,57 +91,45 @@ class SignInActivity : AppCompatActivity()
 
     private fun firebaseAuth(idToken: String?)
     {
+        // This function takes in a Google ID token as a parameter and uses it to create a Google authentication credential using the GoogleAuthProvider.getCredential() method.
+        // The credential is then used to sign in to Firebase using the auth.signInWithCredential() method.
+        // If the sign-in is successful, the function gets the current user's ID, name, and profile picture URL from Firebase and creates a User object.
+        // It then checks whether the user already exists in the database and starts the appropriate activity based on the result.
+        // If the database read fails, a toast message is displayed.
         val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful)
-                {
+                if (task.isSuccessful) {
                     // code to be executed if the sign-in is successful
                     val curUser = auth.currentUser
                     val user: User = User()
-                    if (curUser != null) {
+                    if (curUser != null)
+                    {
                         user.userId = curUser.uid
                         user.name = curUser.displayName.toString()
                         user.profile = curUser.photoUrl.toString()
-
-                        // adds the user to the database and gives them a username of their google name + 9 random numbers on the end.
-                        addUserToDatabase(user.userId, user.name, createRandomUsername(user.name), user.profile)
-
-                        val intent = Intent(this@SignInActivity, MainActivity::class.java)
-                        startActivity(intent)
-
+                        val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
+                        userDatabase.child(curUser.uid).get().addOnSuccessListener {
+                            if(it.exists())
+                            {
+                                // User already exists in the database
+                                val intent = Intent(this@SignInActivity, MainActivity::class.java)
+                                startActivity(intent)
+                            }
+                            else
+                            {
+                                // User doesn't exist in the database, send them to create a profile
+                                val intent = Intent(this@SignInActivity, SignUpActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                 }
-                else
-                {
-                    // code to be executed if the sign-in fails
-                    Toast.makeText(this@SignInActivity, "Error: firebaseAuth task was unsuccessful", Toast.LENGTH_SHORT).show()
-                }
             }
+
     }
-
-    private fun addUserToDatabase(userId: String, name: String, username: String, pfpURL: String)
-    {
-        database.reference.child("UserData").child(userId).child("Profile").child("UserId").setValue(userId)
-        database.reference.child("UserData").child(userId).child("Profile").child("Username").setValue(username)
-        database.reference.child("UserData").child(userId).child("Profile").child("Name").setValue(name)
-        database.reference.child("UserData").child(userId).child("Profile").child("ProfilePictureURL").setValue(pfpURL)
-        database.reference.child("UserData").child(userId).child("Profile").child("FriendCount").setValue(0)
-        database.reference.child("UserData").child(userId).child("Profile").child("BookCount").setValue(0)
-    }
-
-    private fun createRandomUsername(s: String): String {
-        val maxChars = 15
-        val random = (0..999999999).random().toString().take(9)
-        val newString = "$s$random".replace(" ", "").toLowerCase()
-        return if (newString.length > maxChars) {
-            newString.take(maxChars)
-        } else {
-            newString
-        }
-    }
-
-
 }

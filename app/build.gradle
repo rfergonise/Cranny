@@ -57,6 +57,10 @@ dependencies {
     // Dependency needed for card view that has a border
     implementation 'com.google.android.material:material:1.0.0'
 
+    // Dependency needed for Suspending Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+
+
 
 
 
