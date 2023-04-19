@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         // Settings Button
        settingsButton = findViewById(R.id.settingsButton)
         settingsButton.setOnClickListener{
-            val i = Intent(this, MainActivity::class.java)
+            val i = Intent(this, SettingsActivity::class.java)
             startActivity(i)
         }
 
