@@ -4,6 +4,176 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".SocialActivity">
+
+    <ImageView
+        android:id="@+id/ivTitleBar"
+        android:layout_width="415dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/title_bar" />
+
+
+    <TextView
+        android:id="@+id/tvSignUpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Create Profile"
+        android:textColor="@color/cranny_purple_light"
+        android:fontFamily="@font/raleway_custom"
+        android:textSize="40sp"
+        android:shadowColor="#000000"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:shadowRadius="10"
+        app:layout_constraintBottom_toBottomOf="@+id/ivTitleBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cardCornerRadius="65dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitleUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvChangeProfilePicture"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="5dp">
+
+        <ImageView
+            android:id="@+id/ivUploadPFP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/default_profile_picture" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvChangeProfilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/raleway_custom"
+        android:shadowColor="#000000"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:shadowRadius="5"
+        android:text="Change Profile Photo"
+        android:textColor="@color/cranny_purple_light"
+        android:textSize="24dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivTitleBar" />
+
+    <TextView
+        android:id="@+id/tvTitleUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/raleway_custom"
+        android:shadowColor="#000000"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:shadowRadius="5"
+        android:text="Username"
+        android:textColor="@color/cranny_purple_light"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/etUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Enter a Username"
+        android:inputType="textPersonName"
+        android:maxLength="15"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitleDisplayName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:id="@+id/tvTitleDisplayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/raleway_custom"
+        android:shadowColor="#000000"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:shadowRadius="5"
+        android:text="Display Name"
+        android:textColor="@color/cranny_purple_light"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/etDisplayName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="12dp"/>
+
+    <EditText
+        android:id="@+id/etDisplayName"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="12dp"
+        android:ems="10"
+        android:hint="Enter Your Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitleBio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvTitleBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/raleway_custom"
+        android:shadowColor="#000000"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:shadowRadius="5"
+        android:text="Bio"
+        android:textColor="@color/cranny_purple_light"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/etBio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <EditText
+        android:id="@+id/etBio"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Enter Your Bio"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/bDoneCreatingProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="75dp"/>
+
+    <Button
+        android:id="@+id/bDoneCreatingProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="Done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
