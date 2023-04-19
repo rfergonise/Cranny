@@ -1,32 +1,32 @@
 package com.example.cranny
 
+
+
+import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var buttonLogout: Button
+    private lateinit var settingsButton: Button
     private lateinit var buttonSocial: Button
     private lateinit var buttonDeleteAccount: Button
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
     private var username: String = ""
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         getUserData() // retrieves the username from the database
 
         // Social Button On Click Event Handling
@@ -35,25 +35,40 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(this, SocialActivity::class.java)
             startActivity(i)
         }
-
         // Log Out Button On Click Event Handling
         buttonLogout = findViewById(R.id.bLogout)
         buttonLogout.setOnClickListener{
             signOut()
         }
-
         // Delete Account Button On Click Event Handling
         buttonDeleteAccount = findViewById(R.id.bDeleteAccount)
         buttonDeleteAccount.setOnClickListener{
             deleteUserInformation()
         }
+        // Settings Button
+       settingsButton = findViewById(R.id.settingsButton)
+        settingsButton.setOnClickListener{
+            val i = Intent(this, SettingsActivity::class.java)
+            startActivity(i)
+        }
 
         // if you dont have any book data you can uncomment this to fill your account with 10 random books
         // comment it out after running once
         generateDatabaseWith10RandomBooks()
-
     }
-
+    private fun signOut() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.revokeAccess().addOnCompleteListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
     private fun getUserData()
     {
         val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
@@ -68,28 +83,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun signOut() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.revokeAccess().addOnCompleteListener {
-            FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-
     private fun generateDatabaseWith10RandomBooks()
     {
         // 10 Random books for testing
         val book1 = Book(
             id = "1",
             title = "1984",
-            authorNames = listOf("George Orwell"),
+            authorNames = "George Orwell",
             publicationDate = "June 8, 1949",
             starRating = 0,
             publisher = "Secker & Warburg",
@@ -102,18 +102,19 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 12,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Winston Smith, " +"Julia, " +"O'Brien",
             genres = "Dystopian Fiction, " +"Political Fiction",
             tags = "Classic, "+"Thought-provoking",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
 
         val book2 = Book(
             id = "2",
             title = "To Kill a Mockingbird",
-            authorNames = listOf("Harper Lee"),
+            authorNames = "Harper Lee",
             publicationDate = "July 11, 1960",
             starRating = 1,
             publisher = "J. B. Lippincott & Co.",
@@ -126,17 +127,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 0,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Scout Finch, " +"Atticus Finch, "+ "Jem Finch",
             genres = "Southern Gothic, "+ "Coming-of-Age",
             tags = "Classic, "+ "American Literature",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
         val book3 = Book(
             id = "3",
             title = "The Great Gatsby",
-            authorNames = listOf("F. Scott Fitzgerald"),
+            authorNames = "F. Scott Fitzgerald",
             publicationDate = "1925",
             starRating = 2,
             publisher = "Charles Scribner's Sons",
@@ -149,17 +151,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 0,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Jay Gatsby, "+ "Daisy Buchanan, "+ "Tom Buchanan, "+ "Nick Carraway, "+ "Jordan Baker, ",
             genres = "Tragedy, "+ "Modernist Literature",
             tags = "Classic, "+ "American Literature, "+ "Romance",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
         val book4 = Book(
             id = "4",
             title = "Pride and Prejudice",
-            authorNames = listOf("Jane Austen"),
+            authorNames = "Jane Austen",
             publicationDate = "28 January 1813",
             starRating = 3,
             publisher = "n/a",
@@ -172,18 +175,19 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 34,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Elizabeth Bennet, "+ "Fitzwilliam Darcy",
             genres = "Romance, "+ "Comedy"+ "Classic",
             tags = "Jane Austen, "+"British literature",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
 
         val book5 = Book(
             id = "5",
             title = "The Catcher in the Rye",
-            authorNames = listOf("J.D. Salinger"),
+            authorNames = "J.D. Salinger",
             publicationDate = "16 July 1951",
             starRating = 4,
             publisher = "n/a",
@@ -196,17 +200,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 12,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Holden Caulfield",
             genres = "Coming of Age, "+ "Literary Fiction",
             tags = "J.D. Salinger, "+ "American literature",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
         val book6 = Book(
             id = "6",
             title = "The Lord of the Rings",
-            authorNames = listOf("J.R.R. Tolkien"),
+            authorNames = "J.R.R. Tolkien",
             publicationDate = "1954-1955",
             starRating = 5,
             publisher = "George Allen & Unwin",
@@ -219,17 +224,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 53,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Frodo Baggins, "+ "Gandalf, "+ "Aragorn, "+ "Legolas, "+ "Gimli, "+ "Boromir, "+ "Samwise Gamgee, "+ "Merry, "+ "Pippin",
             genres = "High Fantasy, "+"Adventure",
             tags = "Middle-earth, "+ "Ring, "+ "Fantasy",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
         val book7 = Book(
             id = "7",
             title = "One Hundred Years of Solitude",
-            authorNames = listOf("Gabriel García Márquez"),
+            authorNames = "Gabriel García Márquez",
             publicationDate = "June 1967",
             starRating = 1,
             publisher = "Harper & Row",
@@ -242,17 +248,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 43,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "José Arcadio Buendía, "+ "Úrsula Iguarán, "+ "Aureliano Buendía, "+ "Amaranta Buendía, "+ "Rebeca Buendía",
             genres = "Magical Realism, "+ "Literary Fiction",
             tags = "Latin American Literature, "+ "Classic, "+ "Family Saga, "+"Love, "+ "Politics",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false
         )
         val book8 = Book(
             id = "8",
             title = "The Hunger Games",
-            authorNames = listOf("Suzanne Collins"),
+            authorNames = "Suzanne Collins",
             publicationDate = "September 2008",
             starRating = 2,
             publisher = "Scholastic",
@@ -265,17 +272,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 25,
-            purchaseFrom = "Book Store",
             mainCharacters = "Katniss Everdeen, "+ "Peeta Mellark, "+ "Gale Hawthorne, "+ "Haymitch Abernathy, "+ "Effie Trinket",
             genres = "Dystopian, "+ "Young Adult Fiction",
             tags = "Survival, "+ "Adventure, "+ "Friendship, "+ "Love",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            isFav = false,
+            purchasedFrom = ""
         )
         val book9 = Book(
             id = "9",
             title = "The Da Vinci Code",
-            authorNames = listOf("Dan Brown"),
+            authorNames = "Dan Brown",
             publicationDate = "2003",
             starRating = 3,
             publisher = "Doubleday",
@@ -290,17 +298,18 @@ class MainActivity : AppCompatActivity() {
             startDate = " ",
             endDate = " ",
             prevReadCount = 5,
-            purchaseFrom = "Book Store",
+            purchasedFrom = "Book Store",
             mainCharacters = "Robert Langdon, "+ "Sophie Neveu, "+ "Jacques Saunière, "+"Silas",
             genres = "Mystery, "+ "Thriller",
             tags = "Cryptology, "+ "Religion, "+ "Art",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+             isFav = false
         )
         val book10 = Book(
             id = "10",
             title = "The Girl with the Dragon Tattoo",
-            authorNames = listOf("Stieg Larsson"),
+            authorNames = "Stieg Larsson",
             publicationDate = "2005",
             starRating = 4,
             publisher = "Norstedts Förlag",
@@ -313,15 +322,18 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 672,
             userFinished = true,
-            startDate = " ",
-            endDate = " ",
-            prevReadCount = 72,
-            purchaseFrom = "Book Store",
+            isFav = false,
+            purchasedFrom = "Book Store",
             mainCharacters = "Mikael Blomkvist, "+ "Lisbeth Salander, "+ "Henrik Vanger, "+ "Martin Vanger",
             genres = "Mystery, "+ "Thriller",
             tags = "Crime, "+"Family, "+ "Sexual violence",
             lastReadDate = " ",
-            lastReadTime = " "
+            lastReadTime = " ",
+            prevReadCount = 72,
+            startDate =" ",
+            endDate = " ",
+
+
         )
 
         addBookToDatabase(book1)
@@ -363,14 +375,14 @@ class MainActivity : AppCompatActivity() {
             val TEMP_USERNAME = "ExampleName1234"
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("Id").setValue(book.id)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookTitle").setValue(book.title)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookAuthor").setValue(book.authorNames[0])
+            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookAuthor").setValue(book.authorNames)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("IsBookComplete").setValue(book.userFinished)
             // create the page status screen
             var setStatus: String = "@" + TEMP_USERNAME
             if(book.userFinished)
-             {
+            {
                 setStatus += "\nFinished reading!"
-             }
+            }
             else
             {
                 setStatus += "\nRead "
@@ -404,5 +416,6 @@ class MainActivity : AppCompatActivity() {
         }
         signOut() // sign the user out of the app
     }
+
 
 }

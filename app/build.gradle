@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -60,6 +61,12 @@ dependencies {
     // Dependency needed for Suspending Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
 
+    // Dependencies needed for AndroidX preference library
+    implementation 'androidx.preference:preference:1.2.0'
+
+    // Dependencies needed for Android's Room Persistence Library
+    implementation 'androidx.room:room-runtime:2.5.1'
+    kapt 'androidx.room:room-compiler:2.5.1'
 
 
 

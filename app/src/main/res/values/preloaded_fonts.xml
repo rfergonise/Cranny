@@ -3,6 +3,6 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/gravitas_one</item>
         <item>@font/limelight</item>
-        <item>@font/raleway</item>
+        <item>@font/raleway_custom</item>
     </array>
 </resources>

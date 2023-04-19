@@ -299,7 +299,7 @@ class BookRepository(private val database: FirebaseDatabase)
                 for (bookSnapshot in dataSnapshot.children)
                 {
                     val AuthorNames = bookSnapshot.child("AuthorNames").value as? String ?: ""
-                    val AuthorList: List<String> = AuthorNames.split(",").toList()
+
                     val Description = bookSnapshot.child("Description").value as? String ?: ""
                     val EndDate = bookSnapshot.child("EndDate").value as? String ?: ""
                     val Genres = bookSnapshot.child("Genres").value as? String ?: ""
@@ -319,15 +319,17 @@ class BookRepository(private val database: FirebaseDatabase)
                     val StarRating = bookSnapshot.child("StarRating").value as? Long
                     val StarRatingInt = StarRating?.toInt() ?: 0
                     val UserFinished = bookSnapshot.child("UserFinished").value as Boolean
+                    val IsFavorite = bookSnapshot.child("IsFavorite").value as Boolean
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
                     val pageCount = bookSnapshot.child("PageCount").value as? Long
                     val pageCountInt = pageCount?.toInt() ?: 0
                     val PrevReadCount = bookSnapshot.child("PrevReadCount").value as? Long
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
 
-                    var book: Book = Book(Id, Title, AuthorList, PublicationDate, StarRatingInt, Publisher, Description,
-                    pageCountInt, Thumbnail, JournalEntry, UserProgressInt, UserFinished, StartDate, EndDate,
-                        PrevReadCountInt, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime)
+
+                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingInt, Publisher, Description, pageCountInt, Thumbnail,
+                    JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
+                    PrevReadCountInt, StartDate, EndDate)
                     Library.add(book)
                 }
                 _isBookDataReady.postValue(true) // inform the caller we have filled the list with each book
@@ -344,27 +346,29 @@ class BookRepository(private val database: FirebaseDatabase)
         val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books").child(book.id)
         // creates a HashMap of the new data we are setting
         val bookData = HashMap<String, Any>()
-        bookData["AuthorNames"] = book.authorNames[0]
+        bookData["AuthorNames"] = book.authorNames.toString()
         bookData["Description"] = book.description.toString()
         bookData["EndDate"] = book.endDate
-        bookData["Genres"] = book.genres
+        bookData["Genres"] = book.genres.toString()
         bookData["Id"] = book.id
         bookData["JournalEntry"] = book.journalEntry.toString()
-        bookData["LastReadDate"] = book.lastReadDate
-        bookData["LastReadTime"] = book.lastReadTime
-        bookData["MainCharacters"] = book.mainCharacters
+        bookData["LastReadDate"] = book.lastReadDate.toString()
+        bookData["LastReadTime"] = book.lastReadTime.toString()
+        bookData["MainCharacters"] = book.mainCharacters.toString()
         bookData["PageCount"] = book.pageCount!!.toInt()
-        bookData["PrevReadCount"] = book.prevReadCount
+        bookData["PrevReadCount"] = book.prevReadCount.toString()
         bookData["PublicationDate"] = book.publicationDate.toString()
         bookData["Publisher"] = book.publisher.toString()
-        bookData["PurchaseFrom"] = book.purchaseFrom
+        bookData["PurchaseFrom"] = book.purchasedFrom.toString()
         bookData["StarRating"] = book.starRating!!.toInt()
         bookData["StartDate"] = book.startDate
-        bookData["Tags"] = book.tags
+        bookData["Tags"] = book.tags.toString()
         bookData["Thumbnail"] = book.thumbnail.toString()
         bookData["Title"] = book.title
         bookData["UserFinished"] = book.userFinished
         bookData["UserProgress"] = book.userProgress!!.toInt()
+        bookData["IsFavorite"] = book.isFav!!
+
         // updates the book's current HashMap with the new one
         bookDataRef.updateChildren(bookData)
     }
@@ -372,7 +376,7 @@ class BookRepository(private val database: FirebaseDatabase)
     fun addBook(book: Book)
     {
         val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
-        bookDataRef.child(book.id).child("AuthorNames").setValue(book.authorNames.joinToString(","))
+        bookDataRef.child(book.id).child("AuthorNames").setValue(book.authorNames)
         bookDataRef.child(book.id).child("Description").setValue(book.description)
         bookDataRef.child(book.id).child("EndDate").setValue(book.endDate)
         bookDataRef.child(book.id).child("Genres").setValue(book.genres)
@@ -385,13 +389,15 @@ class BookRepository(private val database: FirebaseDatabase)
         bookDataRef.child(book.id).child("PrevReadCount").setValue(book.prevReadCount)
         bookDataRef.child(book.id).child("PublicationDate").setValue(book.publicationDate)
         bookDataRef.child(book.id).child("Publisher").setValue(book.publisher)
-        bookDataRef.child(book.id).child("PurchaseFrom").setValue(book.purchaseFrom)
+        bookDataRef.child(book.id).child("PurchaseFrom").setValue(book.purchasedFrom)
         bookDataRef.child(book.id).child("StarRating").setValue(book.starRating)
         bookDataRef.child(book.id).child("Tags").setValue(book.tags)
         bookDataRef.child(book.id).child("Thumbnail").setValue(book.thumbnail)
         bookDataRef.child(book.id).child("Title").setValue(book.title)
         bookDataRef.child(book.id).child("UserFinished").setValue(book.userFinished)
         bookDataRef.child(book.id).child("UserProgress").setValue(book.userProgress)
+        bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
+
     }
 
     fun stopBookListener()
