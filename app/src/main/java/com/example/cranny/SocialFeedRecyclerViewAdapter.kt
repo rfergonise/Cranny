@@ -2,18 +2,24 @@ package com.example.cranny
 
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.NonNull
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.load.DataSource
+
 
 class SocialFeedRecyclerViewAdapter(private val context: Context, private val friendSocialFeed: ArrayList<SocialFeed>)
-    : RecyclerView.Adapter<SocialFeedRecyclerViewAdapter.MyViewHolder>() {
+    : RecyclerView.Adapter<SocialFeedRecyclerViewAdapter.MyViewHolder>()
+{
 
     @NonNull
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SocialFeedRecyclerViewAdapter.MyViewHolder
@@ -25,18 +31,15 @@ class SocialFeedRecyclerViewAdapter(private val context: Context, private val fr
 
     }
 
-    override fun onBindViewHolder(holder: SocialFeedRecyclerViewAdapter.MyViewHolder, position: Int)
-    {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // assigning values to the views created in the recycler_view_row layout file
         // based on the position of the recycler view
-
-
-
         holder.tvBookTitle.text = friendSocialFeed[position].bookTitle
         holder.tvBookAuthors.text = friendSocialFeed[position].bookAuthor
         holder.tvPageStatus.text = friendSocialFeed[position].status
-        loadImageFromUrl(friendSocialFeed[position].bookCoverURL, holder.ivBookCover, holder.ivBookCover.context)
+        loadImageFromUrl(holder.ivBookCover, friendSocialFeed[position].bookCoverURL)
     }
+
 
 
     override fun getItemCount(): Int {
@@ -55,10 +58,11 @@ class SocialFeedRecyclerViewAdapter(private val context: Context, private val fr
 
     }
 
-    fun loadImageFromUrl(url: String, imageView: ImageView, context: Context) {
-        Glide.with(context)
-            .load(url)
+    fun loadImageFromUrl(imageView: ImageView, imageUrl: String) {
+        Glide.with(imageView.context)
+            .load(imageUrl)
             .into(imageView)
     }
+
 
 }

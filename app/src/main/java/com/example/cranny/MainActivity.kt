@@ -99,15 +99,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 50,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 12,
             purchaseFrom = "Book Store",
             mainCharacters = "Winston Smith, " +"Julia, " +"O'Brien",
             genres = "Dystopian Fiction, " +"Political Fiction",
             tags = "Classic, "+"Thought-provoking",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
 
         val book2 = Book(
@@ -123,15 +123,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 32,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 0,
             purchaseFrom = "Book Store",
             mainCharacters = "Scout Finch, " +"Atticus Finch, "+ "Jem Finch",
             genres = "Southern Gothic, "+ "Coming-of-Age",
             tags = "Classic, "+ "American Literature",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book3 = Book(
             id = "3",
@@ -146,15 +146,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 180,
             userFinished = true,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 0,
             purchaseFrom = "Book Store",
             mainCharacters = "Jay Gatsby, "+ "Daisy Buchanan, "+ "Tom Buchanan, "+ "Nick Carraway, "+ "Jordan Baker, ",
             genres = "Tragedy, "+ "Modernist Literature",
             tags = "Classic, "+ "American Literature, "+ "Romance",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book4 = Book(
             id = "4",
@@ -169,15 +169,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 261,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 34,
             purchaseFrom = "Book Store",
             mainCharacters = "Elizabeth Bennet, "+ "Fitzwilliam Darcy",
             genres = "Romance, "+ "Comedy"+ "Classic",
             tags = "Jane Austen, "+"British literature",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
 
         val book5 = Book(
@@ -193,15 +193,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 147,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 12,
             purchaseFrom = "Book Store",
             mainCharacters = "Holden Caulfield",
             genres = "Coming of Age, "+ "Literary Fiction",
             tags = "J.D. Salinger, "+ "American literature",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book6 = Book(
             id = "6",
@@ -216,15 +216,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 895,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 53,
             purchaseFrom = "Book Store",
             mainCharacters = "Frodo Baggins, "+ "Gandalf, "+ "Aragorn, "+ "Legolas, "+ "Gimli, "+ "Boromir, "+ "Samwise Gamgee, "+ "Merry, "+ "Pippin",
             genres = "High Fantasy, "+"Adventure",
             tags = "Middle-earth, "+ "Ring, "+ "Fantasy",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book7 = Book(
             id = "7",
@@ -239,15 +239,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 417,
             userFinished = true,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 43,
             purchaseFrom = "Book Store",
             mainCharacters = "José Arcadio Buendía, "+ "Úrsula Iguarán, "+ "Aureliano Buendía, "+ "Amaranta Buendía, "+ "Rebeca Buendía",
             genres = "Magical Realism, "+ "Literary Fiction",
             tags = "Latin American Literature, "+ "Classic, "+ "Family Saga, "+"Love, "+ "Politics",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book8 = Book(
             id = "8",
@@ -262,15 +262,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 25,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 25,
             purchaseFrom = "Book Store",
             mainCharacters = "Katniss Everdeen, "+ "Peeta Mellark, "+ "Gale Hawthorne, "+ "Haymitch Abernathy, "+ "Effie Trinket",
             genres = "Dystopian, "+ "Young Adult Fiction",
             tags = "Survival, "+ "Adventure, "+ "Friendship, "+ "Love",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book9 = Book(
             id = "9",
@@ -287,15 +287,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 201,
             userFinished = false,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 5,
             purchaseFrom = "Book Store",
             mainCharacters = "Robert Langdon, "+ "Sophie Neveu, "+ "Jacques Saunière, "+"Silas",
             genres = "Mystery, "+ "Thriller",
             tags = "Cryptology, "+ "Religion, "+ "Art",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
         val book10 = Book(
             id = "10",
@@ -313,15 +313,15 @@ class MainActivity : AppCompatActivity() {
             journalEntry = "Example Journal Entry",
             userProgress = 672,
             userFinished = true,
-            startDate = "",
-            endDate = "",
+            startDate = " ",
+            endDate = " ",
             prevReadCount = 72,
             purchaseFrom = "Book Store",
             mainCharacters = "Mikael Blomkvist, "+ "Lisbeth Salander, "+ "Henrik Vanger, "+ "Martin Vanger",
             genres = "Mystery, "+ "Thriller",
             tags = "Crime, "+"Family, "+ "Sexual violence",
-            lastReadDate = "",
-            lastReadTime = ""
+            lastReadDate = " ",
+            lastReadTime = " "
         )
 
         addBookToDatabase(book1)
@@ -351,46 +351,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun addBookToDatabase(book: Book)
     {
-        currentUser?.let {
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Id").setValue(book.id)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Title").setValue(book.title)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("AuthorNames").setValue(book.authorNames[0])
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("PublicationDate").setValue(book.publicationDate)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("StarRating").setValue(book.starRating)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Publisher").setValue(book.publisher)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Description").setValue(book.description)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("PageCount").setValue(book.pageCount)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Thumbnail").setValue(book.thumbnail)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("JournalEntry").setValue(book.journalEntry)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("UserProgress").setValue(book.userProgress)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("UserFinished").setValue(book.userFinished)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("StartDate").setValue(book.startDate)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("EndDate").setValue(book.endDate)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("PrevReadCount").setValue(book.prevReadCount)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("PurchaseFrom").setValue(book.purchaseFrom)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("MainCharacters").setValue(book.mainCharacters)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Genres").setValue(book.genres)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("Tags").setValue(book.tags)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("LastReadDate").setValue(book.lastReadDate)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Books").child(book.id).child("LastReadTime").setValue(book.lastReadTime)
-
-        }
+        val database = FirebaseDatabase.getInstance()
+        val bookRepository = BookRepository(database)
+        bookRepository.addBook(book)
     }
 
     private fun addRecentToDatabase(book: Book)
     {
         currentUser?.let {
 
-
+            val TEMP_USERNAME = "ExampleName1234"
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("Id").setValue(book.id)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookTitle").setValue(book.title)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookAuthor").setValue(book.authorNames[0])
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("IsBookComplete").setValue(book.userFinished)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("PagesRead").setValue(book.prevReadCount)
+            // create the page status screen
+            var setStatus: String = "@" + TEMP_USERNAME
+            if(book.userFinished)
+             {
+                setStatus += "\nFinished reading!"
+             }
+            else
+            {
+                setStatus += "\nRead "
+                setStatus += book.prevReadCount.toString()
+                if(book.prevReadCount != 1) setStatus += " pages."
+                else setStatus += " page."
+            }
+            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("Status").setValue(setStatus)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("BookCoverURL").setValue(book.thumbnail)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("DateRead").setValue(book.lastReadDate)
             FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("TimeRead").setValue(book.lastReadTime)
-            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("Username").setValue("@ExampleName1234")
+            FirebaseDatabase.getInstance().reference.child("UserData").child(it.uid).child("Recents").child(book.id).child("Username").setValue(TEMP_USERNAME)
 
 
         }

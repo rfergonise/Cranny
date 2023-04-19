@@ -1,21 +1,16 @@
 package com.example.cranny
 
 import android.content.Context
-import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.bumptech.glide.Glide
-
 
 class SocialActivity : AppCompatActivity() {
 
@@ -24,16 +19,13 @@ class SocialActivity : AppCompatActivity() {
     private lateinit var tvFriendsCount: TextView
     private lateinit var tvBooksCount: TextView
     private lateinit var ivProfilePicture: ImageView
-
-    // Firebase elements
-    private val userId = FirebaseAuth.getInstance().currentUser!!.uid
-    private val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
+    private lateinit var ivBackToMain: ImageView
 
     // Used to store what will displayed in the social feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+   override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social)
 
@@ -42,12 +34,19 @@ class SocialActivity : AppCompatActivity() {
         tvFriendsCount = findViewById(R.id.tvTotalFriends)
         tvBooksCount = findViewById(R.id.tvTotalBooks)
         ivProfilePicture = findViewById(R.id.ivProfilePicture)
+        ivBackToMain = findViewById(R.id.ivBackToMain)
 
         // load user data from database into profile text views / image view
         setUpSocialProfile()
 
         // load book data from database into friendSocialFeed then populate the recycler view adapter
         setUpSocialFeed()
+
+        // Back Menu Button On Click Event
+        ivBackToMain.setOnClickListener {
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
+        }
 
     }
 
@@ -60,110 +59,89 @@ class SocialActivity : AppCompatActivity() {
 
     private fun setUpSocialProfile()
     {
-        userDatabase.child(userId).child("Profile").get().addOnSuccessListener {
+        val database = FirebaseDatabase.getInstance()
+        val profileRepo = ProfileRepository(database)
+        profileRepo.profileData.observe(this) { userProfile ->
+            // get the info
+            val username = userProfile.username
+            val name = userProfile.name
+            val friendCount = userProfile.friendCount
+            val bookCount = userProfile.bookCount
+            val pfpURL = userProfile.profile
+            val bio = userProfile.bio
+            val id = userProfile.userId
 
-            if(it.exists())
-            {
-                val username = it.child("Username").value as String
-                val name = it.child("Name").value as String
-                val friendCount = (it.child("FriendCount").value as Long).toInt()
-                val bookCount = (it.child("BookCount").value as Long).toInt()
-                val pfpURL = it.child("ProfilePictureURL").value as String
+            // Change the display username and friend/book count to the values stored in the database
+            tvUsername.text = "@" + username
+            tvBooksCount.text = bookCount.toString()
+            tvFriendsCount.text = friendCount.toString()
 
-                // Change the display username and friend/book count to the values stored in the database
-                tvUsername.text = "@" + username
-                tvBooksCount.text = bookCount.toString()
-                tvFriendsCount.text = friendCount.toString()
-
-                // Load the profile picture from the url stored in the database
-                loadImageFromUrl(pfpURL, ivProfilePicture, this)
-
-            }
-            else
-            {
-                Toast.makeText(this, "User profile does not exist.", Toast.LENGTH_SHORT).show()
-            }
-
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
+            // Load the profile picture from the url stored in the database
+            loadImageFromUrl(pfpURL, ivProfilePicture, this)
+            profileRepo.stopProfileListener()
         }
     }
-    private fun setUpSocialFeed() {
-        userDatabase.child(userId).child("Recents").get().addOnSuccessListener { dataSnapshot ->
-            if (dataSnapshot.exists()) {
-                for (ds in dataSnapshot.children) {
-                    val id = ds.child("Id").getValue(String::class.java) ?: ""
-                    val bookTitle = ds.child("BookTitle").getValue(String::class.java) ?: ""
-                    val bookAuthor = ds.child("BookAuthor").getValue(String::class.java) ?: ""
-                    val isBookComplete = ds.child("IsBookComplete").getValue(Boolean::class.java) ?: false
-                    val pagesRead = ds.child("PagesRead").getValue(Int::class.java) ?: 0
-                    val bookCoverURL = ds.child("BookCoverURL").getValue(String::class.java) ?: ""
-                    val dateRead = ds.child("DateRead").getValue(String::class.java) ?: ""
-                    val timeRead = ds.child("TimeRead").getValue(String::class.java) ?: ""
-                    val username = ds.child("Username").getValue(String::class.java) ?: ""
 
+    private fun formatBookTitle(title: String): String
+    {
+        if (title.length > 17)
+        {
+            // find the last space before or at 17 characters
+            var replaceThisSpace: Int = title.substring(0, 17).lastIndexOf(' ')
+            if (replaceThisSpace <= 0)
+            {
+                // no space found before 17 characters, replace at 17
+                replaceThisSpace = 16
+            }
+            return title.substring(0, replaceThisSpace) + "\n" + title.substring(replaceThisSpace+1)
+        }
+        else return title
+    }
 
+    private fun setUpSocialFeed()
+    {
+        val database = FirebaseDatabase.getInstance()
+        val recentRepository = RecentRepository(database)
+        recentRepository.fetchRecentData()
+        recentRepository.isRecentDataReady.observe(this) { isRecentDataReady ->
+            if (isRecentDataReady) {
+                // clear the list before adding items
+                friendSocialFeed.clear()
+                // grab each social feed from recentRepository.SocialFeeds
+                for (feed in recentRepository.SocialFeeds) {
+                    val bookId = feed.id
+                    val bookAuthors = feed.bookAuthor
+                    val bookTitle = feed.bookTitle
                     // format the title to fit in the recycle view
-                    var setTitle: String = bookTitle
-                    if (setTitle.length > 17) {
-                        // find the last space before or at 17 characters
-                        var replaceThisSpace: Int = setTitle.substring(0, 17).lastIndexOf(' ')
-                        if (replaceThisSpace <= 0) {
-                            // no space found before 17 characters, replace at 17
-                            replaceThisSpace = 16
-                        }
-                        setTitle = setTitle.substring(0, replaceThisSpace) + "\n" + setTitle.substring(replaceThisSpace + 1)
+                    var setTitle: String = formatBookTitle(bookTitle)
+                    val isBookComplete = feed.isBookComplete
+                    val status = feed.status
+                    val bookCoverURL = feed.bookCoverURL
+                    val dateRead = feed.lastReadDate
+                    val timeRead = feed.lastReadTime
+                    val username = feed.username
+                    val socialFeed = SocialFeed(bookId, setTitle, bookAuthors, isBookComplete,
+                        status, bookCoverURL, dateRead, timeRead, username)
+                    // check if the item is already in the list before adding it
+                    if (!friendSocialFeed.contains(socialFeed)) {
+                        friendSocialFeed.add(socialFeed)
                     }
-
-                    // create the page status screen
-                    var setStatus: String = username
-                    if(isBookComplete)
-                    {
-                        setStatus += "\nFinished reading!"
-                    }
-                    else
-                    {
-                        setStatus += "\nRead "
-                        setStatus += pagesRead.toString()
-                        if(pagesRead != 1) setStatus += " pages."
-                        else setStatus += " page."
-                    }
-
-
-                    val socialFeed = SocialFeed(
-                        id,
-                        setTitle,
-                        bookAuthor,
-                        isBookComplete,
-                        setStatus,
-                        bookCoverURL,
-                        dateRead,
-                        timeRead,
-                        username
-                    )
-                    friendSocialFeed.add(socialFeed)
                 }
-
                 // Check if friendSocialFeed is not empty before setting the adapter
                 if (friendSocialFeed.isNotEmpty()) {
+                    recentRepository.stopRecentListener()
                     // Set up the adapter
-                    var rvSocial: RecyclerView = findViewById(R.id.rvSocial)
+                    val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                     val adapter = SocialFeedRecyclerViewAdapter(this, friendSocialFeed)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
-                    adapter.notifyDataSetChanged() // Add this line to notify the adapter that the data set has changed
-                }
-                else
-                {
+                    adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
+                } else {
                     Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
                 }
             }
-            else
-            {
-                Toast.makeText(this, "Recent data is missing.", Toast.LENGTH_SHORT).show()
-            }
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 }

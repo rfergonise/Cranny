@@ -60,14 +60,13 @@
         android:id="@+id/ivProfileVisibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         android:adjustViewBounds="true"
         android:maxWidth="42dp"
         android:maxHeight="42dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/ivTitleBar"
         app:layout_constraintEnd_toEndOf="@+id/ivTitleBar"
-        app:layout_constraintHorizontal_bias="0.772"
-        app:layout_constraintStart_toEndOf="@+id/tvTitle"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/hide_profile" />
 
@@ -196,6 +195,16 @@
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBackToMain"
+        android:layout_width="52dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivTitleBar"
+        app:layout_constraintStart_toStartOf="@+id/ivTitleBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
