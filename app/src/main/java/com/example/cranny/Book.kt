@@ -15,4 +15,16 @@ data class Book(
     var userFinished: Boolean,
 
 
+
+
+    var startDate: String,
+    var endDate: String,
+    var prevReadCount: Int,
+    var purchaseFrom: String,
+    var mainCharacters: String,
+    var genres: String,
+    var tags: String,
+    var lastReadDate: String,
+    var lastReadTime: String,
+
 )

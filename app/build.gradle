@@ -51,6 +51,17 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
+    // Dependency needed for loading images from url
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+    // Dependency needed for card view that has a border
+    implementation 'com.google.android.material:material:1.0.0'
+
+    // Dependency needed for Suspending Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+
+
+
 
 
 
