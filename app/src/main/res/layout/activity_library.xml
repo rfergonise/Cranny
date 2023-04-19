@@ -33,7 +33,7 @@
                 android:id="@+id/tvLibrary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway"
+                android:fontFamily="@font/raleway_custom"
                 android:text="Library"
                 android:textColor="#000000"
                 android:textSize="50sp"

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <TextView
+        android:id="@+id/settingsText"
+        android:layout_width="320dp"
+        android:layout_height="87dp"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textSize="65dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+ <!--
+    <TextView
+        android:id="@+id/notificationText"
+        android:layout_width="200dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="428dp"
+        android:text="Recieve Notifications"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/notificationSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="428dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.563"
+        app:layout_constraintStart_toEndOf="@+id/notificationText"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/newFollowerText"-->
+<!--        android:layout_width="202dp"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="468dp"-->
+<!--        android:text="New Followers"-->
+<!--        android:textAlignment="textEnd"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/newFollowerSwitch"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="84dp"-->
+<!--        android:layout_marginTop="56dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/newFollowerText"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/notificationsSettingsText" />-->
+<!--&lt;!&ndash;&ndash;&gt;-->
+
+    <!--    <TextView-->
+<!--        android:id="@+id/notificationsSettingsText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="372dp"-->
+<!--        android:text="Notification Settings"-->
+<!--        android:textSize="30dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.536"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+ <!--   <ImageButton
+        android:id="@+id/closeSettingsImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_delete"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="8dp" />-->
+
+ <!--   <Switch
+        android:id="@+id/recentReadSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.608"
+        app:layout_constraintStart_toEndOf="@+id/recentReadText"
+        app:layout_constraintTop_toBottomOf="@+id/accountPrivacySwitch" />
+
+    <TextView
+        android:id="@+id/recentReadText"
+        android:layout_width="195dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="24dp"
+        android:text="Make Recent Read Private"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountPrivacyText" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/changeUsernameText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="80dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="Change Username"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/setting_container" />-->
+
+<!--    <Switch-->
+<!--        android:id="@+id/changeUsernameSwitch"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+
+<!--        android:layout_marginTop="8dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.617"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/changeUsernameText"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/setting_container" />-->
+
+    <!--    <Button-->
+<!--        android:id="@+id/newUsernameSaveButton"-->
+<!--        android:layout_width="89dp"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:text="Save"-->
+<!--        tools:layout_editor_absoluteX="16dp"-->
+<!--        tools:layout_editor_absoluteY="276dp" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/oldUsernameConfirmUser"-->
+<!--        android:layout_width="225dp"-->
+<!--        android:layout_height="37dp"-->
+<!--        android:ems="6"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="old username"-->
+<!--        android:textSize="10dp"-->
+<!--        tools:layout_editor_absoluteX="121dp"-->
+<!--        tools:layout_editor_absoluteY="239dp" />-->
+
+    <!--    <EditText-->
+<!--        android:id="@+id/newUsernameUser"-->
+<!--        android:layout_width="226dp"-->
+<!--        android:layout_height="31dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="new username"-->
+<!--        android:textSize="10dp"-->
+<!--        tools:layout_editor_absoluteX="121dp"-->
+<!--        tools:layout_editor_absoluteY="283dp" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/newUsernameConfirmUser"-->
+<!--        android:layout_width="226dp"-->
+<!--        android:layout_height="34dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="confirm new username"-->
+<!--        android:textSize="10dp"-->
+<!--        tools:layout_editor_absoluteX="121dp"-->
+<!--        tools:layout_editor_absoluteY="322dp" />-->
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="191dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="20dp"
+        android:text="Log Out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearLibraryButton" />
+
+    <Button
+        android:id="@+id/deleteAccountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoutButton"
+        app:layout_constraintVertical_bias="0.382" />
+
+    <Button
+        android:id="@+id/clearLibraryButton"
+        android:layout_width="213dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="44dp"
+        android:text="Clear User Library"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_container" />
+
+    <FrameLayout
+        android:id="@+id/setting_container"
+        android:layout_width="396dp"
+        android:layout_height="338dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.251">
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="39dp"
+        android:layout_height="74dp"
+        app:srcCompat="@drawable/common_full_open_on_phone"
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="14dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
