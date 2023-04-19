@@ -45,10 +45,11 @@ class MainActivity : AppCompatActivity() {
         buttonDeleteAccount.setOnClickListener{
             deleteUserInformation()
         }
-        // Delete Account Button On Click Event Handling
+        // Settings Button
        settingsButton = findViewById(R.id.settingsButton)
         settingsButton.setOnClickListener{
-            deleteUserInformation()
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
         }
 
         // if you dont have any book data you can uncomment this to fill your account with 10 random books
