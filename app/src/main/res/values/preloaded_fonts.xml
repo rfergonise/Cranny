@@ -4,5 +4,6 @@
         <item>@font/gravitas_one</item>
         <item>@font/limelight</item>
         <item>@font/raleway</item>
+        <item>@font/raleway_bold</item>
     </array>
 </resources>

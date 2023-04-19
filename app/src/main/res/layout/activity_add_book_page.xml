@@ -34,27 +34,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/raleway"
-                android:text="Add Book"
+                android:text="@string/alAddBook"
                 android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/ibMenuButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/ibCancelButton"
+                android:layout_width="56dp"
+                android:layout_height="53dp"
                 android:layout_marginStart="8dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="Menu"
+                android:contentDescription="@string/btnMenu"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menusmall"
-                tools:ignore="HardcodedText" />
+                app:srcCompat="@drawable/cancelsmall" />
 
             <ImageButton
                 android:id="@+id/ibSaveButton"
@@ -62,12 +62,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="Save"
+                android:contentDescription="@string/btnSave"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/diskettesmall"
-                tools:ignore="HardcodedText" />
+                app:srcCompat="@drawable/diskettesmall" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -110,24 +109,29 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tiTitleInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="395dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:elevation="10dp"
+                    android:hint="Title"
+                    app:errorEnabled="false"
+                    app:helperText="Required"
+                    app:helperTextTextColor="#830101"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivBookImage">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTitleInput"
                         android:layout_width="395dp"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
                         android:fontFamily="@font/raleway"
-                        android:hint="Title"
-                        android:textSize="30sp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="30sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -136,30 +140,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
-                    android:contentDescription="Date started"
+                    android:contentDescription="@string/date_started"
                     android:fontFamily="@font/raleway"
-                    android:text="Date started"
+                    android:text="@string/datestarted"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput" />
 
                 <EditText
                     android:id="@+id/tdStarted"
                     android:layout_width="218dp"
                     android:layout_height="51dp"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="#686666"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
-                    android:hint="mm/dd/yyyy"
+                    android:hint="@string/mm_dd_yyyy"
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:textAlignment="textEnd"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput" />
 
                 <TextView
                     android:id="@+id/tvFinished"
@@ -167,14 +168,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="16dp"
-                    android:contentDescription="Was book finished?"
+                    android:contentDescription="@string/was_book_finished"
                     android:fontFamily="@font/raleway"
-                    android:text="Finished?"
+                    android:text="@string/finished_cb"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDateStarted"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvDateStarted" />
 
                 <CheckBox
                     android:id="@+id/cbFinished"
@@ -194,12 +194,11 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/raleway"
-                    android:text="Last page read"
+                    android:text="@string/last_page_read"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFinished"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
 
                 <EditText
                     android:id="@+id/tnPageNumber"
@@ -209,101 +208,160 @@
                     android:layout_marginEnd="8dp"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
-                    android:hint="Page Number"
+                    android:hint="@string/page_number"
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:textAlignment="textEnd"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFinished"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tiAuthorInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:hint="@string/author"
+                    app:helperText="Required"
+                    app:helperTextTextColor="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvPageRead">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAuthorInput"
                         android:layout_width="395dp"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
                         android:fontFamily="@font/raleway"
-                        android:hint="Author(s)"
-                        android:textSize="30sp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="30sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/tiSummaryInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:hint="@string/summary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiAuthorInput">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSummaryInput"
                         android:layout_width="395dp"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
                         android:fontFamily="@font/raleway"
-                        android:hint="Summary"
                         android:textSize="30sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/tiPurchasedFrom"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:hint="@string/purchased_from"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+                    app:layout_constraintTop_toBottomOf="@+id/tiSummaryInput">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPurchasedFrom"
                         android:layout_width="395sp"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
                         android:fontFamily="@font/raleway"
-                        android:hint="Purchased from"
-                        android:textSize="30sp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="30sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tiMyReview"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="395sp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:hint="@string/my_review"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiPurchasedFrom">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etReview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
                         android:fontFamily="@font/raleway"
-                        android:hint="My review"
-                        android:textSize="30sp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="30sp" />
+
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="100dp"
+                    android:layout_height="57dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/raleway_bold"
+                    android:text="@string/save_btn"
+                    android:textSize="15sp"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="100dp"
+                    android:layout_height="57dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/raleway_bold"
+                    android:text="@string/cancel_btn"
+                    android:textSize="15sp"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="Rating bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="9dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="Rating"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
