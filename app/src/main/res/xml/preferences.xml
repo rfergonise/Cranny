@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+
+    //setting the account to private or public
+    <SwitchPreferenceCompat
+    android:key="account_private"
+    android:title="Account Privacy"
+    android:summaryOff="Your account is currently public"
+    android:summaryOn="Your account is currently private"
+    android:defaultValue="false" />
+
+    //toggling notifications
+    <SwitchPreferenceCompat
+        android:key="enable_notifications"
+        android:title="Enable notifications"
+        android:summary="Turn on/off notifications"
+        android:defaultValue="true" />
+
+    //changing username
+    <EditTextPreference
+        android:key="username"
+        android:title="Change Username"
+        android:summary="Click to change your Username"
+        android:dialogTitle="Enter new Username"
+        android:inputType="text" />
+
+
+</PreferenceScreen>

@@ -33,14 +33,15 @@
                 android:id="@+id/tvLibrary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway"
-                android:text="@string/library_appbar"
+                android:fontFamily="@font/raleway_custom"
+                android:text="Library"
                 android:textColor="#000000"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <ImageButton
                 android:id="@+id/menuButton"
@@ -48,13 +49,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/menu_btn"
-                android:scaleX=".75"
-                android:scaleY=".75"
+                android:contentDescription="Menu"
+                android:scaleX="1"
+                android:scaleY="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu2" />
+                app:srcCompat="@drawable/menusmall"
+                tools:ignore="HardcodedText" />
 
             <ImageButton
                 android:id="@+id/searchButton"
@@ -62,18 +64,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/search_btn"
-                android:scaleX=".75"
-                android:scaleY=".75"
+                android:contentDescription="Search"
+                android:scaleX="1"
+                android:scaleY="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/search2" />
+                app:srcCompat="@drawable/searchsmall"
+                tools:ignore="HardcodedText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvLibraryList"
+        android:id="@+id/rvLibrary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -81,9 +84,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        tools:itemCount="5"
-        tools:listitem="@layout/book_cardview" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

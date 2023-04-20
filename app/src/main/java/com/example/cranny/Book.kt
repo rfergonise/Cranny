@@ -1,9 +1,13 @@
 package com.example.cranny
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+
+@Entity(tableName = "books")
 data class Book(
-    var id: String,
+    @PrimaryKey val id: String,
     var title: String,
-    var authorNames: List<String>,
+    var authorNames: String?,
     var publicationDate: String?,
     var starRating: Int?,
     var publisher: String?,
@@ -13,18 +17,16 @@ data class Book(
     var journalEntry: String?,
     var userProgress: Int?,
     var userFinished: Boolean,
-
-
-
-
+    var isFav: Boolean?,
+    var purchasedFrom: String?,
+    var mainCharacters: String?,
+    var genres: String?,
+    var tags: String?,
+    var lastReadDate: String?,
+    var lastReadTime: String?,
+    var prevReadCount: Int?,
     var startDate: String,
-    var endDate: String,
-    var prevReadCount: Int,
-    var purchaseFrom: String,
-    var mainCharacters: String,
-    var genres: String,
-    var tags: String,
-    var lastReadDate: String,
-    var lastReadTime: String,
+    var endDate: String
+
 
 )
