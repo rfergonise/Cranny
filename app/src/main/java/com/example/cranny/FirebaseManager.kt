@@ -1,5 +1,9 @@
 package com.example.cranny
 
+import android.content.Context
+import android.net.Uri
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
@@ -8,6 +12,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 
 
 // How to use each class?
@@ -163,13 +169,12 @@ class ProfileRepository(private val database: FirebaseDatabase)
                 // whenever data at this location is updated.
                 val username = dataSnapshot.child("Username").getValue(String::class.java) ?: ""
                 val displayName = dataSnapshot.child("Name").getValue(String::class.java) ?: ""
-                val pfpURL = dataSnapshot.child("ProfilePictureURL").getValue(String::class.java) ?: ""
                 val userId = dataSnapshot.child("UserId").getValue(String::class.java) ?: ""
                 val bio = dataSnapshot.child("Bio").getValue(String::class.java) ?: ""
                 val friendCount = dataSnapshot.child("FriendCount").getValue(Long::class.java)?.toInt() ?: 0
                 val bookCount = dataSnapshot.child("BookCount").getValue(Long::class.java)?.toInt() ?: 0
 
-                val user = User(userId, displayName, pfpURL, username, friendCount, bookCount, bio)
+                val user = User(userId, displayName, username, friendCount, bookCount, bio)
                 _profileData.postValue(user) // Update the LiveData object with the new data
             }
             override fun onCancelled(error: DatabaseError) { }
@@ -177,7 +182,7 @@ class ProfileRepository(private val database: FirebaseDatabase)
         profileDataRef.addListenerForSingleValueEvent(listener!!)
     }
 
-    fun updateProfileData(username: String, displayName: String, pfpURL: String, userId: String, bio: String,friendCount: Int, bookCount: Int)
+    fun updateProfileData(username: String, displayName: String, userId: String, bio: String,friendCount: Int, bookCount: Int)
     {
         // gets the path reference to the profile
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -186,7 +191,6 @@ class ProfileRepository(private val database: FirebaseDatabase)
         val profileData = HashMap<String, Any>()
         profileData["Username"] = username
         profileData["Name"] = displayName
-        profileData["ProfilePictureURL"] = pfpURL
         profileData["UserId"] = userId
         profileData["Bio"] = bio
         profileData["FriendCount"] = friendCount
@@ -202,9 +206,30 @@ class ProfileRepository(private val database: FirebaseDatabase)
         userDataRef.child("BookCount").setValue(user.bookCount)
         userDataRef.child("FriendCount").setValue(user.friendCount)
         userDataRef.child("Name").setValue(user.name)
-        userDataRef.child("ProfilePictureURL").setValue(user.profile)
         userDataRef.child("UserId").setValue(user.userId)
         userDataRef.child("Username").setValue(user.username)
+    }
+
+    fun removeUser(username: String)
+    {
+        val curUser = FirebaseAuth.getInstance().currentUser // get the current user
+        if (curUser != null)
+        {
+            // if the user isn't null
+
+            // remove the user's saved profile picture
+            val profilePictureRepository = ProfilePictureRepository(database, curUser.uid)
+            profilePictureRepository.deleteProfilePicture()
+
+            curUser.delete() // delete them from firebase
+            val database = FirebaseDatabase.getInstance()
+            val userRef = database.reference.child("UserData").child(curUser.uid) // get the path to their user data location in the database
+            val usernameRef = database.reference.child("ServerData").child("Usernames").child(username) // get the path to their username in the taken username list
+
+            usernameRef.removeValue() // clear their information from the database
+            userRef.removeValue() // clear the username from the taken username list
+
+        }
     }
 
     fun stopProfileListener()
@@ -549,21 +574,19 @@ class ServerRepository(private val database: FirebaseDatabase)
     fun removeUsername(username: String)
     {
         val usernameRef = database.getReference("ServerData").child("Usernames")
-        usernameRef.orderByValue().equalTo(username)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (childSnapshot in dataSnapshot.children) {
-                        if (childSnapshot.value == username) {
-                            childSnapshot.ref.removeValue()
-                            break
-                        }
+        usernameRef.orderByValue().equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.value == username) {
+                        childSnapshot.ref.removeValue()
+                        break
                     }
                 }
+            }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // Failed to read value
-                }
-            })
+            override fun onCancelled(databaseError: DatabaseError) { }
+        })
     }
 
     fun updateUsername(oldUsername: String, newUsername: String)
@@ -601,6 +624,56 @@ class ServerRepository(private val database: FirebaseDatabase)
             usernameRef.removeEventListener(it)
             listener = null
         }
+    }
+}
+class ProfilePictureRepository(private val database: FirebaseDatabase, val userId: String)
+{
+    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    private val profileRef = database.getReference("UserData/${currentUser!!.uid}/Profile/ProfilePictureURI")
+    private val storageRef = FirebaseStorage.getInstance().reference.child("UserData/ProfilePictures/${currentUser!!.uid}")
+    fun uploadProfilePicture(imageUri: Uri?)
+    {
+        // Upload the image to Firebase Storage
+        storageRef.putFile(imageUri!!).addOnSuccessListener { taskSnapshot ->
+            // Get the download URL of the uploaded image
+            val downloadUrl = taskSnapshot.metadata?.reference?.downloadUrl?.toString()
+
+            // Save the download URL to the Realtime Database
+            profileRef.setValue(downloadUrl).addOnSuccessListener {
+                // Image URI saved successfully
+            }.addOnFailureListener { exception ->
+                // Handle the error
+            }
+        }.addOnFailureListener { exception ->
+            // Handle the error
+        }
+    }
+
+    fun loadProfilePictureIntoImageView(imageView: ImageView)
+    {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("UserData/ProfilePictures/${currentUser!!.uid}")
+
+        // Get the download URL for the image
+        imageRef.downloadUrl.addOnSuccessListener { uri ->
+            // Load the image using Picasso
+            Picasso.get().load(uri.toString()).into(imageView)
+        }.addOnFailureListener { exception ->
+            // Handle any errors
+        }
+    }
+
+    fun deleteProfilePicture()
+    {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("UserData/ProfilePictures/${currentUser!!.uid}")
+        imageRef.delete()
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { exception ->
+            }
     }
 }
 

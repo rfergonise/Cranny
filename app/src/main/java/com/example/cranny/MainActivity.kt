@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsButton: Button
     private lateinit var buttonSocial: Button
     private lateinit var buttonDeleteAccount: Button
+
+    // Firebase stuff
+    val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
     private var username: String = ""
@@ -402,18 +405,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteUserInformation()
     {
-        val curUser = FirebaseAuth.getInstance().currentUser // get the current user
-        if (curUser != null)
-        {
-            // if the user isn't null
-            curUser.delete() // delete them from firebase
-            val database = FirebaseDatabase.getInstance()
-            val userRef = database.reference.child("UserData").child(curUser.uid) // get the path to their user data location in the database
-            val usernameRef = database.reference.child("ServerData").child("Usernames").child(username) // get the path to their username in the taken username list
-
-            usernameRef.removeValue() // clear their information from the database
-            userRef.removeValue() // clear the username from the taken username list
-        }
+        val profileRepository = ProfileRepository(database)
+        profileRepository.removeUser(username)
         signOut() // sign the user out of the app
     }
 

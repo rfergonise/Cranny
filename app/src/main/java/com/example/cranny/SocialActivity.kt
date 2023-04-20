@@ -10,7 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
-import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 
 class SocialActivity : AppCompatActivity() {
 
@@ -50,11 +51,6 @@ class SocialActivity : AppCompatActivity() {
 
     }
 
-    private fun loadImageFromUrl(url: String, imageView: ImageView, context: Context) {
-        Glide.with(context)
-            .load(url)
-            .into(imageView)
-    }
 
 
     private fun setUpSocialProfile()
@@ -67,7 +63,6 @@ class SocialActivity : AppCompatActivity() {
             val name = userProfile.name
             val friendCount = userProfile.friendCount
             val bookCount = userProfile.bookCount
-            val pfpURL = userProfile.profile
             val bio = userProfile.bio
             val id = userProfile.userId
 
@@ -77,7 +72,12 @@ class SocialActivity : AppCompatActivity() {
             tvFriendsCount.text = friendCount.toString()
 
             // Load the profile picture from the url stored in the database
-            loadImageFromUrl(pfpURL, ivProfilePicture, this)
+            //loadImageFromUrl(pfpURL, ivProfilePicture, this)
+
+            val profilePictureRepository = ProfilePictureRepository(database, id)
+            profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
+
+
             profileRepo.stopProfileListener()
         }
     }
