@@ -16,11 +16,8 @@ import com.squareup.picasso.Picasso
 class SocialActivity : AppCompatActivity() {
 
     // UI elements needed
-    private lateinit var tvUsername: TextView
-    private lateinit var tvFriendsCount: TextView
-    private lateinit var tvBooksCount: TextView
-    private lateinit var ivProfilePicture: ImageView
     private lateinit var ivBackToMain: ImageView
+    private lateinit var ivShowProfile: ImageView
 
     // Used to store what will displayed in the social feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
@@ -31,14 +28,8 @@ class SocialActivity : AppCompatActivity() {
         setContentView(R.layout.activity_social)
 
         // link the ui elements
-        tvUsername = findViewById(R.id.tvTitleUsername)
-        tvFriendsCount = findViewById(R.id.tvTotalFriends)
-        tvBooksCount = findViewById(R.id.tvTotalBooks)
-        ivProfilePicture = findViewById(R.id.ivProfilePicture)
         ivBackToMain = findViewById(R.id.ivBackToMain)
-
-        // load user data from database into profile text views / image view
-        setUpSocialProfile()
+        ivShowProfile = findViewById(R.id.ivProfileVisibility)
 
         // load book data from database into friendSocialFeed then populate the recycler view adapter
         setUpSocialFeed()
@@ -49,37 +40,12 @@ class SocialActivity : AppCompatActivity() {
             startActivity(i)
         }
 
-    }
+       // Back Menu Button On Click Event
+       ivShowProfile.setOnClickListener {
+           val i = Intent(this, UserProfileActivity::class.java)
+           startActivity(i)
+       }
 
-
-
-    private fun setUpSocialProfile()
-    {
-        val database = FirebaseDatabase.getInstance()
-        val profileRepo = ProfileRepository(database)
-        profileRepo.profileData.observe(this) { userProfile ->
-            // get the info
-            val username = userProfile.username
-            val name = userProfile.name
-            val friendCount = userProfile.friendCount
-            val bookCount = userProfile.bookCount
-            val bio = userProfile.bio
-            val id = userProfile.userId
-
-            // Change the display username and friend/book count to the values stored in the database
-            tvUsername.text = "@" + username
-            tvBooksCount.text = bookCount.toString()
-            tvFriendsCount.text = friendCount.toString()
-
-            // Load the profile picture from the url stored in the database
-            //loadImageFromUrl(pfpURL, ivProfilePicture, this)
-
-            val profilePictureRepository = ProfilePictureRepository(database, id)
-            profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
-
-
-            profileRepo.stopProfileListener()
-        }
     }
 
     private fun formatBookTitle(title: String): String
@@ -100,6 +66,7 @@ class SocialActivity : AppCompatActivity() {
 
     private fun setUpSocialFeed()
     {
+        // todo change it from the user's recents to the user's friend's recents
         val database = FirebaseDatabase.getInstance()
         val recentRepository = RecentRepository(database)
         recentRepository.fetchRecentData()

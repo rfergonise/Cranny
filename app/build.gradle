@@ -70,6 +70,10 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.1'
     kapt 'androidx.room:room-compiler:2.5.1'
 
+    // Dependency needed for setting pixel size in code
+    implementation "androidx.compose.ui:ui:$compose_version"
+
+
 
 
 

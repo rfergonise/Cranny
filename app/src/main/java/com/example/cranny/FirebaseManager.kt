@@ -72,6 +72,20 @@ val friendRepo = FriendRepository(database)
 friendRepo.removeFriend("abc456")
  */
 
+/* How to FETCH friends?
+val database = FirebaseDatabase.getInstance()
+val friendRepo = FriendRepository(database)
+friendRepo.fetchFriends()
+friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+    if(isFriendsReady)
+    {
+      // get the friend count by using friendRepo.FriendIds.size
+      // get a friend by if(friendCount > 0) friendRepo.FriendIds[0]
+    }
+})
+friendRepo.stopFriendListener() // free the listener to stop memory leaks
+ */
+
 //--------------------------------------------------------
 // BOOK CLASS
 
@@ -85,7 +99,7 @@ bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
       // grab each book from bookRepository.Library
     }
 })
-bookRepository.stopBookListener // free the listener to stop memory leaks
+bookRepository.stopBookListener() // free the listener to stop memory leaks
  */
 
 /* How to ADD book data
@@ -247,7 +261,31 @@ class FriendRepository(private val database: FirebaseDatabase)
 {
     private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
-    // todo add fetchFriendRecent(friendId:String)
+    public var FriendIds = mutableListOf<String>()
+    private val _isFriendReady = MutableLiveData<Boolean>()
+    val isFriendsReady: LiveData<Boolean>
+        get() = _isFriendReady
+    private var listener: ValueEventListener? = null
+
+    fun fetchFriends()
+    {
+        // Firebase Path References
+        val friendDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Friends")
+        listener = object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                _isFriendReady.postValue(false) // inform the caller the list is not ready
+                for (friend in dataSnapshot.children)
+                {
+                    FriendIds.add(friend.value as? String ?: "")
+                }
+                _isFriendReady.postValue(true) // inform the caller we have filled the list with each book
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        }
+        friendDataRef.addListenerForSingleValueEvent(listener!!)
+    }
 
     // Adds whatever friendId that is passed in to the user's friend list
     fun addFriend(friendId: String)
@@ -272,6 +310,15 @@ class FriendRepository(private val database: FirebaseDatabase)
             }
             override fun onCancelled(databaseError: DatabaseError) { }
         })
+    }
+
+    fun stopFriendListener()
+    {
+        listener?.let {
+            val friendDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Friends")
+            friendDataRef.removeEventListener(it)
+            listener = null
+        }
     }
 }
 
@@ -628,9 +675,8 @@ class ServerRepository(private val database: FirebaseDatabase)
 }
 class ProfilePictureRepository(private val database: FirebaseDatabase, val userId: String)
 {
-    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-    private val profileRef = database.getReference("UserData/${currentUser!!.uid}/Profile/ProfilePictureURI")
-    private val storageRef = FirebaseStorage.getInstance().reference.child("UserData/ProfilePictures/${currentUser!!.uid}")
+    private val profileRef = database.getReference("UserData/${userId}/Profile/ProfilePictureURI")
+    private val storageRef = FirebaseStorage.getInstance().reference.child("UserData/ProfilePictures/${userId}")
     fun uploadProfilePicture(imageUri: Uri?)
     {
         // Upload the image to Firebase Storage
@@ -653,7 +699,7 @@ class ProfilePictureRepository(private val database: FirebaseDatabase, val userI
     {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference
-        val imageRef = storageRef.child("UserData/ProfilePictures/${currentUser!!.uid}")
+        val imageRef = storageRef.child("UserData/ProfilePictures/${userId}")
 
         // Get the download URL for the image
         imageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -668,7 +714,7 @@ class ProfilePictureRepository(private val database: FirebaseDatabase, val userI
     {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference
-        val imageRef = storageRef.child("UserData/ProfilePictures/${currentUser!!.uid}")
+        val imageRef = storageRef.child("UserData/ProfilePictures/${userId}")
         imageRef.delete()
             .addOnSuccessListener {
             }
