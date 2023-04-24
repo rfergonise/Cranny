@@ -11,7 +11,6 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
-
         android:layout_width="0dp"
         android:layout_height="80dp"
         app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
@@ -74,8 +73,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
-
-
         android:layout_height="0dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,18 +92,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/ivBookImage"
-                    android:layout_width="125dp"
-                    android:layout_height="140dp"
-                    android:layout_marginTop="8dp"
-                    android:contentDescription="Upload Image"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/file"
-                    tools:ignore="HardcodedText" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tiTitleInput"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -122,7 +107,7 @@
                     app:helperTextTextColor="#830101"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivBookImage">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTitleInput"
@@ -150,9 +135,10 @@
 
                 <EditText
                     android:id="@+id/tdStarted"
-                    android:layout_width="218dp"
+                    android:layout_width="200dp"
                     android:layout_height="51dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
                     android:hint="@string/mm_dd_yyyy"
@@ -188,6 +174,36 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvDateStarted" />
 
                 <TextView
+                    android:id="@+id/tvDateFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="Date finished"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <EditText
+                    android:id="@+id/etDateFinished"
+                    android:layout_width="200dp"
+                    android:layout_height="51dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/raleway"
+                    android:hint="@string/mm_dd_yyyy"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:textAlignment="textEnd"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <TextView
                     android:id="@+id/tvPageRead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -197,13 +213,14 @@
                     android:text="@string/last_page_read"
                     android:textColor="#000000"
                     android:textSize="30sp"
+                    android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
 
                 <EditText
                     android:id="@+id/tnPageNumber"
-                    android:layout_width="176dp"
-                    android:layout_height="48dp"
+                    android:layout_width="185dp"
+                    android:layout_height="51dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:ems="10"
@@ -212,6 +229,7 @@
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:textAlignment="textEnd"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
 
@@ -311,6 +329,75 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiGenres"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Genre(s)"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiTags"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Tag(s)"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiGenres">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="Rating bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTags" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="9dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="Rating"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTags" />
+
                 <Button
                     android:id="@+id/btnSave"
                     android:layout_width="100dp"
@@ -337,31 +424,6 @@
                     app:cornerRadius="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Rating bar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview" />
-
-                <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="9dp"
-                    android:fontFamily="@font/raleway"
-                    android:text="Rating"
-                    android:textColor="#000000"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toTopOf="@+id/btnCancel"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
