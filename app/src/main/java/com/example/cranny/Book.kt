@@ -9,7 +9,7 @@ data class Book(
     var title: String,
     var authorNames: String?,
     var publicationDate: String?,
-    var starRating: Int?,
+    var starRating: Int,
     var publisher: String?,
     var description: String?,
     var pageCount: Int?,

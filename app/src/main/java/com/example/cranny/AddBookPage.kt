@@ -47,5 +47,44 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
+        saveBTN.setOnClickListener {
+            val newBook = Book(
+                // need to create new id with each book
+                id = " ",
+                title = titleInput.toString(),
+                authorNames = authorInput.toString(),
+                //need to add publication date
+                publicationDate = " ",
+                starRating = ratingsInput.toString().toInt(),
+                // need to add publisher
+                publisher = " ",
+                description = summaryInput.toString(),
+                pageCount = lastPageReadInput.toString().toInt(),
+                // will need to work with Ethan about how to scrape book image from Google API
+                thumbnail = " ",
+                journalEntry = reviewInput.toString(),
+                userProgress = 0,
+                userFinished = finishedCB.isChecked,
+                startDate = dataStartedInput.toString(),
+                endDate = dateFinishedInput.toString(),
+                prevReadCount = 0,
+                purchasedFrom = purchasedFromInput.toString(),
+                // need to add main characters
+                mainCharacters = " ",
+                genres = genresInput.toString(),
+                tags = tagsInput.toString(),
+                lastReadDate = " ",
+                lastReadTime = " ",
+                isFav = false
+            )
+
+            // need to work with Ethan about how to add books to database
+            // addBookToDatabase(newBook)
+        }
+
+        cancelBTN.setOnClickListener {
+            // need to clear all fields and return to library screen
+        }
+
     }
 }

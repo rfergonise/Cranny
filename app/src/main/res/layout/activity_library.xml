@@ -49,12 +49,12 @@
                 android:layout_marginStart="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="Menu"
-                android:scaleX="1"
-                android:scaleY="1"
+                android:scaleX=".75"
+                android:scaleY=".75"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menusmall"
+                app:srcCompat="@drawable/menu2"
                 tools:ignore="HardcodedText" />
 
             <ImageButton
@@ -64,12 +64,12 @@
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="Search"
-                android:scaleX="1"
-                android:scaleY="1"
+                android:scaleX=".75"
+                android:scaleY=".75"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/searchsmall"
+                app:srcCompat="@drawable/search2"
                 tools:ignore="HardcodedText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -83,7 +83,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        tools:listitem="@layout/book_cardview" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,5 +24,14 @@
     <string name="alAddBook">Add Book</string>
     <string name="btnMenu">Menu</string>
     <string name="btnSave">Save</string>
+    <string name="date_finished">Date finished</string>
+    <string name="title">Title</string>
+    <string name="publisher_s">Publisher(s)</string>
+    <string name="publication_date">Publication Date</string>
+    <string name="main_character_s">Main character(s)</string>
+    <string name="genre_s">Genre(s)</string>
+    <string name="tag_s">Tag(s)</string>
+    <string name="rating_bar">Rating bar</string>
+    <string name="rating">Rating</string>
 
 </resources>
