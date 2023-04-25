@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Cranny</string>
     <string name="google_web_client_id">AIzaSyBG_BRlT0yPthnagzSOLCaPhFQp_C5bP9Q</string>
+    <string name="menu_icon">Menu Icon</string>
 </resources>
