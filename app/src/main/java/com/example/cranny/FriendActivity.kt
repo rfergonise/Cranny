@@ -1,5 +1,6 @@
 package com.example.cranny
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,78 +14,69 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-
-class UserProfileActivity : AppCompatActivity()
+class FriendActivity : AppCompatActivity()
 {
 
     // Declare UI Objects
-    lateinit var ivHideProfile: ImageView
+    lateinit var ivHideFriendProfile: ImageView
+    lateinit var ivBackToMain: ImageView
     lateinit var ivProfilePicture: ImageView
     lateinit var tvUsername: TextView
     lateinit var tvDisplayName: TextView
     lateinit var tvBio: TextView
     lateinit var tvFriendsCount: TextView
     lateinit var tvBooksCount: TextView
-    lateinit var cvBookButton: MaterialCardView
-    lateinit var cvFriendButton: MaterialCardView
 
     // Used to store what will displayed in the user feed
-    private val userSocialFeed = ArrayList<SocialFeed>()
+    private val friendSocialFeed = ArrayList<SocialFeed>()
 
     lateinit var username: String
+
 
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_profile)
+        setContentView(R.layout.activity_friend2)
+
+        val friendId = intent.getStringExtra("friendId")
+        // friendId = null
 
         // Initialize UI Objects
-        ivHideProfile = findViewById(R.id.ivProfileVisibility)
+        ivHideFriendProfile = findViewById(R.id.ivReturnToProfile)
+        ivBackToMain = findViewById(R.id.ivBackToMain)
         ivProfilePicture = findViewById(R.id.ivProfilePicture)
         tvUsername = findViewById(R.id.tvProfileUsername)
         tvDisplayName = findViewById(R.id.tvProfileDisplayName)
         tvBio = findViewById(R.id.tvProfileBio)
         tvFriendsCount = findViewById(R.id.tvTotalFriends)
         tvBooksCount = findViewById(R.id.tvTotalBooks)
-        cvBookButton = findViewById(R.id.cvBookCount)
-        cvFriendButton = findViewById(R.id.cvFriendCount)
 
         // load user data from database into profile text views / image view
-        setUpSocialProfile()
+        setUpSocialProfile(friendId!!)
 
         // Hide Profile On Click Listener
-        ivHideProfile.setOnClickListener {
-            val i = Intent(this, SocialActivity::class.java)
+        ivHideFriendProfile.setOnClickListener {
+            val i = Intent(this, UserProfileActivity::class.java)
             startActivity(i)
         }
 
-        // Friend On Click Listener
-        cvFriendButton.setOnClickListener {
-            val i = Intent(this, FriendSearchActivity::class.java)
+        // Hide Profile On Click Listener
+        ivBackToMain.setOnClickListener {
+            val i = Intent(this, MainActivity::class.java)
             startActivity(i)
         }
-
-        // Book On Click Listener
-        cvBookButton.setOnClickListener {
-            // todo open user library activity
-        }
-
-        // load the user favorite friends into the horizontal layout
-        setUpFavoriteFriendHorizontalLayout()
 
         // load the user's most recent reads into the recycler view
         setUpUserRecents()
     }
 
-    private fun setUpSocialProfile()
+    private fun setUpSocialProfile(friendId: String)
     {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
         val database = FirebaseDatabase.getInstance()
-        val profileRepo = ProfileRepository(database, userId!!)
+        val profileRepo = ProfileRepository(database, friendId)
         profileRepo.profileData.observe(this) { userProfile ->
             // get the info
             username = userProfile.username
@@ -109,63 +101,17 @@ class UserProfileActivity : AppCompatActivity()
             profileRepo.stopProfileListener()
         }
     }
-    private fun setUpFavoriteFriendHorizontalLayout()
-    {
-        // todo set it up to load favorite friends instead of just every friend
-        val horizontalLayout = findViewById<LinearLayout>(R.id.horizontal_layout)
-        var friendCount = 0
-        val database = FirebaseDatabase.getInstance()
-        val friendRepo = FriendRepository(database)
-        friendRepo.fetchFriends()
-        friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
-            if(isFriendsReady)
-            {
-                friendCount = friendRepo.FriendIds.size
-                if(friendCount > 0)
-                {
-                    for (i in 0 until friendCount) {
-                        val cardView = MaterialCardView(this)
-                        val params = LinearLayout.LayoutParams(200, 200)
-                        params.setMargins(16,8,16,8)
-                        cardView.layoutParams = params
-                        cardView.radius = 130F
-                        cardView.strokeWidth = 10
-                        cardView.strokeColor = ContextCompat.getColor(this, R.color.cranny_blue_light)
-                        cardView.cardElevation = 0F
 
-                        val imageView = ImageView(this)
-                        imageView.layoutParams = ViewGroup.LayoutParams(-1, -1)
-                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-
-                        // Set onClick listener
-                        imageView.setOnClickListener {
-                            val friendIntent = Intent(this, FriendActivity::class.java)
-                            friendIntent.putExtra("friendId", friendRepo.FriendIds[i].id)
-                            // friendRepo.FriendIds[i] != null
-                            startActivity(friendIntent)
-                        }
-
-                        val profilePictureRepository = ProfilePictureRepository(database, friendRepo.FriendIds[i].id)
-                        profilePictureRepository.loadProfilePictureIntoImageView(imageView)
-
-                        cardView.addView(imageView)
-                        horizontalLayout.addView(cardView)
-                    }
-                }
-            }
-        })
-        friendRepo.stopFriendListener() // free the listener to stop memory leaks
-
-    }
     private fun setUpUserRecents()
     {
+        // todo change it from the user's recents to their friend's recents
         val database = FirebaseDatabase.getInstance()
         val recentRepository = RecentRepository(database)
         recentRepository.fetchRecentData()
         recentRepository.isRecentDataReady.observe(this) { isRecentDataReady ->
             if (isRecentDataReady) {
                 // clear the list before adding items
-                userSocialFeed.clear()
+                friendSocialFeed.clear()
                 // grab each social feed from recentRepository.SocialFeeds
                 for (feed in recentRepository.SocialFeeds) {
                     val bookId = feed.id
@@ -183,16 +129,16 @@ class UserProfileActivity : AppCompatActivity()
                     val socialFeed = SocialFeed(bookId, setTitle, bookAuthors, isBookComplete,
                         status, bookCoverURL, dateRead, timeRead, _username)
                     // check if the item is already in the list before adding it
-                    if (!userSocialFeed.contains(socialFeed)) {
-                        userSocialFeed.add(socialFeed)
+                    if (!friendSocialFeed.contains(socialFeed)) {
+                        friendSocialFeed.add(socialFeed)
                     }
                 }
                 // Check if friendSocialFeed is not empty before setting the adapter
-                if (userSocialFeed.isNotEmpty()) {
+                if (friendSocialFeed.isNotEmpty()) {
                     recentRepository.stopRecentListener()
                     // Set up the adapter
                     val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
-                    val adapter = SocialFeedRecyclerViewAdapter(this, userSocialFeed)
+                    val adapter = SocialFeedRecyclerViewAdapter(this, friendSocialFeed)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed

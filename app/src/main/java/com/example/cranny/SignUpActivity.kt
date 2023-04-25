@@ -134,7 +134,7 @@ class SignUpActivity : AppCompatActivity() {
     {
         // Add User Profile Data
         val database = FirebaseDatabase.getInstance()
-        val profileRepo = ProfileRepository(database)
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
         val newUsername = textUsername.text.toString()
         val newDisplayName = textDisplayName.text.toString()
         val newUserId = currentUser!!.uid

@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         // Delete Account Button On Click Event Handling
         buttonDeleteAccount = findViewById(R.id.bDeleteAccount)
         buttonDeleteAccount.setOnClickListener{
-            deleteUserInformation()
+            deleteUserInformation(currentUser?.uid!!)
         }
         // Settings Button
        settingsButton = findViewById(R.id.settingsButton)
@@ -403,9 +403,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteUserInformation()
+    private fun deleteUserInformation(userId: String)
     {
-        val profileRepository = ProfileRepository(database)
+        val profileRepository = ProfileRepository(database, userId)
         profileRepository.removeUser(username)
         signOut() // sign the user out of the app
     }

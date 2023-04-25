@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SocialActivity">
+    tools:context=".FriendActivity">
 
     <!-- Header -->
     <com.google.android.material.card.MaterialCardView
@@ -41,18 +40,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/ivProfileVisibility"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/ivReturnToProfile"
                 android:adjustViewBounds="true"
-                android:maxWidth="42dp"
-                android:maxHeight="42dp"
+                android:layout_width="52dp"
+                android:layout_height="43dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvTitle"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/show_profile" />
+                app:srcCompat="@drawable/baseline_person_outline_24" />
 
             <ImageView
                 android:id="@+id/ivBackToMain"
@@ -155,12 +152,11 @@
         <!-- Friend Count -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvFriendCount"
-            android:layout_width="100dp"
+            android:layout_width= "100dp"
             android:layout_height="75dp"
             app:layout_constraintStart_toStartOf="@+id/cvUsername"
             app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/cranny_purple_dark"
+            app:strokeWidth="0dp"
             app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -214,8 +210,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cvFriendCount"
             app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/cranny_purple_dark"
+            app:strokeWidth="0dp"
             app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -330,60 +325,20 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Favorite Friends -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvBio"
-            app:strokeWidth="0dp"
-            app:cardElevation="0dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="0dp"
-                app:strokeWidth="0dp">
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp">
-
-                    <LinearLayout
-                        android:id="@+id/horizontal_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-
-
-                    </LinearLayout>
-
-                </HorizontalScrollView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
 
         <!-- Recent Read Feed -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvFeed"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="400dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvFavorites"
+            app:layout_constraintTop_toBottomOf="@+id/cvBio"
             app:strokeColor="@color/cranny_purple_dark"
             app:strokeWidth="5dp">
 
@@ -395,9 +350,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
