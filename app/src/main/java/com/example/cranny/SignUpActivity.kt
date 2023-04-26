@@ -27,6 +27,8 @@ class SignUpActivity : AppCompatActivity() {
     val database = FirebaseDatabase.getInstance()
     private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    var isProfilePictureSelected: Boolean = false
+
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
     }
@@ -56,33 +58,35 @@ class SignUpActivity : AppCompatActivity() {
         // Done Creating Profile On Click Event Handling
         buttonDone.setOnClickListener {
 
-            if(isTextNotEmpty()) // checks the Username and Display Name edit text elements
+            if(isNotEmpty()) // checks the Username, Display Name, and Profile Picture for being empty
             {
                 // if no space in username and starts with a letter,and both fields aren't blank
                 // then check if the username exists in the database already
                 val username = textUsername.text.toString()
                 val ServerRepository = ServerRepository(database)
-                ServerRepository.fetchTakenUsernames()
-                ServerRepository.isTakenUsernameListReady.observe(this, Observer { isTakenUsernameListReady ->
-                    if(isTakenUsernameListReady)
+                ServerRepository.isUserListReady.observe(this, Observer { isUserListReady ->
+                    if(isUserListReady)
                     {
-                        if(username in ServerRepository.TakenUsernames)
+                        for(user in ServerRepository.Users)
                         {
-                            // Username exists
-                            Toast.makeText(this, "Username already in use.", Toast.LENGTH_SHORT).show()
-                            textUsername.text.clear()
-                        }
-                        else
-                        {
-                            // Username doesn't exist
-                            updateUserInformation(ServerRepository)
+                            if(username == user.username)
+                            {
+                                // Username exists
+                                Toast.makeText(this, "Username already in use.", Toast.LENGTH_SHORT).show()
+                                textUsername.text.clear()
+                            }
+                            else
+                            {
+                                // Username doesn't exist
+                                updateUserInformation(ServerRepository)
 
-                            // Stop the database listener checking usernames
-                            ServerRepository.stopUsernameListener()
+                                // Stop the database listener checking usernames
+                                ServerRepository.stopUserListener()
 
-                            // start main activity
-                            val i = Intent(this, MainActivity::class.java)
-                            startActivity(i)
+                                // start main activity
+                                val i = Intent(this, MainActivity::class.java)
+                                startActivity(i)
+                            }
                         }
                     }
                 })
@@ -90,7 +94,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun isTextNotEmpty(): Boolean
+    private fun isNotEmpty(): Boolean
     {
         if(textUsername.text.toString() == "")
         {
@@ -113,8 +117,13 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Display name is blank.", Toast.LENGTH_SHORT).show()
             return false
         }
-        // return true if username doesn't start with a letter and doesnt have a space
-        // and both, username and display name, aren't empty
+
+        if(!isProfilePictureSelected)
+        {
+            Toast.makeText(this, "No profile picture added.", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         return true
     }
 
@@ -127,6 +136,7 @@ class SignUpActivity : AppCompatActivity() {
             imageProfile.setImageURI(imageUri) // if we got an image from the user, set it as the image
             val pictureRepository = ProfilePictureRepository(database, currentUser!!.uid)
             pictureRepository.uploadProfilePicture(imageUri)
+            isProfilePictureSelected = true
         }
     }
 
@@ -144,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
         profileRepo.updateProfileData(newUsername, newDisplayName, newUserId, newBio, newFriendCount, newBookCount)
 
         // Add User's Username to Usernames List
-        server.addUsername(newUsername)
+        server.addUser(Friend(newUserId, newUsername))
     }
 
 

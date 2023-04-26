@@ -1,5 +1,6 @@
 package com.example.cranny
 
+import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.opengl.Visibility
@@ -14,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,18 +23,23 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import org.w3c.dom.Text
 
 
 class FriendSearchActivity : AppCompatActivity()
 {
 
-    private var friendList = mutableListOf<String>()
+    private var friendList = mutableListOf<Friend>()
     private lateinit var rvFriends: RecyclerView
+    lateinit var user: User
+    lateinit var tvNoFriend: TextView
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friend_search)
+
+        tvNoFriend = findViewById(R.id.tvNoFriendFound)
 
         val ivBackToMainButton: ImageView = findViewById(R.id.ivBackToMain)
         ivBackToMainButton.setOnClickListener {
@@ -48,7 +55,8 @@ class FriendSearchActivity : AppCompatActivity()
 
         val buttonAddFriend: MaterialCardView = findViewById(R.id.mcvAddButton)
         buttonAddFriend.setOnClickListener {
-            // todo start add friend activity
+            val i = Intent(this, AddFriendActivity::class.java)
+            startActivity(i)
         }
 
         val buttonFriendRequest: MaterialCardView = findViewById(R.id.mcvRequestButton)
@@ -60,7 +68,7 @@ class FriendSearchActivity : AppCompatActivity()
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         val profileRepo = ProfileRepository(database, currentUser?.uid!!)
         profileRepo.profileData.observe(this, Observer { userProfile ->
-            val user = User(userProfile.userId, userProfile.name, userProfile.username, userProfile.friendCount,
+            user = User(userProfile.userId, userProfile.name, userProfile.username, userProfile.friendCount,
             userProfile.bookCount, userProfile.bio)
             rvFriends = findViewById(R.id.rvFriendSearch)
             getFriendList(user)
@@ -74,7 +82,6 @@ class FriendSearchActivity : AppCompatActivity()
 
     private fun getFriendList(user: User)
     {
-        var friendList = mutableListOf<Friend>()
         val database = FirebaseDatabase.getInstance()
         val friendRepo = FriendRepository(database)
         friendRepo.fetchFriends()
@@ -90,14 +97,14 @@ class FriendSearchActivity : AppCompatActivity()
                     }
                     rvFriends.layoutManager = LinearLayoutManager(this)
                     rvFriends.setHasFixedSize(true)
-                    rvFriends.adapter = SearchAdapter(friendList, user)
+                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity,friendList, user, tvNoFriend)
                 }
                 else
                 {
+                    tvNoFriend.visibility = View.VISIBLE
                     rvFriends.visibility = View.INVISIBLE
                     val searchBar: MaterialCardView = findViewById(R.id.mcvSearchBox)
                     searchBar.visibility = View.INVISIBLE
-                    Toast.makeText(this, "No friends added.", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -121,15 +128,20 @@ class FriendSearchActivity : AppCompatActivity()
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val filteredList = friendList.filter { friend ->
-                    friend.startsWith(s.toString(), ignoreCase = true)
+                    friend.username.startsWith(s.toString(), ignoreCase = true)
                 }
-                //adapter.updateData(filteredList)
+                if(user?.username != null)
+                {
+                    if(filteredList.size == 0) tvNoFriend.visibility = View.VISIBLE
+                    else tvNoFriend.visibility = View.INVISIBLE
+                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity, filteredList.toMutableList(), user, tvNoFriend)
+                }
             }
         })
     }
 }
 
-class SearchAdapter(private val usernames: MutableList<Friend>, private var user: User): RecyclerView.Adapter<SearchAdapter.MyViewHolder>()
+class SearchAdapter(private val context: Context, private val usernames: MutableList<Friend>, private var user: User, private var tvNoFriend: TextView): RecyclerView.Adapter<SearchAdapter.MyViewHolder>()
 {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder
@@ -147,15 +159,9 @@ class SearchAdapter(private val usernames: MutableList<Friend>, private var user
     override fun onBindViewHolder(holder: MyViewHolder, position: Int)
     {
         val username = usernames[position].username
-        val usernameSize = username.length
-        var formateUsername = "@${username}"
-        for(i in 0..15 - usernameSize)
-        {
-            formateUsername += " "
-        }
-        holder.tvUsername.text = formateUsername
+        holder.tvUsername.text = "@${username}"
+        val id = usernames[position].id
         holder.ivRemoveFriend.setOnClickListener {
-            val id = usernames[position].id
             val removeFriend = Friend(id, username)
             val database = FirebaseDatabase.getInstance()
             val friendRepo = FriendRepository(database)
@@ -163,11 +169,17 @@ class SearchAdapter(private val usernames: MutableList<Friend>, private var user
             holder.ivRemoveFriend.visibility = View.INVISIBLE
             usernames.removeAt(position)
             notifyItemRemoved(position)
+            if(usernames.size == 0) tvNoFriend.visibility = View.VISIBLE
 
             // Update the user's friend count
             user.friendCount--
             val profileRepo = ProfileRepository(database, user.userId)
             profileRepo.updateProfileData(user.username, user.name, user.userId, user.bio, user.friendCount, user.bookCount)
+        }
+        holder.tvUsername.setOnClickListener{
+            val friendIntent = Intent(context, FriendActivity::class.java)
+            friendIntent.putExtra("friendId", id)
+            context.startActivity(friendIntent)
         }
     }
 

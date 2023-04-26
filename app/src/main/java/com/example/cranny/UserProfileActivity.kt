@@ -3,6 +3,8 @@ package com.example.cranny
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import org.w3c.dom.Text
 
 
 class UserProfileActivity : AppCompatActivity()
@@ -151,6 +154,11 @@ class UserProfileActivity : AppCompatActivity()
                         cardView.addView(imageView)
                         horizontalLayout.addView(cardView)
                     }
+                }
+                else
+                {
+                    val showText: TextView = findViewById(R.id.tvNoFavorites)
+                    showText.visibility = View.VISIBLE
                 }
             }
         })

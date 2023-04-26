@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/ivProfileButton"
+                android:id="@+id/ivFriendButton"
                 android:layout_width="52dp"
                 android:layout_height="43dp"
                 android:adjustViewBounds="true"
@@ -50,7 +50,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvTitle"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_person_outline_24" />
+                app:srcCompat="@drawable/friend" />
 
             <ImageView
                 android:id="@+id/ivBackToMain"
@@ -69,9 +69,10 @@
         android:id="@+id/clSearch"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/clButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cvHeader">
+        android:layout_marginBottom="25dp">
 
 
         <com.google.android.material.card.MaterialCardView
@@ -79,12 +80,13 @@
             android:layout_width="320dp"
             android:layout_height="35dp"
             app:cardBackgroundColor="@color/cranny_blue_light"
+            app:cardCornerRadius="180dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="180dp">
+            app:layout_constraintTop_toTopOf="parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -98,86 +100,35 @@
                     android:hint="Search"
                     android:inputType="textPersonName"
                     android:maxLength="15"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:textColor="@color/black"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Recycler View -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clRView"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clSearch">
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvRVBorder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="3dp"
-            app:cardElevation="0dp"
-            android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="50dp">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvFriendSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvNoFriendFound"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No Friends Found"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="invisible"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Buttons -->
+    <!-- Find Button -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clButtons"
+        android:id="@+id/clButton"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="225dp">
 
-        <!--- Friend Request Button -->
+
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvRequestButton"
+            android:id="@+id/mcvFindButton"
             android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="25dp"
+            android:layout_height="35dp"
             app:cardBackgroundColor="@color/cranny_purple_light"
-            app:cardCornerRadius="65dp"
+            app:cardCornerRadius="180dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/cranny_purple_dark"
@@ -187,14 +138,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <TextView
+                    android:id="@+id/tvFindText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="REQUESTS"
+                    android:text="Find"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -202,44 +153,126 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <!--- Add Friend Button -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvAddButton"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="25dp"
-            app:cardBackgroundColor="@color/cranny_purple_light"
-            app:cardCornerRadius="65dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="3dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/raleway_custom"
-                    android:text="ADD"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- No User Found Box -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvNoUserFound"
+        android:layout_width="325dp"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="@color/cranny_pink"
+        app:cardCornerRadius="45dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/clSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvHeader"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvNoUserFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:text="No User Found"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- User Box -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvUserBox"
+        android:layout_width="325dp"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="@color/cranny_pink"
+        app:cardCornerRadius="45dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/clSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvHeader"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!-- Profile Picture -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvPFPBorder"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    app:cardCornerRadius="65dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/cranny_purple_dark"
+                    app:strokeWidth="5dp">
+
+                    <ImageView
+                        android:id="@+id/ivProfilePicture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/default_profile_picture" />
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/ivRemoveFriend"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/add_friend" />
+
+            <TextView
+                android:id="@+id/tvFriendName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:text="\@123456789123456"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivRemoveFriend"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

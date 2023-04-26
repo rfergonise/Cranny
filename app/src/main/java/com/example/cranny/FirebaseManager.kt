@@ -589,76 +589,66 @@ class RecentRepository(private val database: FirebaseDatabase)
 }
 class ServerRepository(private val database: FirebaseDatabase)
 {
-    public var TakenUsernames = mutableListOf<String>()
-
-    private val _isTakenUsernameListReady = MutableLiveData<Boolean>()
-    val isTakenUsernameListReady: LiveData<Boolean>
-        get() = _isTakenUsernameListReady
+    public var Users = mutableListOf<Friend>()
+    private val _isUserListReady = MutableLiveData<Boolean>()
+    val isUserListReady: LiveData<Boolean>
+        get() = _isUserListReady
 
     private var listener: ValueEventListener? = null
 
     init
     {
-        fetchTakenUsernames()
+        fetchUsers()
     }
 
-    fun addUsername(username: String)
+    // UserDirectory
+    fun addUser(friend: Friend)
     {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
-        usernameRef.child(username).setValue(username)
+        val usernameRef = database.getReference("ServerData").child("UserList")
+        usernameRef.child(friend.username).child("Username").setValue(friend.username)
+        usernameRef.child(friend.username).child("Id").setValue(friend.id)
     }
 
-    fun removeUsername(username: String)
+    fun removeUser(friend: Friend)
     {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
-        usernameRef.orderByValue().equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener
+        val friendDataRef = database.getReference("ServerData").child("UserList").child(friend.username)
+        friendDataRef.removeValue()
+    }
+
+    fun updateUser(friendOld: Friend, friendNew: Friend)
+    {
+        removeUser(friendOld)
+        addUser(friendNew)
+    }
+
+    fun fetchUsers()
+    {
+        val userRef = database.getReference("ServerData").child("UserList")
+
+        listener = object : ValueEventListener
         {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.value == username) {
-                        childSnapshot.ref.removeValue()
-                        break
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) { }
-        })
-    }
-
-    fun updateUsername(oldUsername: String, newUsername: String)
-    {
-        // I have to do it this way because the usernames are set up as <Username, Username>/<Key, Value>
-        // There is no way to change the Key unless you remove it and replace
-        removeUsername(oldUsername)
-        addUsername(newUsername)
-    }
-
-    fun fetchTakenUsernames()
-    {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
-
-        listener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                TakenUsernames.clear()
-                _isTakenUsernameListReady.postValue(false)
-                for (username in dataSnapshot.children)
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                Users.clear()
+                _isUserListReady.postValue(false)
+                for (user in dataSnapshot.children)
                 {
-                    val TakenUsername = username.value as String
-                    TakenUsernames.add(TakenUsername) // adds each taken username to this list
+                    val username = user.child("Username").value as String
+                    val id = user.child("Id").value as String
+                    Users.add(Friend(id, username))
                 }
-                _isTakenUsernameListReady.postValue(true) // inform the caller we have filled the list with each recent book
+                _isUserListReady.postValue(true) // inform the caller we have filled the list with each recent book
             }
             override fun onCancelled(error: DatabaseError) { }
         }
-        usernameRef.addListenerForSingleValueEvent(listener!!)
+        userRef.addListenerForSingleValueEvent(listener!!)
     }
 
-    fun stopUsernameListener()
+    fun stopUserListener()
     {
         listener?.let {
-            val usernameRef = database.getReference("ServerData").child("Usernames")
-            usernameRef.removeEventListener(it)
+            val userRef = database.getReference("ServerData").child("UserList")
+            userRef.removeEventListener(it)
             listener = null
         }
     }
@@ -779,4 +769,5 @@ class FriendRequestRepository(private val database: FirebaseDatabase)
         }
     }
 }
+
 

@@ -405,6 +405,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteUserInformation(userId: String)
     {
+        val serverRepository = ServerRepository(database)
+        serverRepository.removeUser(Friend(userId, username))
         val profileRepository = ProfileRepository(database, userId)
         profileRepository.removeUser(username)
         signOut() // sign the user out of the app

@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 
 class SocialActivity : AppCompatActivity() {
@@ -42,12 +45,6 @@ class SocialActivity : AppCompatActivity() {
            val i = Intent(this, UserProfileActivity::class.java)
            startActivity(i)
        }
-
-
-       val friend = Friend("SnlwJQYXdXfEB33FUnbitbN9nlR2", "Friend")
-       val database = FirebaseDatabase.getInstance()
-       val friendRepo = FriendRepository(database)
-       friendRepo.addFriend(friend)
 
     }
 
