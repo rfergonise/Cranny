@@ -23,10 +23,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_KEY", "\"${getProperty('API_KEY')}\"")
+            buildConfigField("String", "API_KEY", "\"${project.property('API_KEY')}\"")
         }
         debug {
-            buildConfigField("String", "API_KEY", "\"${getProperty('API_KEY')}\"")
+            buildConfigField("String", "API_KEY", "\"${project.property('API_KEY')}\"")
         }
     }
     compileOptions {
