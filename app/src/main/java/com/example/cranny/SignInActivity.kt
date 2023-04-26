@@ -49,7 +49,7 @@ class SignInActivity : AppCompatActivity()
 
         // The GoogleSignInOptions object is then used to create a GoogleSignInClient object.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(BuildConfig.API_KEY)
             .requestEmail()
             .build() // creates the gso object with the specified options^
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)

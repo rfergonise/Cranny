@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Cranny</string>
-    <string name="google_web_client_id">AIzaSyBG_BRlT0yPthnagzSOLCaPhFQp_C5bP9Q</string>
-
     <string name="date_started">Date started</string>
     <string name="mm_dd_yyyy">mm/dd/yyyy</string>
     <string name="was_book_finished">Was book finished?</string>
@@ -33,5 +31,4 @@
     <string name="tag_s">Tag(s)</string>
     <string name="rating_bar">Rating bar</string>
     <string name="rating">Rating</string>
-
 </resources>
