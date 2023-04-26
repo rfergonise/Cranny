@@ -416,6 +416,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tiMyReview">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etGenres"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
@@ -438,6 +439,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tiGenres">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTags"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"

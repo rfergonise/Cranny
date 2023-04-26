@@ -1,13 +1,11 @@
 package com.example.cranny
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
+import com.google.firebase.database.FirebaseDatabase
 
 class AddBookPage : AppCompatActivity() {
 
@@ -21,11 +19,17 @@ class AddBookPage : AppCompatActivity() {
         val summaryInput = findViewById<EditText>(R.id.etSummaryInput)
         val purchasedFromInput = findViewById<EditText>(R.id.etPurchasedFrom)
         val reviewInput = findViewById<EditText>(R.id.etReview)
+        val publisherInput = findViewById<EditText>(R.id.etPublisherInput)
+        val publicationDateInput = findViewById<EditText>(R.id.etnPublicationDateInput)
+        val mainCharactersInput = findViewById<EditText>(R.id.etMainCharactersInput)
         val genresInput = findViewById<EditText>(R.id.tiGenres)
         val tagsInput = findViewById<EditText>(R.id.tiTags)
         val ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
-        val cancelBTN = findViewById<Button>(R.id.btnCancel)
-        val saveBTN = findViewById<Button>(R.id.btnSave)
+        val cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
+        val saveBottomBTN = findViewById<Button>(R.id.btnSave)
+        val cancelTopBTN = findViewById<ImageButton>(R.id.ibCancelButton)
+        val saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
+
         val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
         val dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
         val dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
@@ -47,17 +51,15 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
-        saveBTN.setOnClickListener {
+        saveBottomBTN.setOnClickListener {
             val newBook = Book(
                 // need to create new id with each book
                 id = " ",
                 title = titleInput.toString(),
                 authorNames = authorInput.toString(),
-                //need to add publication date
-                publicationDate = " ",
+                publicationDate = publicationDateInput.toString(),
                 starRating = ratingsInput.toString().toInt(),
-                // need to add publisher
-                publisher = " ",
+                publisher = publisherInput.toString(),
                 description = summaryInput.toString(),
                 pageCount = lastPageReadInput.toString().toInt(),
                 // will need to work with Ethan about how to scrape book image from Google API
@@ -69,8 +71,7 @@ class AddBookPage : AppCompatActivity() {
                 endDate = dateFinishedInput.toString(),
                 prevReadCount = 0,
                 purchasedFrom = purchasedFromInput.toString(),
-                // need to add main characters
-                mainCharacters = " ",
+                mainCharacters = mainCharactersInput.toString(),
                 genres = genresInput.toString(),
                 tags = tagsInput.toString(),
                 lastReadDate = " ",
@@ -79,11 +80,64 @@ class AddBookPage : AppCompatActivity() {
             )
 
             // need to work with Ethan about how to add books to database
-            // addBookToDatabase(newBook)
+            val database = FirebaseDatabase.getInstance()
+            val bookRepository = BookRepository(database)
+            bookRepository.addBook(newBook)
+
+            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, LibraryData::class.java)
+            startActivity(intent)
         }
 
-        cancelBTN.setOnClickListener {
+        saveTopBTN.setOnClickListener {
+            val newBook = Book(
+                // need to create new id with each book
+                id = " ",
+                title = titleInput.toString(),
+                authorNames = authorInput.toString(),
+                publicationDate = publicationDateInput.toString(),
+                starRating = ratingsInput.toString().toInt(),
+                publisher = publisherInput.toString(),
+                description = summaryInput.toString(),
+                pageCount = lastPageReadInput.toString().toInt(),
+                // will need to work out how to scrape book image from Google API
+                thumbnail = " ",
+                journalEntry = reviewInput.toString(),
+                userProgress = 0,
+                userFinished = finishedCB.isChecked,
+                startDate = dataStartedInput.toString(),
+                endDate = dateFinishedInput.toString(),
+                prevReadCount = 0,
+                purchasedFrom = purchasedFromInput.toString(),
+                mainCharacters = mainCharactersInput.toString(),
+                genres = genresInput.toString(),
+                tags = tagsInput.toString(),
+                lastReadDate = " ",
+                lastReadTime = " ",
+                isFav = false
+            )
+
+            // need to work with Ethan about how to add books to database
+            val database = FirebaseDatabase.getInstance()
+            val bookRepository = BookRepository(database)
+            bookRepository.addBook(newBook)
+
+            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, LibraryData::class.java)
+            startActivity(intent)
+        }
+
+        cancelBottomBTN.setOnClickListener {
             // need to clear all fields and return to library screen
+            val intent = Intent(this, LibraryData::class.java)
+            startActivity(intent)
+        }
+
+        cancelTopBTN.setOnClickListener {
+            val intent = Intent(this, LibraryData::class.java)
+            startActivity(intent)
         }
 
     }
