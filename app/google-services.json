@@ -1,7 +1,6 @@
 {
   "project_info": {
     "project_number": "890129750167",
-    "firebase_url": "https://cranny-fs2023-default-rtdb.firebaseio.com",
     "project_id": "cranny-fs2023",
     "storage_bucket": "cranny-fs2023.appspot.com"
   },
@@ -15,35 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "890129750167-134gu38avcu9fo7hf1ah938u2dp8j0hs.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.cranny",
-            "certificate_hash": "b369bb5b6ddc4e32f55eb21e783f85645cb5cbc0"
-          }
-        },
-        {
-          "client_id": "890129750167-7fc395cckenl7sqkldr388q3qoo5jclv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.cranny",
-            "certificate_hash": "7c51fad5f987891a03ab145c2194097652c03592"
-          }
-        },
-        {
           "client_id": "890129750167-gfngjca37udauqdgh4cnp420jn9kro9c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.cranny",
             "certificate_hash": "638049d3f6ca344e996f17a2987d019318c9e65b"
-          }
-        },
-        {
-          "client_id": "890129750167-ve9qkoae6sede4h0lfi0end0lirgb1db.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.cranny",
-            "certificate_hash": "c8e29cfe641cc367e531bfb17a6e812994a332b9"
           }
         },
         {

@@ -40,6 +40,14 @@ class SignInActivity : AppCompatActivity()
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
+
+        // This code sets up a GoogleSignInOptions object with default sign-in options
+        // Such as requesting the user's information and ID token.
+
+        // The requestIdToken method sets the web client ID to authenticate the user with Google
+        // While the requestEmail method requests the user's email.
+
+        // The GoogleSignInOptions object is then used to create a GoogleSignInClient object.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.API_KEY)
             .requestEmail()
