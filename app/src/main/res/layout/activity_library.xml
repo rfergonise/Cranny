@@ -10,8 +10,9 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
+
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,12 +50,12 @@
                 android:layout_marginStart="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="Menu"
-                android:scaleX=".75"
-                android:scaleY=".75"
+                android:scaleX="1"
+                android:scaleY="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu2"
+                app:srcCompat="@drawable/menusmall"
                 tools:ignore="HardcodedText" />
 
             <ImageButton
@@ -64,12 +65,12 @@
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="Search"
-                android:scaleX=".75"
-                android:scaleY=".75"
+                android:scaleX="1"
+                android:scaleY="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/search2"
+                app:srcCompat="@drawable/searchsmall"
                 tools:ignore="HardcodedText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -83,8 +84,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        tools:listitem="@layout/book_cardview" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

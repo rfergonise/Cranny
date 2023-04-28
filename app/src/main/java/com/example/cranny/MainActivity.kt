@@ -6,6 +6,8 @@ import com.google.firebase.database.FirebaseDatabase
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import android.util.Log
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         // Delete Account Button On Click Event Handling
         buttonDeleteAccount = findViewById(R.id.bDeleteAccount)
         buttonDeleteAccount.setOnClickListener{
-            deleteUserInformation()
+            deleteUserInformation(currentUser?.uid!!)
         }
         // Settings Button
        settingsButton = findViewById(R.id.settingsButton)
@@ -401,9 +403,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteUserInformation()
+    private fun deleteUserInformation(userId: String)
     {
-        val profileRepository = ProfileRepository(database)
+        val serverRepository = ServerRepository(database)
+        serverRepository.removeUser(Friend(userId, username))
+        val profileRepository = ProfileRepository(database, userId)
         profileRepository.removeUser(username)
         signOut() // sign the user out of the app
     }

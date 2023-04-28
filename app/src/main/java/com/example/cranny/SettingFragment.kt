@@ -2,7 +2,6 @@ package com.example.cranny
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -12,10 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class SettingsFragment : PreferenceFragmentCompat() {
-    private val auth = FirebaseAuth.getInstance()
-    private var currentUser = auth.currentUser
-    private var username: String = ""
-
     private fun getUserId(): String? {
         val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         return firebaseUser?.uid
