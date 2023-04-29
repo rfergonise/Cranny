@@ -76,9 +76,6 @@ class UserProfileActivity : AppCompatActivity()
             // todo open user library activity
         }
 
-        // load the user favorite friends into the horizontal layout
-        setUpFavoriteFriendHorizontalLayout()
-
         // load the user's most recent reads into the recycler view
         setUpUserRecents()
     }
@@ -109,16 +106,18 @@ class UserProfileActivity : AppCompatActivity()
             profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
 
 
+            setUpFavoriteFriendHorizontalLayout(username, id)
+
             profileRepo.stopProfileListener()
         }
     }
-    private fun setUpFavoriteFriendHorizontalLayout()
+    private fun setUpFavoriteFriendHorizontalLayout(username: String, id: String)
     {
         // todo set it up to load favorite friends instead of just every friend
         val horizontalLayout = findViewById<LinearLayout>(R.id.horizontal_layout)
         var friendCount = 0
         val database = FirebaseDatabase.getInstance()
-        val friendRepo = FriendRepository(database)
+        val friendRepo = FriendRepository(database, username, id, this)
         friendRepo.fetchFriends()
         friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
             if(isFriendsReady)

@@ -11,7 +11,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -409,7 +413,30 @@ class MainActivity : AppCompatActivity() {
         serverRepository.removeUser(Friend(userId, username))
         val profileRepository = ProfileRepository(database, userId)
         profileRepository.removeUser(username)
-        signOut() // sign the user out of the app
+        val friendRepo = FriendRepository(database, username, userId, this)
+        friendRepo.fetchFriends()
+        friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+            if(isFriendsReady)
+            {
+                val friendCount = friendRepo.FriendIds.size
+                if(friendCount > 0)
+                {
+                    val friends = mutableListOf<Friend>()
+                    for(friend in friendRepo.FriendIds)
+                    {
+                        friends.add(Friend(friend.id, friend.username))
+                    }
+                    for (friend in friends)
+                    {
+                        val friends = FriendRepository(database, friend.username, friend.id, this)
+                        friends.removeFriend(Friend(userId, username))
+                    }
+                    signOut() // sign the user out of the app
+                }
+            }
+        })
+        friendRepo.stopFriendListener() // free the listener to stop memory leaks
+
     }
 
 

@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,7 +62,8 @@ class FriendSearchActivity : AppCompatActivity()
 
         val buttonFriendRequest: MaterialCardView = findViewById(R.id.mcvRequestButton)
         buttonFriendRequest.setOnClickListener {
-            // todo start friend request activity
+            val i = Intent(this, FriendRequestActivity::class.java)
+            startActivity(i)
         }
 
         val database = FirebaseDatabase.getInstance()
@@ -83,7 +85,7 @@ class FriendSearchActivity : AppCompatActivity()
     private fun getFriendList(user: User)
     {
         val database = FirebaseDatabase.getInstance()
-        val friendRepo = FriendRepository(database)
+        val friendRepo = FriendRepository(database, user.username, user.userId, this)
         friendRepo.fetchFriends()
         friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
             if(isFriendsReady)
@@ -97,7 +99,7 @@ class FriendSearchActivity : AppCompatActivity()
                     }
                     rvFriends.layoutManager = LinearLayoutManager(this)
                     rvFriends.setHasFixedSize(true)
-                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity,friendList, user, tvNoFriend)
+                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity,this@FriendSearchActivity,friendList, user, tvNoFriend)
                 }
                 else
                 {
@@ -134,14 +136,14 @@ class FriendSearchActivity : AppCompatActivity()
                 {
                     if(filteredList.size == 0) tvNoFriend.visibility = View.VISIBLE
                     else tvNoFriend.visibility = View.INVISIBLE
-                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity, filteredList.toMutableList(), user, tvNoFriend)
+                    rvFriends.adapter = SearchAdapter(this@FriendSearchActivity,this@FriendSearchActivity, filteredList.toMutableList(), user, tvNoFriend)
                 }
             }
         })
     }
 }
 
-class SearchAdapter(private val context: Context, private val usernames: MutableList<Friend>, private var user: User, private var tvNoFriend: TextView): RecyclerView.Adapter<SearchAdapter.MyViewHolder>()
+class SearchAdapter(private val owner: LifecycleOwner, val context: Context, private val usernames: MutableList<Friend>, private var user: User, private var tvNoFriend: TextView): RecyclerView.Adapter<SearchAdapter.MyViewHolder>()
 {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder
@@ -164,7 +166,7 @@ class SearchAdapter(private val context: Context, private val usernames: Mutable
         holder.ivRemoveFriend.setOnClickListener {
             val removeFriend = Friend(id, username)
             val database = FirebaseDatabase.getInstance()
-            val friendRepo = FriendRepository(database)
+            val friendRepo = FriendRepository(database, user.username, user.userId, owner)
             friendRepo.removeFriend(removeFriend)
             holder.ivRemoveFriend.visibility = View.INVISIBLE
             usernames.removeAt(position)

@@ -116,18 +116,14 @@ class AddFriendActivity : AppCompatActivity()
                 {
                     tvUsername.text = filteredList[0].username
                     ivAddFriend.setOnClickListener {
-                        val friendRepo = FriendRepository(database)
-                        val friend = Friend(filteredList[0].id, filteredList[0].username)
-                        friendRepo.addFriend(friend)
                         UserList.removeIf { userToRemove ->
                             userToRemove == filteredList[0]
                         }
                         userCard.visibility = View.INVISIBLE
                         noUserFound.visibility = View.INVISIBLE
-                        // Update the user's friend count
-                        user.friendCount++
-                        val profileRepo = ProfileRepository(database, user.userId)
-                        profileRepo.updateProfileData(user.username, user.name, user.userId, user.bio, user.friendCount, user.bookCount)
+
+                        val requestRepo = FriendRequestRepository(database, filteredList[0].id)
+                        requestRepo.addFriendRequest(Friend(user.userId, user.username))
                         Toast.makeText(this, "Friend Request Sent!", Toast.LENGTH_SHORT).show()
                     }
                     val profilePictureRepository = ProfilePictureRepository(database, filteredList[0].id)
@@ -142,7 +138,7 @@ class AddFriendActivity : AppCompatActivity()
     private fun getFriendList()
     {
         val database = FirebaseDatabase.getInstance()
-        val friendRepo = FriendRepository(database)
+        val friendRepo = FriendRepository(database, user.username,user.userId, this)
         friendRepo.fetchFriends()
         friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
             if(isFriendsReady)

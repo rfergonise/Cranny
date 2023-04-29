@@ -14,17 +14,19 @@
         android:theme="@style/Theme.Cranny"
         tools:targetApi="31">
         <activity
+            android:name=".FriendRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddFriendActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".FriendSearchActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".FriendActivity"
             android:exported="false"
-            android:label="@string/title_activity_friend"
             android:theme="@style/Theme.Cranny.NoActionBar" />
         <activity
             android:name=".UserProfileActivity"
@@ -44,7 +46,7 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SignInActivity"
             android:exported="true">

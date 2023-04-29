@@ -1,15 +1,28 @@
 <resources>
     <string name="app_name">Cranny</string>
     <string name="google_web_client_id">AIzaSyBG_BRlT0yPthnagzSOLCaPhFQp_C5bP9Q</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_friend">FriendActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="date_started">Date started</string>
+    <string name="mm_dd_yyyy">mm/dd/yyyy</string>
+    <string name="was_book_finished">Was book finished?</string>
+    <string name="finished_cb">Finished?</string>
+    <string name="last_page_read">Last page read</string>
+    <string name="page_number">Page Number</string>
+    <string name="datestarted">Date started</string>
+    <string name="author">Author(s)</string>
+    <string name="summary">Summary</string>
+    <string name="purchased_from">Purchased from</string>
+    <string name="my_review">My review</string>
+    <string name="save_btn">Save</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="library_appbar">Library</string>
+    <string name="menu_btn">Menu</string>
+    <string name="search_btn">Search</string>
+    <string name="tvrvBookTitle">Book Title</string>
+    <string name="tvrvAuthorName">Author Name</string>
+    <string name="rvBookImage">Book image</string>
+    <string name="alAddBook">Add Book</string>
+    <string name="btnMenu">Menu</string>
+    <string name="btnSave">Save</string>
+
 </resources>
