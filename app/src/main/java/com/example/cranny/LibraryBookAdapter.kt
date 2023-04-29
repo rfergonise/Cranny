@@ -8,31 +8,33 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class LibraryBookAdapter(
-    private val data: List<LibraryBookRecyclerData>
-) : RecyclerView.Adapter<LibraryBookAdapter.ItemViewHolder>() {
+    private val libraryDataToDisplay: ArrayList<LibraryBookRecyclerData>):
+    RecyclerView.Adapter<LibraryBookAdapter.ItemViewHolder>() {
 
-    inner class ItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val libBookTitle: TextView = view.findViewById(R.id.tvrvBookTitle)
-        val libAuthors: TextView = view.findViewById(R.id.tvrvAuthorName)
-        val libBookImage: ImageView = view.findViewById(R.id.rvBookImagePreview)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val inflatedView: View = LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+            LibraryBookAdapter.ItemViewHolder {
+        val itemView: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.book_cardview, parent, false)
 
-        return ItemViewHolder(inflatedView)
+        return ItemViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return libraryDataToDisplay.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val libraryBook: LibraryBookRecyclerData = data[position]
+        val libraryBook: LibraryBookRecyclerData = libraryDataToDisplay[position]
 
         holder.libBookTitle.text = libraryBook.libraryBookTitle
         holder.libAuthors.text = libraryBook.libraryAuthorsName
-        holder.libBookImage.setImageResource(libraryBook.libraryBookImage)
+        holder.libBookImage.setImageResource(libraryBook.libraryBookImage.toString().toInt())
     }
+
+    inner class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val libBookTitle: TextView = itemView.findViewById(R.id.tvrvBookTitle)
+        val libAuthors: TextView = itemView.findViewById(R.id.tvrvAuthorName)
+        val libBookImage: ImageView = itemView.findViewById(R.id.rvBookImagePreview)
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
 
 class AddBookPage : AppCompatActivity() {
@@ -22,8 +23,8 @@ class AddBookPage : AppCompatActivity() {
         val publisherInput = findViewById<EditText>(R.id.etPublisherInput)
         val publicationDateInput = findViewById<EditText>(R.id.etnPublicationDateInput)
         val mainCharactersInput = findViewById<EditText>(R.id.etMainCharactersInput)
-        val genresInput = findViewById<EditText>(R.id.tiGenres)
-        val tagsInput = findViewById<EditText>(R.id.tiTags)
+        val genresInput = findViewById<TextInputLayout>(R.id.tiGenres)
+        val tagsInput = findViewById<TextInputLayout>(R.id.tiTags)
         val ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
         val cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
         val saveBottomBTN = findViewById<Button>(R.id.btnSave)
@@ -52,73 +53,95 @@ class AddBookPage : AppCompatActivity() {
         }
 
         saveBottomBTN.setOnClickListener {
-            val newBook = Book(
-                // need to create new id with each book
-                id = " ",
-                title = titleInput.toString(),
-                authorNames = authorInput.toString(),
-                publicationDate = publicationDateInput.toString(),
-                starRating = ratingsInput.toString().toInt(),
-                publisher = publisherInput.toString(),
-                description = summaryInput.toString(),
-                pageCount = lastPageReadInput.toString().toInt(),
-                // will need to work with Ethan about how to scrape book image from Google API
-                thumbnail = " ",
-                journalEntry = reviewInput.toString(),
-                userProgress = 0,
-                userFinished = finishedCB.isChecked,
-                startDate = dataStartedInput.toString(),
-                endDate = dateFinishedInput.toString(),
-                prevReadCount = 0,
-                purchasedFrom = purchasedFromInput.toString(),
-                mainCharacters = mainCharactersInput.toString(),
-                genres = genresInput.toString(),
-                tags = tagsInput.toString(),
-                lastReadDate = " ",
-                lastReadTime = " ",
-                isFav = false
-            )
+            if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
+                val editText = genresInput.editText
+                val genres = editText?.text.toString()
 
-            // need to work with Ethan about how to add books to database
-            val database = FirebaseDatabase.getInstance()
-            val bookRepository = BookRepository(database)
-            bookRepository.addBook(newBook)
+                val editText2 = tagsInput.editText
+                val tags = editText2?.text.toString()
 
-            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+                val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
+                    lastPageReadInput.text.toString().toInt()
+                } else {
+                    0 // or any other default value you want to use
+                }
 
-            val intent = Intent(this, LibraryData::class.java)
-            startActivity(intent)
+                val newBook = Book(
+                    // need to create new id with each book
+                    id = "15",
+                    title = titleInput.text.toString(),
+                    authorNames = authorInput.text.toString(),
+                    publicationDate = publicationDateInput.text.toString(),
+                    starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                    publisher = publisherInput.text.toString(),
+                    description = summaryInput.text.toString(),
+                    pageCount = lastPageRead,
+                    thumbnail = " ",
+                    journalEntry = reviewInput.text.toString(),
+                    userProgress = 0,
+                    userFinished = finishedCB.isChecked,
+                    startDate = dataStartedInput.text.toString(),
+                    endDate = dateFinishedInput.text.toString(),
+                    prevReadCount = 0,
+                    purchasedFrom = purchasedFromInput.text.toString(),
+                    mainCharacters = mainCharactersInput.text.toString(),
+                    genres = genres,
+                    tags = tags,
+                    lastReadDate = " ",
+                    lastReadTime = " ",
+                    isFav = false
+                )
+
+                // need to work with Ethan about how to add books to database
+                val database = FirebaseDatabase.getInstance()
+                val bookRepository = BookRepository(database)
+                bookRepository.addBook(newBook)
+
+                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, LibraryData::class.java)
+                startActivity(intent)
+            }
+            else {
+                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
+            }
         }
 
         saveTopBTN.setOnClickListener {
+            val editText = genresInput.editText
+            val genres = editText?.text.toString()
+
+            val editText2 = tagsInput.editText
+            val tags = editText2?.text.toString()
+
             val newBook = Book(
                 // need to create new id with each book
-                id = " ",
-                title = titleInput.toString(),
-                authorNames = authorInput.toString(),
-                publicationDate = publicationDateInput.toString(),
-                starRating = ratingsInput.toString().toInt(),
-                publisher = publisherInput.toString(),
-                description = summaryInput.toString(),
-                pageCount = lastPageReadInput.toString().toInt(),
-                // will need to work out how to scrape book image from Google API
+                id = "14",
+                title = titleInput.text.toString(),
+                authorNames = authorInput.text.toString(),
+                publicationDate = publicationDateInput.text.toString(),
+                starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                publisher = publisherInput.text.toString(),
+                description = summaryInput.text.toString(),
+                pageCount = lastPageReadInput.text.toString().toInt(),
+                // will need to work with Ethan about how to scrape book image from Google API
                 thumbnail = " ",
-                journalEntry = reviewInput.toString(),
+                journalEntry = reviewInput.text.toString(),
                 userProgress = 0,
                 userFinished = finishedCB.isChecked,
-                startDate = dataStartedInput.toString(),
-                endDate = dateFinishedInput.toString(),
+                startDate = dataStartedInput.text.toString(),
+                endDate = dateFinishedInput.text.toString(),
                 prevReadCount = 0,
-                purchasedFrom = purchasedFromInput.toString(),
-                mainCharacters = mainCharactersInput.toString(),
-                genres = genresInput.toString(),
-                tags = tagsInput.toString(),
+                purchasedFrom = purchasedFromInput.text.toString(),
+                mainCharacters = mainCharactersInput.text.toString(),
+                genres = genres,
+                tags = tags,
                 lastReadDate = " ",
                 lastReadTime = " ",
                 isFav = false
             )
 
-            // need to work with Ethan about how to add books to database
+
             val database = FirebaseDatabase.getInstance()
             val bookRepository = BookRepository(database)
             bookRepository.addBook(newBook)

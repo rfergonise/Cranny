@@ -13,7 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cranny"
         tools:targetApi="31">
-
+        <activity
+            android:name=".LibraryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddBookPage"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
