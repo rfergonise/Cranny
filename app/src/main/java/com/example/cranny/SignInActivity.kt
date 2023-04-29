@@ -114,7 +114,7 @@ class SignInActivity : AppCompatActivity()
                             if(it.exists())
                             {
                                 // User already exists in the database
-                                val intent = Intent(this@SignInActivity, MainActivity::class.java)
+                                val intent = Intent(this@SignInActivity, DashboardActivity::class.java)
                                 startActivity(intent)
                             }
                             else

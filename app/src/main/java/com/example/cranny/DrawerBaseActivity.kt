@@ -37,7 +37,7 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
         return false
     }
 
-      fun allocateActivityTitle(titleString: String) {
+    fun allocateActivityTitle(titleString: String) {
         supportActionBar?.title = titleString
     }
 

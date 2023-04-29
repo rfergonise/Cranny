@@ -84,7 +84,7 @@ class SignUpActivity : AppCompatActivity() {
                             ServerRepository.stopUsernameListener()
 
                             // start main activity
-                            val i = Intent(this, MainActivity::class.java)
+                            val i = Intent(this, DashboardActivity::class.java)
                             startActivity(i)
                         }
                     }
