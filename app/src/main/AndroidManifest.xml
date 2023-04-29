@@ -12,7 +12,10 @@
         android:theme="@style/Theme.Cranny"
         tools:targetApi="31">
         <activity
-            android:name=".DashboardActivtity"
+            android:name=".DrawerBaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
