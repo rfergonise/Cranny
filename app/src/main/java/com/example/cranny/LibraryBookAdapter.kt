@@ -8,13 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class LibraryBookAdapter(
-    private val libraryDataToDisplay: ArrayList<LibraryBookRecyclerData>):
-    RecyclerView.Adapter<LibraryBookAdapter.ItemViewHolder>() {
+    private val libraryDataToDisplay: ArrayList<LibraryBookRecyclerData>): RecyclerView.Adapter<LibraryBookAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             LibraryBookAdapter.ItemViewHolder {
-        val itemView: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.book_cardview, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.book_cardview, parent, false)
 
         return ItemViewHolder(itemView)
     }
@@ -26,9 +24,10 @@ class LibraryBookAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val libraryBook: LibraryBookRecyclerData = libraryDataToDisplay[position]
 
-        holder.libBookTitle.text = libraryBook.libraryBookTitle
-        holder.libAuthors.text = libraryBook.libraryAuthorsName
-        holder.libBookImage.setImageResource(libraryBook.libraryBookImage.toString().toInt())
+        holder.libBookTitle.text = libraryDataToDisplay[position].libraryBookTitle
+        holder.libAuthors.text = libraryDataToDisplay[position].libraryAuthorsName
+        // Need to fix when we figure out images
+        //holder.libBookImage.imageview = libraryDataToDisplay[position].libraryBookImage
     }
 
     inner class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

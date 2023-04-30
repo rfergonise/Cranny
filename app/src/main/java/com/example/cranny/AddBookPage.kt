@@ -153,13 +153,12 @@ class AddBookPage : AppCompatActivity() {
         }
 
         cancelBottomBTN.setOnClickListener {
-            // need to clear all fields and return to library screen
-            val intent = Intent(this, LibraryData::class.java)
+            val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
 
         cancelTopBTN.setOnClickListener {
-            val intent = Intent(this, LibraryData::class.java)
+            val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
 
