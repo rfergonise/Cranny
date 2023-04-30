@@ -1,7 +1,11 @@
 package com.example.cranny
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -9,6 +13,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.example.cranny.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private fun getUserId(): String? {
@@ -30,7 +35,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         //account notification switch
-        val accountNotificationSwitch: SwitchPreferenceCompat? = findPreference("account_private")
+        val accountNotificationSwitch: SwitchPreferenceCompat? = findPreference("enable_notifications")
         accountNotificationSwitch?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
 
@@ -55,29 +60,52 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     }
     //account privacy
-   private fun savePrivateAccountSetting(userID: String, isPrivate: Boolean) {
-        val sharedPreferences = requireActivity().getSharedPreferences("user_settings_$userID", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("account_private", isPrivate)
-        editor.apply()
+    private fun savePrivateAccountSetting(userID: String, isPrivate: Boolean) {
+        val database = FirebaseDatabase.getInstance()
+        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        userPreferencesRef.child("account_private").setValue(isPrivate)
     }
     //account notifications
     private fun saveNotificationsAccountSetting(userID: String, isNotified: Boolean) {
-        val sharedPreferences = requireActivity().getSharedPreferences("user_settings_$userID", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("enable_notifications", isNotified)
-        editor.apply()
+        val database = FirebaseDatabase.getInstance()
+        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        userPreferencesRef.child("enable_notifications").setValue(isNotified)
     }
     //account change username
     private fun updateUsername(userID: String, newUsername: String) {
-        val sharedPreferences = requireActivity().getSharedPreferences("user_settings_$userID", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("username", newUsername)
-        editor.apply()
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.reference.child("UserData").child(userID).child("Profile")
+        val ServerRepository = ServerRepository(database)
+        ServerRepository.isUserListReady.observe(this, Observer { isUserListReady ->
+            if (isUserListReady) {
+                for (user in ServerRepository.Users) {
+                    if (newUsername == user.username) {
+                        // Username exists
+                        Toast.makeText(requireContext(), "Username is already in user", Toast.LENGTH_SHORT)
+                            .show()
+
+                    } else {
+                        // Username doesn't exist
+                        userRef.child("Username").setValue(newUsername)
+                        Toast.makeText(requireContext(), "Username changed to $newUsername", Toast.LENGTH_SHORT).show()
+                            }
+
+                        // Stop the database listener checking usernames
+                        ServerRepository.stopUserListener()
+
+
+                    }
+                }
+            })
+        }
     }
 
 
 
 
-}
+
+
+
+
+
 

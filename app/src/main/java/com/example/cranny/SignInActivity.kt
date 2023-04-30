@@ -108,7 +108,6 @@ class SignInActivity : AppCompatActivity()
                     {
                         user.userId = curUser.uid
                         user.name = curUser.displayName.toString()
-                        user.profile = curUser.photoUrl.toString()
                         val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
                         userDatabase.child(curUser.uid).get().addOnSuccessListener {
                             if(it.exists())

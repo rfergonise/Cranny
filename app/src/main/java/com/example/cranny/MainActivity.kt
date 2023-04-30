@@ -11,7 +11,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -20,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsButton: Button
     private lateinit var buttonSocial: Button
     private lateinit var buttonDeleteAccount: Button
+
+    // Firebase stuff
+    val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
     private var username: String = ""
@@ -43,12 +50,24 @@ class MainActivity : AppCompatActivity() {
         // Delete Account Button On Click Event Handling
         buttonDeleteAccount = findViewById(R.id.bDeleteAccount)
         buttonDeleteAccount.setOnClickListener{
-            deleteUserInformation()
+            deleteUserInformation(currentUser?.uid!!)
         }
         // Settings Button
        settingsButton = findViewById(R.id.settingsButton)
         settingsButton.setOnClickListener{
             val i = Intent(this, SettingsActivity::class.java)
+            startActivity(i)
+        }
+        // Add Book Button
+        val buttonAddBook = findViewById<Button>(R.id.bAddBook)
+        buttonAddBook.setOnClickListener{
+            val i = Intent(this, AddBookPage::class.java)
+            startActivity(i)
+        }
+        // Library Button
+        val buttonLibrary = findViewById<Button>(R.id.bLibrary)
+        buttonLibrary.setOnClickListener{
+            val i = Intent(this, LibraryActivity::class.java)
             startActivity(i)
         }
 
@@ -400,21 +419,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteUserInformation()
+    private fun deleteUserInformation(userId: String)
     {
-        val curUser = FirebaseAuth.getInstance().currentUser // get the current user
-        if (curUser != null)
-        {
-            // if the user isn't null
-            curUser.delete() // delete them from firebase
-            val database = FirebaseDatabase.getInstance()
-            val userRef = database.reference.child("UserData").child(curUser.uid) // get the path to their user data location in the database
-            val usernameRef = database.reference.child("ServerData").child("Usernames").child(username) // get the path to their username in the taken username list
+        val serverRepository = ServerRepository(database)
+        serverRepository.removeUser(Friend(userId, username))
+        val profileRepository = ProfileRepository(database, userId)
+        profileRepository.removeUser(username)
+        val friendRepo = FriendRepository(database, username, userId, this)
+        friendRepo.fetchFriends()
+        friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+            if(isFriendsReady)
+            {
+                val friendCount = friendRepo.FriendIds.size
+                if(friendCount > 0)
+                {
+                    val friends = mutableListOf<Friend>()
+                    for(friend in friendRepo.FriendIds)
+                    {
+                        friends.add(Friend(friend.id, friend.username))
+                    }
+                    for (friend in friends)
+                    {
+                        val friends = FriendRepository(database, friend.username, friend.id, this)
+                        friends.removeFriend(Friend(userId, username))
+                    }
+                    signOut() // sign the user out of the app
+                }
+            }
+        })
+        friendRepo.stopFriendListener() // free the listener to stop memory leaks
 
-            usernameRef.removeValue() // clear their information from the database
-            userRef.removeValue() // clear the username from the taken username list
-        }
-        signOut() // sign the user out of the app
     }
 
 

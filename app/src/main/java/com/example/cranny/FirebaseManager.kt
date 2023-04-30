@@ -1,5 +1,11 @@
 package com.example.cranny
 
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
@@ -8,6 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 
 
 // How to use each class?
@@ -55,15 +63,29 @@ bookRepository.removeUser(user)
 /* How to ADD friend data
 val database = FirebaseDatabase.getInstance()
 val friendRepo = FriendRepository(database)
-// Add a friend with friendId "xyz123"
-friendRepo.addFriend("xyz123")
+val friend = Friend("friendId", "username")
+friendRepo.addFriend(friend)
 */
 
 /* How to REMOVE friend data
 val database = FirebaseDatabase.getInstance()
 val friendRepo = FriendRepository(database)
-// Remove a friend with friendId "abc456"
-friendRepo.removeFriend("abc456")
+val friend = Friend("friendId", "username")
+friendRepo.removeFriend(friend)
+ */
+
+/* How to FETCH friends?
+val database = FirebaseDatabase.getInstance()
+val friendRepo = FriendRepository(database)
+friendRepo.fetchFriends()
+friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+    if(isFriendsReady)
+    {
+      // get the friend count by using friendRepo.FriendIds.size
+      // get a friend by if(friendCount > 0) friendRepo.FriendIds[0]
+    }
+})
+friendRepo.stopFriendListener() // free the listener to stop memory leaks
  */
 
 //--------------------------------------------------------
@@ -79,7 +101,7 @@ bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
       // grab each book from bookRepository.Library
     }
 })
-bookRepository.stopBookListener // free the listener to stop memory leaks
+bookRepository.stopBookListener() // free the listener to stop memory leaks
  */
 
 /* How to ADD book data
@@ -138,13 +160,11 @@ recentRepository.updateRecent(socialFeed)
 
 //---------------------------------------------------------------
 
-class ProfileRepository(private val database: FirebaseDatabase)
+class ProfileRepository(private val database: FirebaseDatabase, private val userId: String)
 {
     private val _profileData = MutableLiveData<User>()
     val profileData: LiveData<User>
         get() = _profileData
-
-    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     private var listener: ValueEventListener? = null
 
@@ -156,20 +176,19 @@ class ProfileRepository(private val database: FirebaseDatabase)
     private fun fetchProfileData()
     {
         // Firebase Path References
-        val profileDataRef = database.getReference("UserData").child(currentUser!!.uid) .child("Profile")
+        val profileDataRef = database.getReference("UserData").child(userId).child("Profile")
         listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 val username = dataSnapshot.child("Username").getValue(String::class.java) ?: ""
                 val displayName = dataSnapshot.child("Name").getValue(String::class.java) ?: ""
-                val pfpURL = dataSnapshot.child("ProfilePictureURL").getValue(String::class.java) ?: ""
                 val userId = dataSnapshot.child("UserId").getValue(String::class.java) ?: ""
                 val bio = dataSnapshot.child("Bio").getValue(String::class.java) ?: ""
                 val friendCount = dataSnapshot.child("FriendCount").getValue(Long::class.java)?.toInt() ?: 0
                 val bookCount = dataSnapshot.child("BookCount").getValue(Long::class.java)?.toInt() ?: 0
 
-                val user = User(userId, displayName, pfpURL, username, friendCount, bookCount, bio)
+                val user = User(userId, displayName, username, friendCount, bookCount, bio)
                 _profileData.postValue(user) // Update the LiveData object with the new data
             }
             override fun onCancelled(error: DatabaseError) { }
@@ -177,22 +196,20 @@ class ProfileRepository(private val database: FirebaseDatabase)
         profileDataRef.addListenerForSingleValueEvent(listener!!)
     }
 
-    fun updateProfileData(username: String, displayName: String, pfpURL: String, userId: String, bio: String,friendCount: Int, bookCount: Int)
+    fun updateProfileData(username: String, displayName: String, userId: String, bio: String,friendCount: Int, bookCount: Int)
     {
-        // gets the path reference to the profile
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val profileDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Profile")
-        // creates a HashMap of the new data we are setting
-        val profileData = HashMap<String, Any>()
-        profileData["Username"] = username
-        profileData["Name"] = displayName
-        profileData["ProfilePictureURL"] = pfpURL
-        profileData["UserId"] = userId
-        profileData["Bio"] = bio
-        profileData["FriendCount"] = friendCount
-        profileData["BookCount"] = bookCount
-        // updates the profile's current HashMap with the new one
-        profileDataRef.updateChildren(profileData)
+            // gets the path reference to the profile
+            val profileDataRef = database.getReference("UserData").child(userId).child("Profile")
+            // creates a HashMap of the new data we are setting
+            val profileData = HashMap<String, Any>()
+            profileData["Username"] = username
+            profileData["Name"] = displayName
+            profileData["UserId"] = userId
+            profileData["Bio"] = bio
+            profileData["FriendCount"] = friendCount
+            profileData["BookCount"] = bookCount
+            // updates the profile's current HashMap with the new one
+            profileDataRef.updateChildren(profileData)
     }
 
     fun addUser(user: User)
@@ -202,15 +219,36 @@ class ProfileRepository(private val database: FirebaseDatabase)
         userDataRef.child("BookCount").setValue(user.bookCount)
         userDataRef.child("FriendCount").setValue(user.friendCount)
         userDataRef.child("Name").setValue(user.name)
-        userDataRef.child("ProfilePictureURL").setValue(user.profile)
         userDataRef.child("UserId").setValue(user.userId)
         userDataRef.child("Username").setValue(user.username)
+    }
+
+    fun removeUser(username: String)
+    {
+        val curUser = FirebaseAuth.getInstance().currentUser // get the current user
+        if (curUser != null && userId == curUser.uid)
+        {
+            // if the user isn't null
+
+            // remove the user's saved profile picture
+            val profilePictureRepository = ProfilePictureRepository(database, curUser.uid)
+            profilePictureRepository.deleteProfilePicture()
+
+            curUser.delete() // delete them from firebase
+            val database = FirebaseDatabase.getInstance()
+            val userRef = database.reference.child("UserData").child(curUser.uid) // get the path to their user data location in the database
+            val usernameRef = database.reference.child("ServerData").child("Usernames").child(username) // get the path to their username in the taken username list
+
+            usernameRef.removeValue() // clear their information from the database
+            userRef.removeValue() // clear the username from the taken username list
+
+        }
     }
 
     fun stopProfileListener()
     {
         listener?.let {
-            val profileDataRef = database.getReference("UserData").child(currentUser!!.uid)
+            val profileDataRef = database.getReference("UserData").child(userId)
                 .child("Profile")
             profileDataRef.removeEventListener(it)
             listener = null
@@ -218,35 +256,107 @@ class ProfileRepository(private val database: FirebaseDatabase)
     }
 }
 
-class FriendRepository(private val database: FirebaseDatabase)
+class FriendRepository(private val database: FirebaseDatabase, private val username: String,private val id: String, private val owner: LifecycleOwner)
 {
-    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    //private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
-    // todo add fetchFriendRecent(friendId:String)
+    public var FriendIds = mutableListOf<Friend>()
+    private val _isFriendReady = MutableLiveData<Boolean>()
+    val isFriendsReady: LiveData<Boolean>
+        get() = _isFriendReady
+    private var listener: ValueEventListener? = null
+
+    fun fetchFriends()
+    {
+        // Firebase Path References
+        val friendDataRef = database.getReference("UserData").child(id).child("Friends")
+        listener = object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                _isFriendReady.postValue(false) // inform the caller the list is not ready
+                for (friend in dataSnapshot.children)
+                {
+                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "")
+                    FriendIds.add(temp_friend)
+                }
+                _isFriendReady.postValue(true) // inform the caller we have filled the list with each book
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        }
+        friendDataRef.addListenerForSingleValueEvent(listener!!)
+    }
 
     // Adds whatever friendId that is passed in to the user's friend list
-    fun addFriend(friendId: String)
+    fun addFriend(friend: Friend)
     {
-        val friendDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Friends")
-        friendDataRef.child(friendId).setValue(friendId)
+        // add the friend to the user's friend list
+        val userDataRef = database.getReference("UserData").child(id).child("Friends")
+        userDataRef.child(friend.id).child("id").setValue(friend.id)
+        userDataRef.child(friend.id).child("username").setValue(friend.username)
+
+        // update the user's friend count
+        val userProfileRepo = ProfileRepository(database, id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var friendCount = userProfile.friendCount
+            friendCount++
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, friendCount, userProfile.bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
+        // add the user to the friend's friend list
+        val friendDataRef = database.getReference("UserData").child(friend.id).child("Friends")
+        friendDataRef.child(id).child("id").setValue(id)
+        friendDataRef.child(id).child("username").setValue(username)
+
+        // update the friend's friend count
+        val friendProfileRepo = ProfileRepository(database, friend.id)
+        friendProfileRepo.profileData.observe(owner) { friendProfile ->
+            var friendCount = friendProfile.friendCount
+            friendCount++
+            friendProfileRepo.updateProfileData(friendProfile.username, friendProfile.name, friendProfile.userId, friendProfile.bio, friendCount, friendProfile.bookCount)
+            friendProfileRepo.stopProfileListener()
+        }
     }
 
     // Searches the user's friend list and removes the passed in friendId from it
-    fun removeFriend(friendId: String)
+    fun removeFriend(friend: Friend) {
+
+        // remove the friend from the user's friend list
+        val userDataRef = database.getReference("UserData").child(id).child("Friends").child(friend.id)
+        userDataRef.removeValue()
+
+        // update the user's friend count
+        val userProfileRepo = ProfileRepository(database, id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var friendCount = userProfile.friendCount
+            friendCount--
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, friendCount, userProfile.bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
+        // remove the user from the friend's friend list
+        val friendDataRef = database.getReference("UserData").child(friend.id).child("Friends").child(id)
+        friendDataRef.removeValue()
+
+        // update the friend's friend count
+        val friendProfileRepo = ProfileRepository(database, friend.id)
+        friendProfileRepo.profileData.observe(owner) { friendProfile ->
+            var friendCount = friendProfile.friendCount
+            friendCount--
+            friendProfileRepo.updateProfileData(friendProfile.username, friendProfile.name, friendProfile.userId, friendProfile.bio, friendCount, friendProfile.bookCount)
+            friendProfileRepo.stopProfileListener()
+        }
+
+    }
+
+    fun stopFriendListener()
     {
-        val friendDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Friends")
-        friendDataRef.orderByValue().equalTo(friendId).addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.value == friendId) {
-                        childSnapshot.ref.removeValue()
-                        break
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) { }
-        })
+        listener?.let {
+            val friendDataRef = database.getReference("UserData").child(id).child("Friends")
+            friendDataRef.removeEventListener(it)
+            listener = null
+        }
     }
 }
 
@@ -266,17 +376,12 @@ class BookRepository(private val database: FirebaseDatabase)
         fetchBookData()
     }
 
-    fun removeBook(book: Book)
-    {
+    fun removeBook(book: Book) {
         val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
-        bookDataRef.orderByValue().equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot)
-            {
-                for (childSnapshot in dataSnapshot.children)
-                {
-                    if (childSnapshot.value == book.id)
-                    {
+        bookDataRef.orderByChild("Id").equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.child("Id").value == book.id) {
                         childSnapshot.ref.removeValue()
                         break
                     }
@@ -318,7 +423,7 @@ class BookRepository(private val database: FirebaseDatabase)
                     val UserProgressInt = userProgress?.toInt()
                     val StarRating = bookSnapshot.child("StarRating").value as? Long
                     val StarRatingInt = StarRating?.toInt() ?: 0
-                    val UserFinished = bookSnapshot.child("UserFinished").value as Boolean
+                    val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as Boolean
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
                     val pageCount = bookSnapshot.child("PageCount").value as? Long
@@ -391,6 +496,7 @@ class BookRepository(private val database: FirebaseDatabase)
         bookDataRef.child(book.id).child("Publisher").setValue(book.publisher)
         bookDataRef.child(book.id).child("PurchaseFrom").setValue(book.purchasedFrom)
         bookDataRef.child(book.id).child("StarRating").setValue(book.starRating)
+        bookDataRef.child(book.id).child("StartDate").setValue(book.startDate)
         bookDataRef.child(book.id).child("Tags").setValue(book.tags)
         bookDataRef.child(book.id).child("Thumbnail").setValue(book.thumbnail)
         bookDataRef.child(book.id).child("Title").setValue(book.title)
@@ -407,6 +513,20 @@ class BookRepository(private val database: FirebaseDatabase)
                 .child("Books")
             profileDataRef.removeEventListener(it)
             listener = null
+        }
+    }
+
+    fun clearUserLibrary() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            for (book in Library) {
+                removeBook(book)
+            }
+            // Signal that the user library has been cleared
+            _isBookDataReady.postValue(true)
+        } else {
+            Log.e("BookRepository", "User ID is null. Cannot clear the library.")
+            _isBookDataReady.postValue(false)
         }
     }
 }
@@ -495,17 +615,12 @@ class RecentRepository(private val database: FirebaseDatabase)
     }
 
     // Searches the user's recents list and removes the passed in SocialFeed from it
-    fun removeRecent(socialFeed: SocialFeed)
-    {
+    fun removeRecent(socialFeed: SocialFeed) {
         val socialDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents")
-        socialDataRef.orderByValue().equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot)
-            {
-                for (childSnapshot in dataSnapshot.children)
-                {
-                    if (childSnapshot.value == socialFeed.id)
-                    {
+        socialDataRef.orderByChild("Id").equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.child("Id").value == socialFeed.id) {
                         childSnapshot.ref.removeValue()
                         break
                     }
@@ -524,83 +639,178 @@ class RecentRepository(private val database: FirebaseDatabase)
             listener = null
         }
     }
+
+
 }
 class ServerRepository(private val database: FirebaseDatabase)
 {
-    public var TakenUsernames = mutableListOf<String>()
-
-    private val _isTakenUsernameListReady = MutableLiveData<Boolean>()
-    val isTakenUsernameListReady: LiveData<Boolean>
-        get() = _isTakenUsernameListReady
+    public var Users = mutableListOf<Friend>()
+    private val _isUserListReady = MutableLiveData<Boolean>()
+    val isUserListReady: LiveData<Boolean>
+        get() = _isUserListReady
 
     private var listener: ValueEventListener? = null
 
     init
     {
-        fetchTakenUsernames()
+        fetchUsers()
     }
 
-    fun addUsername(username: String)
+    // UserDirectory
+    fun addUser(friend: Friend)
     {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
-        usernameRef.child(username).setValue(username)
+        val usernameRef = database.getReference("ServerData").child("UserList")
+        usernameRef.child(friend.username).child("Username").setValue(friend.username)
+        usernameRef.child(friend.username).child("Id").setValue(friend.id)
     }
 
-    fun removeUsername(username: String)
+    fun removeUser(friend: Friend)
     {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
-        usernameRef.orderByValue().equalTo(username)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (childSnapshot in dataSnapshot.children) {
-                        if (childSnapshot.value == username) {
-                            childSnapshot.ref.removeValue()
-                            break
-                        }
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // Failed to read value
-                }
-            })
+        val friendDataRef = database.getReference("ServerData").child("UserList").child(friend.username)
+        friendDataRef.removeValue()
     }
 
-    fun updateUsername(oldUsername: String, newUsername: String)
+    fun updateUser(friendOld: Friend, friendNew: Friend)
     {
-        // I have to do it this way because the usernames are set up as <Username, Username>/<Key, Value>
-        // There is no way to change the Key unless you remove it and replace
-        removeUsername(oldUsername)
-        addUsername(newUsername)
+        removeUser(friendOld)
+        addUser(friendNew)
     }
 
-    fun fetchTakenUsernames()
+    fun fetchUsers()
     {
-        val usernameRef = database.getReference("ServerData").child("Usernames")
+        val userRef = database.getReference("ServerData").child("UserList")
 
-        listener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                TakenUsernames.clear()
-                _isTakenUsernameListReady.postValue(false)
-                for (username in dataSnapshot.children)
+        listener = object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                Users.clear()
+                _isUserListReady.postValue(false)
+                for (user in dataSnapshot.children)
                 {
-                    val TakenUsername = username.value as String
-                    TakenUsernames.add(TakenUsername) // adds each taken username to this list
+                    val username = user.child("Username").value as String
+                    val id = user.child("Id").value as String
+                    Users.add(Friend(id, username))
                 }
-                _isTakenUsernameListReady.postValue(true) // inform the caller we have filled the list with each recent book
+                _isUserListReady.postValue(true) // inform the caller we have filled the list with each recent book
             }
             override fun onCancelled(error: DatabaseError) { }
         }
-        usernameRef.addListenerForSingleValueEvent(listener!!)
+        userRef.addListenerForSingleValueEvent(listener!!)
     }
 
-    fun stopUsernameListener()
+    fun stopUserListener()
     {
         listener?.let {
-            val usernameRef = database.getReference("ServerData").child("Usernames")
-            usernameRef.removeEventListener(it)
+            val userRef = database.getReference("ServerData").child("UserList")
+            userRef.removeEventListener(it)
             listener = null
         }
     }
 }
+class ProfilePictureRepository(private val database: FirebaseDatabase, val userId: String)
+{
+    private val profileRef = database.getReference("UserData/${userId}/Profile/ProfilePictureURI")
+    private val storageRef = FirebaseStorage.getInstance().reference.child("UserData/ProfilePictures/${userId}")
+    fun uploadProfilePicture(imageUri: Uri?)
+    {
+        // Upload the image to Firebase Storage
+        storageRef.putFile(imageUri!!).addOnSuccessListener { taskSnapshot ->
+            // Get the download URL of the uploaded image
+            val downloadUrl = taskSnapshot.metadata?.reference?.downloadUrl?.toString()
+
+            // Save the download URL to the Realtime Database
+            profileRef.setValue(downloadUrl).addOnSuccessListener {
+                // Image URI saved successfully
+            }.addOnFailureListener { exception ->
+                // Handle the error
+            }
+        }.addOnFailureListener { exception ->
+            // Handle the error
+        }
+    }
+
+    fun loadProfilePictureIntoImageView(imageView: ImageView)
+    {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("UserData/ProfilePictures/${userId}")
+
+        // Get the download URL for the image
+        imageRef.downloadUrl.addOnSuccessListener { uri ->
+            // Load the image using Picasso
+            Picasso.get().load(uri.toString()).into(imageView)
+        }.addOnFailureListener { exception ->
+            // Handle any errors
+        }
+    }
+
+    fun deleteProfilePicture()
+    {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("UserData/ProfilePictures/${userId}")
+        imageRef.delete()
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { exception ->
+            }
+    }
+}
+
+class FriendRequestRepository(private val database: FirebaseDatabase, private val id: String)
+{
+    public var RequestedUsers = mutableListOf<Friend>()
+    private val _isFriendRequestReady = MutableLiveData<Boolean>()
+    val isFriendsReady: LiveData<Boolean>
+        get() = _isFriendRequestReady
+    private var listener: ValueEventListener? = null
+
+    fun fetchFriendRequests()
+    {
+        // Firebase Path References
+        val friendDataRef = database.getReference("UserData").child(id).child("FriendRequests")
+        listener = object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                _isFriendRequestReady.postValue(false) // inform the caller the list is not ready
+                for (friend in dataSnapshot.children)
+                {
+                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "")
+                    RequestedUsers.add(temp_friend)
+                }
+                _isFriendRequestReady.postValue(true) // inform the caller we have filled the list with each book
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        }
+        friendDataRef.addListenerForSingleValueEvent(listener!!)
+    }
+
+    // Adds whatever friendId that is passed in to the user's friend list
+    fun addFriendRequest(friend: Friend)
+    {
+        val friendDataRef = database.getReference("UserData").child(id).child("FriendRequests")
+        friendDataRef.child(friend.id).child("id").setValue(friend.id)
+        friendDataRef.child(friend.id).child("username").setValue(friend.username)
+    }
+
+    // Searches the user's friend list and removes the passed in friendId from it
+    fun removeFriendRequest(friend: Friend)
+    {
+
+        val friendDataRef = database.getReference("UserData").child(id).child("FriendRequests").child(friend.id)
+        friendDataRef.removeValue()
+    }
+
+    fun stopFriendRequestListener()
+    {
+        listener?.let {
+            val friendDataRef = database.getReference("UserData").child(id).child("Friends")
+            friendDataRef.removeEventListener(it)
+            listener = null
+        }
+    }
+}
+
 

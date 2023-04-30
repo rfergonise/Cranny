@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+
+    android:id="@+id/clAddBookLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/collapsingToolbarLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+
+            <TextView
+                android:id="@+id/tvAddBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway"
+                android:text="@string/alAddBook"
+                android:textColor="#000000"
+                android:textSize="50sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ibCancelButton"
+                android:layout_width="56dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="8dp"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/btnMenu"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/cancelsmall" />
+
+            <ImageButton
+                android:id="@+id/ibSaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/btnSave"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/diskettesmall" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiTitleInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="10dp"
+                    android:hint="@string/title"
+                    app:errorEnabled="false"
+                    app:helperText="Required"
+                    app:helperTextTextColor="#830101"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTitleInput"
+                        android:layout_width="395dp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvDateStarted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/date_started"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/datestarted"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput" />
+
+                <EditText
+                    android:id="@+id/tdStarted"
+                    android:layout_width="200dp"
+                    android:layout_height="51dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/raleway"
+                    android:hint="@string/mm_dd_yyyy"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTitleInput" />
+
+                <TextView
+                    android:id="@+id/tvFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/was_book_finished"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/finished_cb"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDateStarted" />
+
+                <CheckBox
+                    android:id="@+id/cbFinished"
+                    android:layout_width="56dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="14dp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvFinished"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDateStarted" />
+
+                <TextView
+                    android:id="@+id/tvDateFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/date_finished"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <EditText
+                    android:id="@+id/etDateFinished"
+                    android:layout_width="200dp"
+                    android:layout_height="51dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/raleway"
+                    android:hint="@string/mm_dd_yyyy"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:textAlignment="textEnd"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <TextView
+                    android:id="@+id/tvPageRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/last_page_read"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <EditText
+                    android:id="@+id/tnPageNumber"
+                    android:layout_width="175dp"
+                    android:layout_height="51dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/raleway"
+                    android:hint="@string/page_number"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textAlignment="textEnd"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFinished" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiAuthorInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/author"
+                    app:helperText="Required"
+                    app:helperTextTextColor="#830101"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPageRead">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAuthorInput"
+                        android:layout_width="395dp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiPublisherInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/publisher_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiAuthorInput">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPublisherInput"
+                        android:layout_width="395dp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvPublicationDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/publication_date"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiPublisherInput" />
+
+                <EditText
+                    android:id="@+id/etnPublicationDateInput"
+                    android:layout_width="155dp"
+                    android:layout_height="51dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/raleway"
+                    android:hint="@string/mm_dd_yyyy"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiPublisherInput" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiMainCharactersInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/main_character_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etnPublicationDateInput">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMainCharactersInput"
+                        android:layout_width="395dp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiSummaryInput"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/summary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiMainCharactersInput">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSummaryInput"
+                        android:layout_width="395dp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiPurchasedFrom"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/purchased_from"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiSummaryInput">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPurchasedFrom"
+                        android:layout_width="395sp"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiMyReview"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/my_review"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiPurchasedFrom">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etReview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiGenres"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/genre_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiMyReview">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etGenres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tiTags"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="395dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/tag_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiGenres">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#6AFFFFFF"
+                        android:backgroundTint="#283C3C3C"
+                        android:fontFamily="@font/raleway"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/rating_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTags" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="9dp"
+                    android:fontFamily="@font/raleway"
+                    android:text="@string/rating"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tiTags" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="100dp"
+                    android:layout_height="57dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/save_btn"
+                    android:textSize="15sp"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="100dp"
+                    android:layout_height="57dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/cancel_btn"
+                    android:textSize="15sp"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <!--
+        Will need to fix autofill for date if no date is entered
+-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

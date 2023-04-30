@@ -3,22 +3,18 @@ package com.example.cranny
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 
 
 class SignUpActivity : AppCompatActivity() {
-
-    // Firebase stuff
-    //private var database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    //private val auth = FirebaseAuth.getInstance()
-    //private var currentUser = auth.currentUser
 
     // UI Elements needed
     private lateinit var buttonDone: Button
@@ -27,29 +23,20 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var textBio: EditText
     private lateinit var imageProfile: ImageView
 
-    private lateinit var userInfo: User
+    // Firebase stuff
+    val database = FirebaseDatabase.getInstance()
+    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
-    private lateinit var profileRepository: ProfileRepository
+    var isProfilePictureSelected: Boolean = false
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-
-        // get the user info
-        val database = FirebaseDatabase.getInstance()
-        profileRepository = ProfileRepository(database)
-        profileRepository.profileData.observe(this) { userProfile ->
-            // get the info
-            val username = userProfile.username
-            val name = userProfile.name
-            val friendCount = userProfile.friendCount
-            val bookCount = userProfile.bookCount
-            val pfpURL = userProfile.profile
-            val bio = userProfile.bio
-            val id = userProfile.userId
-            userInfo = User(id, name, pfpURL, username, friendCount, bookCount, bio)
-        }
 
         // Get the ui elements linked
         buttonDone = findViewById(R.id.bDoneCreatingProfile)
@@ -58,36 +45,48 @@ class SignUpActivity : AppCompatActivity() {
         textBio = findViewById(R.id.etBio)
         imageProfile = findViewById(R.id.ivUploadPFP)
 
+        // Upload Profile On Click Event Handling
+        imageProfile.setOnClickListener {
+            // Create an Intent to select an image from the gallery
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.type = "image/*"
+
+            // Start the Intent with a request code
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+        }
+
         // Done Creating Profile On Click Event Handling
         buttonDone.setOnClickListener {
 
-            if(isTextNotEmpty()) // checks the Username and Display Name edit text elements
+            if(isNotEmpty()) // checks the Username, Display Name, and Profile Picture for being empty
             {
                 // if no space in username and starts with a letter,and both fields aren't blank
                 // then check if the username exists in the database already
                 val username = textUsername.text.toString()
                 val ServerRepository = ServerRepository(database)
-                ServerRepository.fetchTakenUsernames()
-                ServerRepository.isTakenUsernameListReady.observe(this, Observer { isTakenUsernameListReady ->
-                    if(isTakenUsernameListReady)
+                ServerRepository.isUserListReady.observe(this, Observer { isUserListReady ->
+                    if(isUserListReady)
                     {
-                        if(username in ServerRepository.TakenUsernames)
+                        for(user in ServerRepository.Users)
                         {
-                            // Username exists
-                            Toast.makeText(this, "Username already in use.", Toast.LENGTH_SHORT).show()
-                            textUsername.text.clear()
-                        }
-                        else
-                        {
-                            // Username doesn't exist
-                            updateUserInformation(ServerRepository)
+                            if(username == user.username)
+                            {
+                                // Username exists
+                                Toast.makeText(this, "Username already in use.", Toast.LENGTH_SHORT).show()
+                                textUsername.text.clear()
+                            }
+                            else
+                            {
+                                // Username doesn't exist
+                                updateUserInformation(ServerRepository)
 
-                            // Stop the database listener checking usernames
-                            ServerRepository.stopUsernameListener()
+                                // Stop the database listener checking usernames
+                                ServerRepository.stopUserListener()
 
-                            // start main activity
-                            val i = Intent(this, MainActivity::class.java)
-                            startActivity(i)
+                                // start main activity
+                                val i = Intent(this, MainActivity::class.java)
+                                startActivity(i)
+                            }
                         }
                     }
                 })
@@ -95,12 +94,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        profileRepository.stopProfileListener()
-    }
-
-    private fun isTextNotEmpty(): Boolean
+    private fun isNotEmpty(): Boolean
     {
         if(textUsername.text.toString() == "")
         {
@@ -123,30 +117,46 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Display name is blank.", Toast.LENGTH_SHORT).show()
             return false
         }
-        // return true if username doesn't start with a letter and doesnt have a space
-        // and both, username and display name, aren't empty
+
+        if(!isProfilePictureSelected)
+        {
+            Toast.makeText(this, "No profile picture added.", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         return true
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+            val imageUri = data.data
+
+            imageProfile.setImageURI(imageUri) // if we got an image from the user, set it as the image
+            val pictureRepository = ProfilePictureRepository(database, currentUser!!.uid)
+            pictureRepository.uploadProfilePicture(imageUri)
+            isProfilePictureSelected = true
+        }
+    }
 
     private fun updateUserInformation(server: ServerRepository)
     {
         // Add User Profile Data
         val database = FirebaseDatabase.getInstance()
-        val profileRepo = ProfileRepository(database)
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
         val newUsername = textUsername.text.toString()
         val newDisplayName = textDisplayName.text.toString()
-        val newPfpURL = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-        val newUserId = userInfo.userId
+        val newUserId = currentUser!!.uid
         val newBio = textBio.text.toString()
-        val newFriendCount = userInfo.friendCount
-        val newBookCount = userInfo.bookCount
-        profileRepo.updateProfileData(newUsername, newDisplayName, newPfpURL, newUserId, newBio, newFriendCount, newBookCount)
+        val newFriendCount = 0
+        val newBookCount = 0
+        profileRepo.updateProfileData(newUsername, newDisplayName, newUserId, newBio, newFriendCount, newBookCount)
 
         // Add User's Username to Usernames List
-        server.addUsername(newUsername)
+        server.addUser(Friend(newUserId, newUsername))
     }
+
 
 
 }
