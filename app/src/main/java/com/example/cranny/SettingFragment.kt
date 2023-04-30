@@ -35,7 +35,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         //account notification switch
-        val accountNotificationSwitch: SwitchPreferenceCompat? = findPreference("account_private")
+        val accountNotificationSwitch: SwitchPreferenceCompat? = findPreference("enable_notifications")
         accountNotificationSwitch?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
 
@@ -60,18 +60,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     }
     //account privacy
-   private fun savePrivateAccountSetting(userID: String, isPrivate: Boolean) {
-        val sharedPreferences = requireActivity().getSharedPreferences("user_settings_$userID", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("account_private", isPrivate)
-        editor.apply()
+    private fun savePrivateAccountSetting(userID: String, isPrivate: Boolean) {
+        val database = FirebaseDatabase.getInstance()
+        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        userPreferencesRef.child("account_private").setValue(isPrivate)
     }
     //account notifications
     private fun saveNotificationsAccountSetting(userID: String, isNotified: Boolean) {
-        val sharedPreferences = requireActivity().getSharedPreferences("user_settings_$userID", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("enable_notifications", isNotified)
-        editor.apply()
+        val database = FirebaseDatabase.getInstance()
+        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        userPreferencesRef.child("enable_notifications").setValue(isNotified)
     }
     //account change username
     private fun updateUsername(userID: String, newUsername: String) {

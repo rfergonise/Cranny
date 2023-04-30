@@ -77,6 +77,29 @@ class SettingsActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val profileRepository = ProfileRepository(database, userId)
         profileRepository.removeUser(username)
+        val friendRepo = FriendRepository(database, username, userId, this)
+        friendRepo.fetchFriends()
+        friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+            if(isFriendsReady)
+            {
+                val friendCount = friendRepo.FriendIds.size
+                if(friendCount > 0)
+                {
+                    val friends = mutableListOf<Friend>()
+                    for(friend in friendRepo.FriendIds)
+                    {
+                        friends.add(Friend(friend.id, friend.username))
+                    }
+                    for (friend in friends)
+                    {
+                        val friends = FriendRepository(database, friend.username, friend.id, this)
+                        friends.removeFriend(Friend(userId, username))
+                    }
+                    signOut() // sign the user out of the app
+                }
+            }
+        })
+        friendRepo.stopFriendListener() // free the listener to stop memory leaks
     }
 
     //function to sign out of account
