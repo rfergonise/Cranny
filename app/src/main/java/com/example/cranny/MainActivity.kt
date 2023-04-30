@@ -58,6 +58,18 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(this, SettingsActivity::class.java)
             startActivity(i)
         }
+        // Add Book Button
+        val buttonAddBook = findViewById<Button>(R.id.bAddBook)
+        buttonAddBook.setOnClickListener{
+            val i = Intent(this, AddBookPage::class.java)
+            startActivity(i)
+        }
+        // Library Button
+        val buttonLibrary = findViewById<Button>(R.id.bLibrary)
+        buttonLibrary.setOnClickListener{
+            val i = Intent(this, LibraryActivity::class.java)
+            startActivity(i)
+        }
 
         // if you dont have any book data you can uncomment this to fill your account with 10 random books
         // comment it out after running once

@@ -423,7 +423,7 @@ class BookRepository(private val database: FirebaseDatabase)
                     val UserProgressInt = userProgress?.toInt()
                     val StarRating = bookSnapshot.child("StarRating").value as? Long
                     val StarRatingInt = StarRating?.toInt() ?: 0
-                    val UserFinished = bookSnapshot.child("UserFinished").value as Boolean
+                    val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as Boolean
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
                     val pageCount = bookSnapshot.child("PageCount").value as? Long

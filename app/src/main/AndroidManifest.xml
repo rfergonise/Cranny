@@ -32,6 +32,13 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".LibraryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddBookPage"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
@@ -46,7 +53,7 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"  />
         <activity
             android:name=".SignInActivity"
             android:exported="true">
