@@ -2,6 +2,7 @@ package com.example.cranny
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
@@ -375,17 +376,12 @@ class BookRepository(private val database: FirebaseDatabase)
         fetchBookData()
     }
 
-    fun removeBook(book: Book)
-    {
+    fun removeBook(book: Book) {
         val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
-        bookDataRef.orderByValue().equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot)
-            {
-                for (childSnapshot in dataSnapshot.children)
-                {
-                    if (childSnapshot.value == book.id)
-                    {
+        bookDataRef.orderByChild("Id").equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.child("Id").value == book.id) {
                         childSnapshot.ref.removeValue()
                         break
                     }
@@ -519,6 +515,20 @@ class BookRepository(private val database: FirebaseDatabase)
             listener = null
         }
     }
+
+    fun clearUserLibrary() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            for (book in Library) {
+                removeBook(book)
+            }
+            // Signal that the user library has been cleared
+            _isBookDataReady.postValue(true)
+        } else {
+            Log.e("BookRepository", "User ID is null. Cannot clear the library.")
+            _isBookDataReady.postValue(false)
+        }
+    }
 }
 
 class RecentRepository(private val database: FirebaseDatabase)
@@ -605,17 +615,12 @@ class RecentRepository(private val database: FirebaseDatabase)
     }
 
     // Searches the user's recents list and removes the passed in SocialFeed from it
-    fun removeRecent(socialFeed: SocialFeed)
-    {
+    fun removeRecent(socialFeed: SocialFeed) {
         val socialDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents")
-        socialDataRef.orderByValue().equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot)
-            {
-                for (childSnapshot in dataSnapshot.children)
-                {
-                    if (childSnapshot.value == socialFeed.id)
-                    {
+        socialDataRef.orderByChild("Id").equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.child("Id").value == socialFeed.id) {
                         childSnapshot.ref.removeValue()
                         break
                     }
@@ -634,6 +639,8 @@ class RecentRepository(private val database: FirebaseDatabase)
             listener = null
         }
     }
+
+
 }
 class ServerRepository(private val database: FirebaseDatabase)
 {
