@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"/>
+        <item android:id="@+id/nav_social"
+            android:icon="@drawable/baseline_social_distance_24"
+            android:title="Social" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_library"
+        android:icon="@drawable/baseline_library_books_24"
+        android:title="Library" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_addabook"
+        android:icon="@drawable/baseline_library_add_24"
+        android:title="Add A Book" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_favorites"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="Favorites" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_sortby"
+        android:icon="@drawable/baseline_sort_24"
+        android:title="Sort By" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_genre"
+        android:icon="@drawable/baseline_style_24"
+        android:title="Genre" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_rating"
+        android:icon="@drawable/baseline_rate_review_24"
+        android:title="Rating" />
+
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_tag"
+        android:icon="@drawable/baseline_tag_24"
+        android:title="Tag" />
+    <group android:checkableBehavior="single"/>
+    <item android:id="@+id/nav_settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Settings" />
+
+</menu>

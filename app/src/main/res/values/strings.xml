@@ -33,5 +33,12 @@
     <string name="tag_s">Tags</string>
     <string name="rating_bar">Rating bar</string>
     <string name="rating">Rating</string>
+    <string name="menu_icon">Menu Icon</string>
+
+<!--    drawer open and close:-->
+    <string name="menu_drawer_open">Drawer Open</string>
+    <string name="menu_drawer_close">Drawer Close</string>
+
+
 
 </resources>

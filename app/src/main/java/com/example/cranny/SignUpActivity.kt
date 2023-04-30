@@ -82,11 +82,11 @@ class SignUpActivity : AppCompatActivity() {
 
                                 // Stop the database listener checking usernames
                                 ServerRepository.stopUserListener()
-
-                                // start main activity
-                                val i = Intent(this, MainActivity::class.java)
-                                startActivity(i)
                             }
+                            // start main activity
+                            val i = Intent(this, DashboardActivity::class.java)
+                            startActivity(i)
+
                         }
                     }
                 })
