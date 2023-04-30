@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
+import kotlin.random.Random
 
 class AddBookPage : AppCompatActivity() {
 
@@ -30,12 +31,14 @@ class AddBookPage : AppCompatActivity() {
         val saveBottomBTN = findViewById<Button>(R.id.btnSave)
         val cancelTopBTN = findViewById<ImageButton>(R.id.ibCancelButton)
         val saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
-
         val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
         val dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
         val dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
         val lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
         val lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
+
+        // Random number generator for book IDs
+        val randNum: Int = Random.nextInt(1000)
 
         // Hide Data Finished or Last Page Read based on finished checkbox
         finishedCB.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -52,6 +55,7 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
+
         saveBottomBTN.setOnClickListener {
             if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
                 val editText = genresInput.editText
@@ -66,9 +70,11 @@ class AddBookPage : AppCompatActivity() {
                     0 // or any other default value you want to use
                 }
 
+
+
                 val newBook = Book(
                     // need to create new id with each book
-                    id = "15",
+                    id = randNum.toString(),
                     title = titleInput.text.toString(),
                     authorNames = authorInput.text.toString(),
                     publicationDate = publicationDateInput.text.toString(),
@@ -99,7 +105,7 @@ class AddBookPage : AppCompatActivity() {
 
                 Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(this, LibraryData::class.java)
+                val intent = Intent(this, LibraryActivity::class.java)
                 startActivity(intent)
             }
             else {
@@ -116,7 +122,7 @@ class AddBookPage : AppCompatActivity() {
 
             val newBook = Book(
                 // need to create new id with each book
-                id = "14",
+                id = randNum.toString(),
                 title = titleInput.text.toString(),
                 authorNames = authorInput.text.toString(),
                 publicationDate = publicationDateInput.text.toString(),
@@ -148,7 +154,7 @@ class AddBookPage : AppCompatActivity() {
 
             Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
 
-            val intent = Intent(this, LibraryData::class.java)
+            val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
 
@@ -161,6 +167,5 @@ class AddBookPage : AppCompatActivity() {
             val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
-
     }
 }
