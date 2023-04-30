@@ -39,7 +39,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:fontFamily="@font/raleway_bold"
+            android:fontFamily="@font/raleway_custom"
             android:maxEms="8"
             android:maxLines="2"
             android:text="@string/tvrvBookTitle"
