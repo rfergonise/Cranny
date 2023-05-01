@@ -154,7 +154,7 @@ class SignUpActivity : AppCompatActivity() {
         profileRepo.updateProfileData(newUsername, newDisplayName, newUserId, newBio, newFriendCount, newBookCount)
 
         // Add User's Username to Usernames List
-        server.addUser(Friend(newUserId, newUsername))
+        server.addUser(Friend(newUserId, newUsername, false))
     }
 
 

@@ -277,7 +277,8 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
                 _isFriendReady.postValue(false) // inform the caller the list is not ready
                 for (friend in dataSnapshot.children)
                 {
-                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "")
+                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "",
+                    friend.child("isFavorite").value as? Boolean ?: false)
                     FriendIds.add(temp_friend)
                 }
                 _isFriendReady.postValue(true) // inform the caller we have filled the list with each book
@@ -294,6 +295,7 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
         val userDataRef = database.getReference("UserData").child(id).child("Friends")
         userDataRef.child(friend.id).child("id").setValue(friend.id)
         userDataRef.child(friend.id).child("username").setValue(friend.username)
+        userDataRef.child(friend.id).child("isFavorite").setValue(false)
 
         // update the user's friend count
         val userProfileRepo = ProfileRepository(database, id)
@@ -308,6 +310,7 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
         val friendDataRef = database.getReference("UserData").child(friend.id).child("Friends")
         friendDataRef.child(id).child("id").setValue(id)
         friendDataRef.child(id).child("username").setValue(username)
+        friendDataRef.child(id).child("isFavorite").setValue(false)
 
         // update the friend's friend count
         val friendProfileRepo = ProfileRepository(database, friend.id)
@@ -348,6 +351,12 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
             friendProfileRepo.stopProfileListener()
         }
 
+    }
+
+    fun updateFavoriteStatus(friend: Friend)
+    {
+        val userDataRef = database.getReference("UserData").child(id).child("Friends")
+        userDataRef.child(friend.id).child("isFavorite").setValue(friend.isFavorite)
     }
 
     fun stopFriendListener()
@@ -690,7 +699,7 @@ class ServerRepository(private val database: FirebaseDatabase)
                 {
                     val username = user.child("Username").value as String
                     val id = user.child("Id").value as String
-                    Users.add(Friend(id, username))
+                    Users.add(Friend(id, username, false))
                 }
                 _isUserListReady.postValue(true) // inform the caller we have filled the list with each recent book
             }
@@ -777,7 +786,7 @@ class FriendRequestRepository(private val database: FirebaseDatabase, private va
                 _isFriendRequestReady.postValue(false) // inform the caller the list is not ready
                 for (friend in dataSnapshot.children)
                 {
-                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "")
+                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "", false)
                     RequestedUsers.add(temp_friend)
                 }
                 _isFriendRequestReady.postValue(true) // inform the caller we have filled the list with each book

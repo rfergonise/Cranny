@@ -117,10 +117,10 @@ class FriendRequestAdapter(private val owner: LifecycleOwner, val context: Conte
 
         holder.ivAcceptFriend.setOnClickListener {
             val friendRepo = FriendRepository(database, user.username, user.userId, owner)
-            friendRepo.addFriend(Friend(id, username))
+            friendRepo.addFriend(Friend(id, username, false))
             // remove the friend from the request list and data
             val requestRepo = FriendRequestRepository(database, user.userId)
-            requestRepo.removeFriendRequest(Friend(id, username))
+            requestRepo.removeFriendRequest(Friend(id, username, false))
             usernames.removeAt(position)
             notifyItemRemoved(position)
             if(usernames.size == 0) tvNoFriend.visibility = View.VISIBLE
@@ -131,7 +131,7 @@ class FriendRequestAdapter(private val owner: LifecycleOwner, val context: Conte
         holder.ivDeclineFriend.setOnClickListener {
             // remove the friend from the request list and data
             val requestRepo = FriendRequestRepository(database, user.userId)
-            requestRepo.removeFriendRequest(Friend(id, username))
+            requestRepo.removeFriendRequest(Friend(id, username, false))
             usernames.removeAt(position)
             notifyItemRemoved(position)
             if(usernames.size == 0) tvNoFriend.visibility = View.VISIBLE

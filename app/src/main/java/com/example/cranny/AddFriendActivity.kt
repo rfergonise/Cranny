@@ -123,7 +123,7 @@ class AddFriendActivity : AppCompatActivity()
                         noUserFound.visibility = View.INVISIBLE
 
                         val requestRepo = FriendRequestRepository(database, filteredList[0].id)
-                        requestRepo.addFriendRequest(Friend(user.userId, user.username))
+                        requestRepo.addFriendRequest(Friend(user.userId, user.username, false))
                         Toast.makeText(this, "Friend Request Sent!", Toast.LENGTH_SHORT).show()
                     }
                     val profilePictureRepository = ProfilePictureRepository(database, filteredList[0].id)

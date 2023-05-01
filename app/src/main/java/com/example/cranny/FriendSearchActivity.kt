@@ -163,8 +163,11 @@ class SearchAdapter(private val owner: LifecycleOwner, val context: Context, pri
         val username = usernames[position].username
         holder.tvUsername.text = "@${username}"
         val id = usernames[position].id
+
+        FriendFavorite(usernames[position], holder.ivUnFavorite, holder.ivFavorite)
+
         holder.ivRemoveFriend.setOnClickListener {
-            val removeFriend = Friend(id, username)
+            val removeFriend = Friend(id, username, false)
             val database = FirebaseDatabase.getInstance()
             val friendRepo = FriendRepository(database, user.username, user.userId, owner)
             friendRepo.removeFriend(removeFriend)
@@ -185,10 +188,50 @@ class SearchAdapter(private val owner: LifecycleOwner, val context: Context, pri
         }
     }
 
+    fun FriendFavorite(friend:Friend, ivUnFavorite: ImageView, ivFavorite: ImageView)
+    {
+        if(friend.isFavorite)
+        {
+            ivUnFavorite.visibility = View.VISIBLE
+            ivFavorite.visibility = View.INVISIBLE
+            ivUnFavorite.setOnClickListener {
+                // todo set the friend to not a favorite
+                val database = FirebaseDatabase.getInstance()
+                val FriendRepo = FriendRepository(database, user.username, user.userId, owner)
+                friend.isFavorite = false
+                FriendRepo.updateFavoriteStatus(friend)
+                ivUnFavorite.visibility = View.INVISIBLE
+                ivFavorite.visibility = View.VISIBLE
+                ivFavorite.setOnClickListener {
+                    FriendFavorite(friend, ivUnFavorite, ivFavorite)
+                }
+            }
+
+        }
+        else
+        {
+            ivUnFavorite.visibility = View.INVISIBLE
+            ivFavorite.visibility = View.VISIBLE
+            ivFavorite.setOnClickListener {
+                // todo set the friend to a favorite
+                val database = FirebaseDatabase.getInstance()
+                val FriendRepo = FriendRepository(database, user.username, user.userId, owner)
+                friend.isFavorite = true
+                FriendRepo.updateFavoriteStatus(friend)
+                ivUnFavorite.visibility = View.VISIBLE
+                ivFavorite.visibility = View.INVISIBLE
+                ivUnFavorite.setOnClickListener {
+                    FriendFavorite(friend, ivUnFavorite, ivFavorite)
+                }
+            }
+        }
+    }
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     {
         val tvUsername: TextView = itemView.findViewById(R.id.tvFriendName)
         val ivRemoveFriend: ImageView = itemView.findViewById(R.id.ivRemoveFriend)
+        val ivUnFavorite: ImageView = itemView.findViewById(R.id.ivUnFavorite)
+        val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
     }
 }

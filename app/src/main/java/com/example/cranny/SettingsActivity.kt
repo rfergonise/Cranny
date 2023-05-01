@@ -88,12 +88,12 @@ class SettingsActivity : AppCompatActivity() {
                     val friends = mutableListOf<Friend>()
                     for(friend in friendRepo.FriendIds)
                     {
-                        friends.add(Friend(friend.id, friend.username))
+                        friends.add(Friend(friend.id, friend.username, false))
                     }
                     for (friend in friends)
                     {
                         val friends = FriendRepository(database, friend.username, friend.id, this)
-                        friends.removeFriend(Friend(userId, username))
+                        friends.removeFriend(Friend(userId, username, false))
                     }
                     signOut() // sign the user out of the app
                 }

@@ -125,33 +125,44 @@ class UserProfileActivity : AppCompatActivity()
                 friendCount = friendRepo.FriendIds.size
                 if(friendCount > 0)
                 {
+                    var favoriteCount: Int = 0
                     for (i in 0 until friendCount) {
-                        val cardView = MaterialCardView(this)
-                        val params = LinearLayout.LayoutParams(200, 200)
-                        params.setMargins(16,8,16,8)
-                        cardView.layoutParams = params
-                        cardView.radius = 130F
-                        cardView.strokeWidth = 10
-                        cardView.strokeColor = ContextCompat.getColor(this, R.color.cranny_blue_light)
-                        cardView.cardElevation = 0F
 
-                        val imageView = ImageView(this)
-                        imageView.layoutParams = ViewGroup.LayoutParams(-1, -1)
-                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                        if(friendRepo.FriendIds[i].isFavorite)
+                        {
+                            val cardView = MaterialCardView(this)
+                            val params = LinearLayout.LayoutParams(200, 200)
+                            params.setMargins(16,8,16,8)
+                            cardView.layoutParams = params
+                            cardView.radius = 130F
+                            cardView.strokeWidth = 10
+                            cardView.strokeColor = ContextCompat.getColor(this, R.color.cranny_blue_light)
+                            cardView.cardElevation = 0F
 
-                        // Set onClick listener
-                        imageView.setOnClickListener {
-                            val friendIntent = Intent(this, FriendActivity::class.java)
-                            friendIntent.putExtra("friendId", friendRepo.FriendIds[i].id)
-                            // friendRepo.FriendIds[i] != null
-                            startActivity(friendIntent)
+                            val imageView = ImageView(this)
+                            imageView.layoutParams = ViewGroup.LayoutParams(-1, -1)
+                            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+
+                            // Set onClick listener
+                            imageView.setOnClickListener {
+                                val friendIntent = Intent(this, FriendActivity::class.java)
+                                friendIntent.putExtra("friendId", friendRepo.FriendIds[i].id)
+                                // friendRepo.FriendIds[i] != null
+                                startActivity(friendIntent)
+                            }
+
+                            val profilePictureRepository = ProfilePictureRepository(database, friendRepo.FriendIds[i].id)
+                            profilePictureRepository.loadProfilePictureIntoImageView(imageView)
+
+                            cardView.addView(imageView)
+                            horizontalLayout.addView(cardView)
+                            favoriteCount++
                         }
-
-                        val profilePictureRepository = ProfilePictureRepository(database, friendRepo.FriendIds[i].id)
-                        profilePictureRepository.loadProfilePictureIntoImageView(imageView)
-
-                        cardView.addView(imageView)
-                        horizontalLayout.addView(cardView)
+                    }
+                    if(favoriteCount == 0)
+                    {
+                        val showText: TextView = findViewById(R.id.tvNoFavorites)
+                        showText.visibility = View.VISIBLE
                     }
                 }
                 else
