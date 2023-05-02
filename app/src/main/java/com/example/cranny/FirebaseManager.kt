@@ -515,6 +515,12 @@ class BookRepository(private val database: FirebaseDatabase)
 
     }
 
+    fun updateFavoriteStatus(book: Book)
+    {
+        val userDataRef = database.getReference("UserData").child(currentUser?.uid!!).child("Books")
+        userDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
+    }
+
     fun stopBookListener()
     {
         listener?.let {
