@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.lifecycle.Observer
+import com.example.cranny.databinding.ActivitySettingsBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -29,16 +30,28 @@ class SettingsActivity : AppCompatActivity() {
     val bookRepository = BookRepository(database)
     val profileRepository = ProfileRepository(firebaseDatabase, userId)
 
+    lateinit var activitySettingsBinding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+
+        activitySettingsBinding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(activitySettingsBinding.root)
+
+        //back button navigates back to the dashboard
+        val btSettingsActivity : Button = findViewById(R.id.btSettingsActivity)
+        btSettingsActivity.setOnClickListener {
+            val i = Intent(this, DashboardActivity::class.java)
+            startActivity(i)
+        }
 
         //back to main menu button logic
-        backButton = findViewById(R.id.backButton)
+        /*backButton = findViewById(R.id.backButton)
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }
+            }*/
+
 
         supportFragmentManager
             .beginTransaction()

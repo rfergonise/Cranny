@@ -64,15 +64,16 @@
 
     </FrameLayout>
 
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="39dp"
-        android:layout_height="74dp"
-        android:tint="#5C0F0F"
-        app:layout_constraintEnd_toStartOf="@+id/settingsText"
+    <Button
+        android:id="@+id/btSettingsActivity"
+        android:layout_width="83dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+
+
+        android:text="Home"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_arrow_back_24" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

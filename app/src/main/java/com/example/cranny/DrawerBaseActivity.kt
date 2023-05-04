@@ -1,5 +1,6 @@
 package com.example.cranny
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 
 
@@ -34,6 +36,14 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
     }
 
      override fun onNavigationItemSelected(item: MenuItem): Boolean {
+         drawerLayout.closeDrawer(GravityCompat.START)
+
+         when (item.itemId) {
+             R.id.nav_settings -> {
+                 startActivity(Intent(this, SettingsActivity::class.java))
+                 overridePendingTransition(0, 0)
+             }
+         }
         return false
     }
 
