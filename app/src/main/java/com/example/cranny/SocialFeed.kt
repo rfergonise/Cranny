@@ -7,7 +7,7 @@ data class SocialFeed(
     val isBookComplete: Boolean,
     val status: String,
     val bookCoverURL: String,
-    val lastReadDate: String,
-    val lastReadTime: String,
+    val lastReadDate: Long,
+    val lastReadTime: Long,
     val username: String
 )

@@ -71,7 +71,7 @@ class AddBookPage : AppCompatActivity() {
                 }
 
 
-
+                val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
                 val newBook = Book(
                     // need to create new id with each book
                     id = randNum.toString(),
@@ -93,8 +93,8 @@ class AddBookPage : AppCompatActivity() {
                     mainCharacters = mainCharactersInput.text.toString(),
                     genres = genres,
                     tags = tags,
-                    lastReadDate = " ",
-                    lastReadTime = " ",
+                    lastReadDate = currentMillis,
+                    lastReadTime = currentMillis,
                     isFav = false
                 )
 
@@ -119,7 +119,7 @@ class AddBookPage : AppCompatActivity() {
 
             val editText2 = tagsInput.editText
             val tags = editText2?.text.toString()
-
+            val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
             val newBook = Book(
                 // need to create new id with each book
                 id = randNum.toString(),
@@ -142,8 +142,8 @@ class AddBookPage : AppCompatActivity() {
                 mainCharacters = mainCharactersInput.text.toString(),
                 genres = genres,
                 tags = tags,
-                lastReadDate = " ",
-                lastReadTime = " ",
+                lastReadDate = currentMillis,
+                lastReadTime = currentMillis,
                 isFav = false
             )
 

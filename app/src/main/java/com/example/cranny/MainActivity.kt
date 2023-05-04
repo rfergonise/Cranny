@@ -6,17 +6,13 @@ import com.google.firebase.database.FirebaseDatabase
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import android.util.Log
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -104,6 +100,39 @@ class MainActivity : AppCompatActivity() {
     }
     private fun generateDatabaseWith10RandomBooks()
     {
+        val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, 1)
+        val longBookOne = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, -1)
+        val longBookTwo = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, -2)
+        val longBookThree = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, 2)
+        val longBookFour = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, -6)
+        val longBookFive = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, 4)
+        val longBookSix = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, -4)
+        val longBookSeven = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, 8)
+        val longBookEight = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, -9)
+        val longBookNine = calendar.timeInMillis
+        calendar.timeInMillis = currentMillis
+        calendar.add(Calendar.DATE, 10)
+        val longBookTen = calendar.timeInMillis
+
         // 10 Random books for testing
         val book1 = Book(
             id = "1",
@@ -125,8 +154,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Winston Smith, " +"Julia, " +"O'Brien",
             genres = "Dystopian Fiction, " +"Political Fiction",
             tags = "Classic, "+"Thought-provoking",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookOne,
+            lastReadTime = longBookOne,
             isFav = false
         )
 
@@ -150,8 +179,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Scout Finch, " +"Atticus Finch, "+ "Jem Finch",
             genres = "Southern Gothic, "+ "Coming-of-Age",
             tags = "Classic, "+ "American Literature",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookTwo,
+            lastReadTime = longBookTwo,
             isFav = false
         )
         val book3 = Book(
@@ -174,8 +203,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Jay Gatsby, "+ "Daisy Buchanan, "+ "Tom Buchanan, "+ "Nick Carraway, "+ "Jordan Baker, ",
             genres = "Tragedy, "+ "Modernist Literature",
             tags = "Classic, "+ "American Literature, "+ "Romance",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookThree,
+            lastReadTime = longBookThree,
             isFav = false
         )
         val book4 = Book(
@@ -198,8 +227,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Elizabeth Bennet, "+ "Fitzwilliam Darcy",
             genres = "Romance, "+ "Comedy"+ "Classic",
             tags = "Jane Austen, "+"British literature",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookFour,
+            lastReadTime = longBookFour,
             isFav = false
         )
 
@@ -223,8 +252,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Holden Caulfield",
             genres = "Coming of Age, "+ "Literary Fiction",
             tags = "J.D. Salinger, "+ "American literature",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookFive,
+            lastReadTime = longBookFive,
             isFav = false
         )
         val book6 = Book(
@@ -247,8 +276,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Frodo Baggins, "+ "Gandalf, "+ "Aragorn, "+ "Legolas, "+ "Gimli, "+ "Boromir, "+ "Samwise Gamgee, "+ "Merry, "+ "Pippin",
             genres = "High Fantasy, "+"Adventure",
             tags = "Middle-earth, "+ "Ring, "+ "Fantasy",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookSix,
+            lastReadTime = longBookSix,
             isFav = false
         )
         val book7 = Book(
@@ -271,8 +300,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "José Arcadio Buendía, "+ "Úrsula Iguarán, "+ "Aureliano Buendía, "+ "Amaranta Buendía, "+ "Rebeca Buendía",
             genres = "Magical Realism, "+ "Literary Fiction",
             tags = "Latin American Literature, "+ "Classic, "+ "Family Saga, "+"Love, "+ "Politics",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookSeven,
+            lastReadTime = longBookSeven,
             isFav = false
         )
         val book8 = Book(
@@ -294,8 +323,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Katniss Everdeen, "+ "Peeta Mellark, "+ "Gale Hawthorne, "+ "Haymitch Abernathy, "+ "Effie Trinket",
             genres = "Dystopian, "+ "Young Adult Fiction",
             tags = "Survival, "+ "Adventure, "+ "Friendship, "+ "Love",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookEight,
+            lastReadTime = longBookEight,
             isFav = false,
             purchasedFrom = ""
         )
@@ -321,8 +350,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Robert Langdon, "+ "Sophie Neveu, "+ "Jacques Saunière, "+"Silas",
             genres = "Mystery, "+ "Thriller",
             tags = "Cryptology, "+ "Religion, "+ "Art",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookNine,
+            lastReadTime = longBookNine,
              isFav = false
         )
         val book10 = Book(
@@ -346,8 +375,8 @@ class MainActivity : AppCompatActivity() {
             mainCharacters = "Mikael Blomkvist, "+ "Lisbeth Salander, "+ "Henrik Vanger, "+ "Martin Vanger",
             genres = "Mystery, "+ "Thriller",
             tags = "Crime, "+"Family, "+ "Sexual violence",
-            lastReadDate = " ",
-            lastReadTime = " ",
+            lastReadDate = longBookTen,
+            lastReadTime = longBookTen,
             prevReadCount = 72,
             startDate =" ",
             endDate = " ",

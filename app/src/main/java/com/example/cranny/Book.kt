@@ -22,8 +22,8 @@ data class Book(
     var mainCharacters: String?,
     var genres: String?,
     var tags: String?,
-    var lastReadDate: String?,
-    var lastReadTime: String?,
+    var lastReadDate: Long?,
+    var lastReadTime: Long?,
     var prevReadCount: Int?,
     var startDate: String,
     var endDate: String

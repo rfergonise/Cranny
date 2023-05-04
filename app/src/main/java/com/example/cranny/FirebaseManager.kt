@@ -419,8 +419,8 @@ class BookRepository(private val database: FirebaseDatabase)
                     val Genres = bookSnapshot.child("Genres").value as? String ?: ""
                     val Id = bookSnapshot.child("Id").value as? String ?: ""
                     val JournalEntry = bookSnapshot.child("JournalEntry").value as? String ?: ""
-                    val LastReadDate = bookSnapshot.child("LastReadDate").value as? String ?: ""
-                    val LastReadTime = bookSnapshot.child("LastReadTime").value as? String ?: ""
+                    val LastReadDate = bookSnapshot.child("LastReadDate").value as? Long ?: 0
+                    val LastReadTime = bookSnapshot.child("LastReadTime").value as? Long ?: 0
                     val MainCharacters = bookSnapshot.child("MainCharacters").value as? String ?: ""
                     val PublicationDate = bookSnapshot.child("PublicationDate").value as? String ?: ""
                     val Publisher = bookSnapshot.child("Publisher").value as? String ?: ""
@@ -466,8 +466,8 @@ class BookRepository(private val database: FirebaseDatabase)
         bookData["Genres"] = book.genres.toString()
         bookData["Id"] = book.id
         bookData["JournalEntry"] = book.journalEntry.toString()
-        bookData["LastReadDate"] = book.lastReadDate.toString()
-        bookData["LastReadTime"] = book.lastReadTime.toString()
+        bookData["LastReadDate"] = book.lastReadDate!!
+        bookData["LastReadTime"] = book.lastReadTime!!
         bookData["MainCharacters"] = book.mainCharacters.toString()
         bookData["PageCount"] = book.pageCount!!.toInt()
         bookData["PrevReadCount"] = book.prevReadCount.toString()
@@ -598,10 +598,10 @@ class RecentRepository(private val database: FirebaseDatabase)
                     val BookAuthor = bookSnapshot.child("BookAuthor").value as String
                     val BookCoverURL = bookSnapshot.child("BookCoverURL").value as String
                     val BookTitle = bookSnapshot.child("BookTitle").value as String
-                    val DateRead = bookSnapshot.child("DateRead").value as String
+                    val DateRead = bookSnapshot.child("DateRead").value as Long
                     val Id = bookSnapshot.child("Id").value as String
                     val IsBookComplete = bookSnapshot.child("IsBookComplete").value as Boolean
-                    val TimeRead = bookSnapshot.child("TimeRead").value as String
+                    val TimeRead = bookSnapshot.child("TimeRead").value as Long
                     val Username = bookSnapshot.child("Username").value as String
                     val Status = bookSnapshot.child("Status").value as String
 
