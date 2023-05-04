@@ -502,11 +502,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <!--
-        Will need to fix autofill for date if no date is entered
--->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

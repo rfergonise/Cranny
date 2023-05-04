@@ -1,23 +1,19 @@
 package com.example.cranny
 
 import android.content.Intent
-import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.FirebaseDatabase
 
-class LibraryActivity : AppCompatActivity() {
+class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListener {
 
     private lateinit var libraryRecycler: RecyclerView
     private val libraryBookList = ArrayList<LibraryBookRecyclerData>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +23,7 @@ class LibraryActivity : AppCompatActivity() {
         getLibraryRecyclerData()
 
         // Go back to Main Activity until menu is created
-        val menuBTN = findViewById<ImageButton>(R.id.menuButton)
+        val menuBTN = findViewById<ImageButton>(R.id.bpBackButton)
         menuBTN.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -39,11 +35,11 @@ class LibraryActivity : AppCompatActivity() {
             val intent = Intent(this, AddBookPage::class.java)
             startActivity(intent)
         }
+
     }
 
     private fun getLibraryRecyclerData() {
-        //val libraryBookList = ArrayList<LibraryBookRecyclerData>()
-
+        val libraryBookList = ArrayList<LibraryBookRecyclerData>()
         val database = FirebaseDatabase.getInstance()
         val bookRepository = BookRepository(database)
         bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
@@ -56,18 +52,27 @@ class LibraryActivity : AppCompatActivity() {
                         val bookAuthors = books.authorNames
                         val bookTitle = books.title
                         val bookImage = books.thumbnail
+                        val bookID = books.id
 
-                        libraryBookList.add(LibraryBookRecyclerData(bookTitle, bookAuthors, bookImage))
+                        libraryBookList.add(LibraryBookRecyclerData(bookID, bookTitle, bookAuthors, bookImage))
+                        libraryRecycler.adapter = LibraryBookAdapter(libraryBookList, this@LibraryActivity)
+                        libraryRecycler.layoutManager = LinearLayoutManager(this)
+                        libraryRecycler.setHasFixedSize(true)
 
                     }
-
-                    libraryRecycler.adapter = LibraryBookAdapter(libraryBookList)
-                    libraryRecycler.layoutManager = LinearLayoutManager(this)
-                    libraryRecycler.setHasFixedSize(true)
                 }
             }
             bookRepository.stopBookListener()
         })
+
     }
 
+
+    // What will happen when the user clicks on a book
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, BookPageActivity::class.java)
+        startActivity(intent)
+
+    }
 }
+

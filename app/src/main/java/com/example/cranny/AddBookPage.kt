@@ -129,6 +129,7 @@ class AddBookPage : AppCompatActivity() {
                 starRating = ratingsInput.rating.toString().toFloat().toInt(),
                 publisher = publisherInput.text.toString(),
                 description = summaryInput.text.toString(),
+                // This is breaking for some reason VVV
                 pageCount = lastPageReadInput.text.toString().toInt(),
                 // will need to work with Ethan about how to scrape book image from Google API
                 thumbnail = " ",

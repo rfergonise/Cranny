@@ -35,10 +35,9 @@
     <string name="rating">Rating</string>
     <string name="menu_icon">Menu Icon</string>
 
-<!--    drawer open and close:-->
+    <!--    drawer open and close:-->
     <string name="menu_drawer_open">Drawer Open</string>
     <string name="menu_drawer_close">Drawer Close</string>
-
 
 
 </resources>
