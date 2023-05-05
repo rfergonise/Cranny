@@ -1,6 +1,8 @@
 package com.example.cranny
 
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -16,7 +18,7 @@ class AddBookPage : AppCompatActivity() {
         setContentView(R.layout.activity_add_book_page)
 
         val titleInput = findViewById<EditText>(R.id.etTitleInput)
-        val dataStartedInput = findViewById<TextView>(R.id.tvDateStarted)
+        val dataStartedInput = findViewById<TextView>(R.id.tdStarted)
         val authorInput = findViewById<EditText>(R.id.etAuthorInput)
         val summaryInput = findViewById<EditText>(R.id.etSummaryInput)
         val purchasedFromInput = findViewById<EditText>(R.id.etPurchasedFrom)
@@ -86,7 +88,7 @@ class AddBookPage : AppCompatActivity() {
                     journalEntry = reviewInput.text.toString(),
                     userProgress = 0,
                     userFinished = finishedCB.isChecked,
-                    startDate = dataStartedInput.text.toString(),
+                    startDate = setDate(dataStartedInput.text.toString()),
                     endDate = dateFinishedInput.text.toString(),
                     prevReadCount = 0,
                     purchasedFrom = purchasedFromInput.text.toString(),
@@ -121,7 +123,6 @@ class AddBookPage : AppCompatActivity() {
             val tags = editText2?.text.toString()
 
             val newBook = Book(
-                // need to create new id with each book
                 id = randNum.toString(),
                 title = titleInput.text.toString(),
                 authorNames = authorInput.text.toString(),
@@ -129,14 +130,15 @@ class AddBookPage : AppCompatActivity() {
                 starRating = ratingsInput.rating.toString().toFloat().toInt(),
                 publisher = publisherInput.text.toString(),
                 description = summaryInput.text.toString(),
-                // This is breaking for some reason VVV
-                pageCount = lastPageReadInput.text.toString().toInt(),
+                // vv This is breaking for some reason vv
+                pageCount = setPageRead(lastPageReadInput.text.toString()),
                 // will need to work with Ethan about how to scrape book image from Google API
                 thumbnail = " ",
                 journalEntry = reviewInput.text.toString(),
                 userProgress = 0,
                 userFinished = finishedCB.isChecked,
-                startDate = dataStartedInput.text.toString(),
+                // vv Need to fill with current date when no date is entered vv
+                startDate = setDate(dataStartedInput.text.toString()),
                 endDate = dateFinishedInput.text.toString(),
                 prevReadCount = 0,
                 purchasedFrom = purchasedFromInput.text.toString(),
@@ -168,5 +170,31 @@ class AddBookPage : AppCompatActivity() {
             val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
+
     }
+
+    // If user doesn't input a date, it will autofill with the current date
+    private fun setDate(startDate: String): String {
+        if (startDate.isNullOrEmpty()) {
+            val time = Calendar.getInstance().time
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val current = formatter.format(time)
+            return current
+        } else {
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val dateInput = formatter.parse(startDate)
+            val startDateFormatted = formatter.format(dateInput)
+            return startDateFormatted
+        }
+    }
+
+    // If user doesn't input last page read, it will default to 0
+    private fun setPageRead(pageRead: String): Int {
+        return if (pageRead.isNullOrEmpty()) {
+            0
+        } else {
+            pageRead.toInt()
+        }
+    }
+
 }
