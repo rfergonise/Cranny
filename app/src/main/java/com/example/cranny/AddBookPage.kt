@@ -66,16 +66,7 @@ class AddBookPage : AppCompatActivity() {
                 val editText2 = tagsInput.editText
                 val tags = editText2?.text.toString()
 
-                val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
-                    lastPageReadInput.text.toString().toInt()
-                } else {
-                    0 // or any other default value you want to use
-                }
-
-
-
                 val newBook = Book(
-                    // need to create new id with each book
                     id = randNum.toString(),
                     title = titleInput.text.toString(),
                     authorNames = authorInput.text.toString(),
@@ -83,7 +74,7 @@ class AddBookPage : AppCompatActivity() {
                     starRating = ratingsInput.rating.toString().toFloat().toInt(),
                     publisher = publisherInput.text.toString(),
                     description = summaryInput.text.toString(),
-                    pageCount = lastPageRead,
+                    pageCount = setPageRead(lastPageReadInput.text.toString()),
                     thumbnail = " ",
                     journalEntry = reviewInput.text.toString(),
                     userProgress = 0,
@@ -100,7 +91,6 @@ class AddBookPage : AppCompatActivity() {
                     isFav = false
                 )
 
-                // need to work with Ethan about how to add books to database
                 val database = FirebaseDatabase.getInstance()
                 val bookRepository = BookRepository(database)
                 bookRepository.addBook(newBook)
@@ -130,14 +120,12 @@ class AddBookPage : AppCompatActivity() {
                 starRating = ratingsInput.rating.toString().toFloat().toInt(),
                 publisher = publisherInput.text.toString(),
                 description = summaryInput.text.toString(),
-                // vv This is breaking for some reason vv
                 pageCount = setPageRead(lastPageReadInput.text.toString()),
                 // will need to work with Ethan about how to scrape book image from Google API
                 thumbnail = " ",
                 journalEntry = reviewInput.text.toString(),
                 userProgress = 0,
                 userFinished = finishedCB.isChecked,
-                // vv Need to fill with current date when no date is entered vv
                 startDate = setDate(dataStartedInput.text.toString()),
                 endDate = dateFinishedInput.text.toString(),
                 prevReadCount = 0,
@@ -177,14 +165,12 @@ class AddBookPage : AppCompatActivity() {
     private fun setDate(startDate: String): String {
         if (startDate.isNullOrEmpty()) {
             val time = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("MM/dd/yyyy")
-            val current = formatter.format(time)
-            return current
+            val formatter = SimpleDateFormat("MMddyyyy")
+            return formatter.format(time)
         } else {
-            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val formatter = SimpleDateFormat("MMddyyyy")
             val dateInput = formatter.parse(startDate)
-            val startDateFormatted = formatter.format(dateInput)
-            return startDateFormatted
+            return formatter.format(dateInput)
         }
     }
 
@@ -196,5 +182,4 @@ class AddBookPage : AppCompatActivity() {
             pageRead.toInt()
         }
     }
-
 }
