@@ -9,13 +9,13 @@
 
 <h3>Features Developed by Each Team Member</h3>
 <ul>
-<li>Will: created the settings page, which can turn on and off notifications and change the user's username. Also updated the delete and clear library functions to include a warning and reflect actions in firebase.</li>
-<li>Krista: developed the library activity, which generates a list of books in the user's library in a scrollable view. Also created the add book activity, where users can input specific information about a book to add it to their library and save it to the firebase database.</li>
-<li>Robert: designed the drawer base activity and main drawer menu layout, which allow users to navigate to various activities, including social, library, add a book, favorites, sort by, genre, rating, and tag.</li>
-<li>Ethan: created the social page, which features a feed to see the user's recently read books and profile information. Also developed the login page using Firebase's Google authentication and classes for CRUD on Firebase.</li>
+<li><u>Will</u>: created the settings page, which can turn on and off notifications and change the user's username. Also updated the delete and clear library functions to include a warning and reflect actions in firebase.</li>
+<li><u>Krista</u>: developed the library activity, which generates a list of books in the user's library in a scrollable view. Also created the add book activity, where users can input specific information about a book to add it to their library and save it to the firebase database.</li>
+<li><u>Robert</u>: designed the drawer base activity and main drawer menu layout, which allow users to navigate to various activities, including social, library, add a book, favorites, sort by, genre, rating, and tag.</li>
+<li><u>Ethan</u>: created the social page, which features a feed to see the user's recently read books and profile information. Also developed the login page using Firebase's Google authentication and classes for CRUD on Firebase.</li>
 </ul>
 <h3>Getting Started</h3>
 <p>The Cranny app is still in development, and there is no installation or setup guide available at this time. However, you can view the progress of our project on GitHub.</p>
 
 <h3>Acknowledgments</h3>
-<p>We would like to thank Austin Cordle for his guidance and support during the development of the Cranny app.</p>
+<p>We would like to thank <u>Austin Cordle</u> for his guidance and support during the development of the Cranny app.</p>
