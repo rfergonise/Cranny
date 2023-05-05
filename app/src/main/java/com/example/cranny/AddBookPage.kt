@@ -4,13 +4,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.random.Random
 
 class AddBookPage : AppCompatActivity() {
 
+    private val auth = FirebaseAuth.getInstance()
+    private var currentUser = auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_book_page)
@@ -72,9 +79,96 @@ class AddBookPage : AppCompatActivity() {
 
 
                 val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
+                Toast.makeText(applicationContext, "Saving book...", Toast.LENGTH_SHORT).show()
+                val database = FirebaseDatabase.getInstance()
+                val profileRepo = ProfileRepository(database, currentUser!!.uid)
+                profileRepo.profileData.observe(this, Observer { userProfile ->
+                    val username: String = userProfile.username
+                    val newBook = Book(
+                        // need to create new id with each book
+                        id = username + randNum.toString(),
+                        title = titleInput.text.toString(),
+                        authorNames = authorInput.text.toString(),
+                        publicationDate = publicationDateInput.text.toString(),
+                        starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                        publisher = publisherInput.text.toString(),
+                        description = summaryInput.text.toString(),
+                        pageCount = lastPageRead,
+                        thumbnail = " ",
+                        journalEntry = reviewInput.text.toString(),
+                        userProgress = 0,
+                        userFinished = finishedCB.isChecked,
+                        startDate = dataStartedInput.text.toString(),
+                        endDate = dateFinishedInput.text.toString(),
+                        prevReadCount = lastPageRead,
+                        purchasedFrom = purchasedFromInput.text.toString(),
+                        mainCharacters = mainCharactersInput.text.toString(),
+                        genres = genres,
+                        tags = tags,
+                        lastReadDate = currentMillis,
+                        lastReadTime = currentMillis,
+                        isFav = false
+                    )
+                    val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
+                    bookRepository.addBook(newBook)
+                    val friendRepo = FriendRepository(database, username, currentUser!!.uid, this)
+                    friendRepo.fetchFriends()
+                    friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+                        if(isFriendsReady)
+                        {
+                            val friendCount = friendRepo.FriendIds.size
+                            if(friendCount > 0) {
+                                val recentRepository = RecentRepository(database, username, friendRepo.FriendIds)
+                                val status = if (newBook.userFinished) {
+                                    "@$username Finished Reading!"
+                                }
+                                else if(lastPageRead > 1)
+                                {
+                                    "@$username Read $lastPageRead pages."
+                                }
+                                else
+                                {
+                                    "@$username Read $lastPageRead page."
+                                }
+                                recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
+                                    status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username))
+                                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, LibraryActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }
+                    })
+                    friendRepo.stopFriendListener()
+                })
+                profileRepo.stopProfileListener()
+            }
+            else {
+                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        saveTopBTN.setOnClickListener {
+            val editText = genresInput.editText
+            val genres = editText?.text.toString()
+
+            val editText2 = tagsInput.editText
+            val tags = editText2?.text.toString()
+
+            val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
+                lastPageReadInput.text.toString().toInt()
+            } else {
+                0 // or any other default value you want to use
+            }
+
+            val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
+            Toast.makeText(applicationContext, "Saving book...", Toast.LENGTH_SHORT).show()
+            val database = FirebaseDatabase.getInstance()
+            val profileRepo = ProfileRepository(database, currentUser!!.uid)
+            profileRepo.profileData.observe(this, Observer { userProfile ->
+                val username: String = userProfile.username
                 val newBook = Book(
                     // need to create new id with each book
-                    id = randNum.toString(),
+                    id = username + randNum.toString(),
                     title = titleInput.text.toString(),
                     authorNames = authorInput.text.toString(),
                     publicationDate = publicationDateInput.text.toString(),
@@ -88,7 +182,7 @@ class AddBookPage : AppCompatActivity() {
                     userFinished = finishedCB.isChecked,
                     startDate = dataStartedInput.text.toString(),
                     endDate = dateFinishedInput.text.toString(),
-                    prevReadCount = 0,
+                    prevReadCount = lastPageRead,
                     purchasedFrom = purchasedFromInput.text.toString(),
                     mainCharacters = mainCharactersInput.text.toString(),
                     genres = genres,
@@ -97,65 +191,38 @@ class AddBookPage : AppCompatActivity() {
                     lastReadTime = currentMillis,
                     isFav = false
                 )
-
-                // need to work with Ethan about how to add books to database
-                val database = FirebaseDatabase.getInstance()
-                val bookRepository = BookRepository(database)
+                val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
                 bookRepository.addBook(newBook)
-
-                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, LibraryActivity::class.java)
-                startActivity(intent)
-            }
-            else {
-                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        saveTopBTN.setOnClickListener {
-            val editText = genresInput.editText
-            val genres = editText?.text.toString()
-
-            val editText2 = tagsInput.editText
-            val tags = editText2?.text.toString()
-            val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
-            val newBook = Book(
-                // need to create new id with each book
-                id = randNum.toString(),
-                title = titleInput.text.toString(),
-                authorNames = authorInput.text.toString(),
-                publicationDate = publicationDateInput.text.toString(),
-                starRating = ratingsInput.rating.toString().toFloat().toInt(),
-                publisher = publisherInput.text.toString(),
-                description = summaryInput.text.toString(),
-                pageCount = lastPageReadInput.text.toString().toInt(),
-                // will need to work with Ethan about how to scrape book image from Google API
-                thumbnail = " ",
-                journalEntry = reviewInput.text.toString(),
-                userProgress = 0,
-                userFinished = finishedCB.isChecked,
-                startDate = dataStartedInput.text.toString(),
-                endDate = dateFinishedInput.text.toString(),
-                prevReadCount = 0,
-                purchasedFrom = purchasedFromInput.text.toString(),
-                mainCharacters = mainCharactersInput.text.toString(),
-                genres = genres,
-                tags = tags,
-                lastReadDate = currentMillis,
-                lastReadTime = currentMillis,
-                isFav = false
-            )
-
-
-            val database = FirebaseDatabase.getInstance()
-            val bookRepository = BookRepository(database)
-            bookRepository.addBook(newBook)
-
-            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
+                val friendRepo = FriendRepository(database, username, currentUser!!.uid, this)
+                friendRepo.fetchFriends()
+                friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+                    if(isFriendsReady)
+                    {
+                        val friendCount = friendRepo.FriendIds.size
+                        if(friendCount > 0) {
+                            val recentRepository = RecentRepository(database, username, friendRepo.FriendIds)
+                            val status = if (newBook.userFinished) {
+                                "@$username Finished Reading!"
+                            }
+                            else if(lastPageRead > 1)
+                            {
+                                "@$username Read $lastPageRead pages."
+                            }
+                            else
+                            {
+                                "@$username Read $lastPageRead page."
+                            }
+                            recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
+                                status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username))
+                            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, LibraryActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                })
+                friendRepo.stopFriendListener()
+            })
+            profileRepo.stopProfileListener()
         }
 
         cancelBottomBTN.setOnClickListener {

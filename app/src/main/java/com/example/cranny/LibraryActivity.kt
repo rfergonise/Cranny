@@ -7,17 +7,20 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class LibraryActivity : AppCompatActivity() {
 
     private lateinit var libraryRecycler: RecyclerView
     private val libraryBookList = ArrayList<LibraryBookRecyclerData>()
-
+    private val auth = FirebaseAuth.getInstance()
+    private var currentUser = auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,29 +48,34 @@ class LibraryActivity : AppCompatActivity() {
         //val libraryBookList = ArrayList<LibraryBookRecyclerData>()
 
         val database = FirebaseDatabase.getInstance()
-        val bookRepository = BookRepository(database)
-        bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
-            if (isBookDataReady) {
-                val bookCount = bookRepository.Library.size
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
+        profileRepo.profileData.observe(this, Observer { userProfile ->
+            val username: String = userProfile.username
+            val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
+            bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
+                if (isBookDataReady) {
+                    val bookCount = bookRepository.Library.size
 
-                if (bookCount > 0) {
-                    for (books in bookRepository.Library) {
+                    if (bookCount > 0) {
+                        for (books in bookRepository.Library) {
 
-                        val bookAuthors = books.authorNames
-                        val bookTitle = books.title
-                        val bookImage = books.thumbnail
+                            val bookAuthors = books.authorNames
+                            val bookTitle = books.title
+                            val bookImage = books.thumbnail
 
-                        libraryBookList.add(LibraryBookRecyclerData(bookTitle, bookAuthors, bookImage))
+                            libraryBookList.add(LibraryBookRecyclerData(bookTitle, bookAuthors, bookImage))
 
+                        }
+
+                        libraryRecycler.adapter = LibraryBookAdapter(libraryBookList)
+                        libraryRecycler.layoutManager = LinearLayoutManager(this)
+                        libraryRecycler.setHasFixedSize(true)
                     }
-
-                    libraryRecycler.adapter = LibraryBookAdapter(libraryBookList)
-                    libraryRecycler.layoutManager = LinearLayoutManager(this)
-                    libraryRecycler.setHasFixedSize(true)
                 }
-            }
-            bookRepository.stopBookListener()
+                bookRepository.stopBookListener()
+            })
         })
+        profileRepo.stopProfileListener()
     }
 
 }

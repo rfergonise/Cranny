@@ -13,7 +13,7 @@ import androidx.annotation.NonNull
 import com.squareup.picasso.Picasso
 
 
-class SocialFeedRecyclerViewAdapter(private val context: Context, private val friendSocialFeed: ArrayList<SocialFeed>)
+class SocialFeedRecyclerViewAdapter(private val context: Context, private val friendSocialFeed: MutableList<SocialFeed>)
     : RecyclerView.Adapter<SocialFeedRecyclerViewAdapter.MyViewHolder>()
 {
 
@@ -30,12 +30,26 @@ class SocialFeedRecyclerViewAdapter(private val context: Context, private val fr
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // assigning values to the views created in the recycler_view_row layout file
         // based on the position of the recycler view
-        holder.tvBookTitle.text = friendSocialFeed[position].bookTitle
+        holder.tvBookTitle.text = formatBookTitle(friendSocialFeed[position].bookTitle)
         holder.tvBookAuthors.text = friendSocialFeed[position].bookAuthor
         holder.tvPageStatus.text = friendSocialFeed[position].status
         // todo load book covers
     }
-
+    private fun formatBookTitle(title: String): String
+    {
+        if (title.length > 17)
+        {
+            // find the last space before or at 17 characters
+            var replaceThisSpace: Int = title.substring(0, 17).lastIndexOf(' ')
+            if (replaceThisSpace <= 0)
+            {
+                // no space found before 17 characters, replace at 17
+                replaceThisSpace = 16
+            }
+            return title.substring(0, replaceThisSpace) + "\n" + title.substring(replaceThisSpace+1)
+        }
+        else return title
+    }
 
 
     override fun getItemCount(): Int {

@@ -26,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val userId: String = currentUser!!.uid
     val database = FirebaseDatabase.getInstance()
-    val bookRepository = BookRepository(database)
+    lateinit var bookRepository: BookRepository
     val profileRepository = ProfileRepository(firebaseDatabase, userId)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +46,18 @@ class SettingsActivity : AppCompatActivity() {
             .commit()
 
 
-        //Clear Library Function
-        clearLibraryButton = findViewById(R.id.clearLibraryButton)
-        clearLibraryButton.setOnClickListener {
-            showClearLibraryDialog()
-        }
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
+        profileRepo.profileData.observe(this, Observer { userProfile ->
+            val username: String = userProfile.username
+            bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
+            //Clear Library Function
+            clearLibraryButton = findViewById(R.id.clearLibraryButton)
+            clearLibraryButton.setOnClickListener {
+                showClearLibraryDialog()
+            }
+        })
+        profileRepo.stopProfileListener()
+
         //delete button logic
         deleteAccountButton = findViewById(R.id.deleteAccountButton)
         deleteAccountButton.setOnClickListener {

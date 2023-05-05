@@ -5,19 +5,27 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.core.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SocialActivity : AppCompatActivity() {
 
     // UI elements needed
     private lateinit var ivBackToMain: ImageView
     private lateinit var ivShowProfile: ImageView
+    private lateinit var tvNoSocialFeed: TextView
+    private lateinit var mcvFeedBorder: MaterialCardView
 
     // Used to store what will displayed in the social feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
@@ -30,9 +38,10 @@ class SocialActivity : AppCompatActivity() {
         // link the ui elements
         ivBackToMain = findViewById(R.id.ivBackToMain)
         ivShowProfile = findViewById(R.id.ivProfileVisibility)
+       tvNoSocialFeed = findViewById(R.id.tvNoSocialFeed)
+       mcvFeedBorder = findViewById(R.id.mcvBorder)
 
-        // load book data from database into friendSocialFeed then populate the recycler view adapter
-        setUpSocialFeed()
+       getFriendsRecentlyReadBooks()
 
         // Back Menu Button On Click Event
         ivBackToMain.setOnClickListener {
@@ -48,65 +57,47 @@ class SocialActivity : AppCompatActivity() {
 
     }
 
-    private fun formatBookTitle(title: String): String
-    {
-        if (title.length > 17)
-        {
-            // find the last space before or at 17 characters
-            var replaceThisSpace: Int = title.substring(0, 17).lastIndexOf(' ')
-            if (replaceThisSpace <= 0)
-            {
-                // no space found before 17 characters, replace at 17
-                replaceThisSpace = 16
-            }
-            return title.substring(0, replaceThisSpace) + "\n" + title.substring(replaceThisSpace+1)
-        }
-        else return title
+
+
+    private fun getFriendsRecentlyReadBooks() {
+        val database = FirebaseDatabase.getInstance()
+        val userId = FirebaseAuth.getInstance().uid!!
+        val profileRepository = ProfileRepository(database, userId)
+        profileRepository.profileData.observe(this, Observer { userProfile ->
+            val username: String = userProfile.username
+            val recentRepository = RecentRepository(database, username, mutableListOf())
+            recentRepository.fetchRecentData()
+            recentRepository.isRecentDataReady.observe(this, Observer { isRecentDataReady ->
+                if(isRecentDataReady)
+                {
+                    val sortedFeeds: MutableList<SocialFeed> = recentRepository.SocialFeeds.sortedByDescending { it.lastReadTime }.toMutableList()
+                    setUpSocialFeed(sortedFeeds)
+                }
+            })
+
+        })
+        profileRepository.stopProfileListener()
     }
 
-    private fun setUpSocialFeed()
+    private fun setUpSocialFeed(sortedFeeds: MutableList<SocialFeed>)
     {
-        // todo change it from the user's recents to the user's friend's recents
-        val database = FirebaseDatabase.getInstance()
-        val recentRepository = RecentRepository(database)
-        recentRepository.fetchRecentData()
-        recentRepository.isRecentDataReady.observe(this) { isRecentDataReady ->
-            if (isRecentDataReady) {
-                // clear the list before adding items
-                friendSocialFeed.clear()
-                // grab each social feed from recentRepository.SocialFeeds
-                for (feed in recentRepository.SocialFeeds) {
-                    val bookId = feed.id
-                    val bookAuthors = feed.bookAuthor
-                    val bookTitle = feed.bookTitle
-                    // format the title to fit in the recycle view
-                    var setTitle: String = formatBookTitle(bookTitle)
-                    val isBookComplete = feed.isBookComplete
-                    val status = feed.status
-                    val bookCoverURL = feed.bookCoverURL
-                    val dateRead = feed.lastReadDate
-                    val timeRead = feed.lastReadTime
-                    val username = feed.username
-                    val socialFeed = SocialFeed(bookId, setTitle, bookAuthors, isBookComplete,
-                        status, bookCoverURL, dateRead, timeRead, username)
-                    // check if the item is already in the list before adding it
-                    if (!friendSocialFeed.contains(socialFeed)) {
-                        friendSocialFeed.add(socialFeed)
-                    }
-                }
-                // Check if friendSocialFeed is not empty before setting the adapter
-                if (friendSocialFeed.isNotEmpty()) {
-                    recentRepository.stopRecentListener()
-                    // Set up the adapter
-                    val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
-                    val adapter = SocialFeedRecyclerViewAdapter(this, friendSocialFeed)
-                    rvSocial.layoutManager = LinearLayoutManager(this)
-                    rvSocial.adapter = adapter
-                    adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
-                } else {
-                    Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
-                }
-            }
+        val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
+        // Check if friendSocialFeed is not empty before setting the adapter
+        if (sortedFeeds.isNotEmpty()) {
+            tvNoSocialFeed.visibility = android.view.View.INVISIBLE
+            rvSocial.visibility = android.view.View.VISIBLE
+            mcvFeedBorder.visibility = android.view.View.VISIBLE
+            // Set up the adapter
+            val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
+            rvSocial.layoutManager = LinearLayoutManager(this)
+            rvSocial.adapter = adapter
+            adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
+        }
+        else
+        {
+            tvNoSocialFeed.visibility = android.view.View.VISIBLE
+            rvSocial.visibility = android.view.View.INVISIBLE
+            mcvFeedBorder.visibility = android.view.View.INVISIBLE
         }
     }
 
