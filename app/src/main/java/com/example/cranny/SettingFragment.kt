@@ -75,29 +75,34 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun updateUsername(userID: String, newUsername: String) {
         val database = FirebaseDatabase.getInstance()
         val userRef = database.reference.child("UserData").child(userID).child("Profile")
-        val ServerRepository = ServerRepository(database)
-        ServerRepository.isUserListReady.observe(this, Observer { isUserListReady ->
+        val serverRepository = ServerRepository(database)
+
+        serverRepository.isUserListReady.observe(this, Observer { isUserListReady ->
             if (isUserListReady) {
-                for (user in ServerRepository.Users) {
+                var usernameAvailable = true
+
+                for (user in serverRepository.Users) {
                     if (newUsername == user.username) {
                         // Username exists
-                        Toast.makeText(requireContext(), "Username is already in user", Toast.LENGTH_SHORT)
-                            .show()
-
-                    } else {
-                        // Username doesn't exist
-                        userRef.child("Username").setValue(newUsername)
-                        Toast.makeText(requireContext(), "Username changed to $newUsername", Toast.LENGTH_SHORT).show()
-                            }
-
-                        // Stop the database listener checking usernames
-                        ServerRepository.stopUserListener()
-
-
+                        usernameAvailable = false
+                        break
                     }
                 }
-            })
-        }
+
+                if (usernameAvailable) {
+                    // Username doesn't exist
+                    userRef.child("Username").setValue(newUsername)
+                    Toast.makeText(requireContext(), "Username changed to $newUsername", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Username exists
+                    Toast.makeText(requireContext(), "Username is already in use", Toast.LENGTH_SHORT).show()
+                }
+
+                // Stop the database listener checking usernames
+                serverRepository.stopUserListener()
+            }
+        })
+    }
     }
 
 
