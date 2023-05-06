@@ -3,6 +3,7 @@ package com.example.cranny
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase
 class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListener {
 
     private lateinit var libraryRecycler: RecyclerView
-    private val libraryBookList = ArrayList<LibraryBookRecyclerData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
     }
 
     private fun getLibraryRecyclerData() {
-        val libraryBookList = ArrayList<LibraryBookRecyclerData>()
+        val libraryRecyclerBookList = ArrayList<LibraryBookRecyclerData>()
         val database = FirebaseDatabase.getInstance()
         val bookRepository = BookRepository(database)
         bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
@@ -49,13 +49,33 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                 if (bookCount > 0) {
                     for (books in bookRepository.Library) {
 
-                        val bookAuthors = books.authorNames
-                        val bookTitle = books.title
-                        val bookImage = books.thumbnail
-                        val bookID = books.id
-
-                        libraryBookList.add(LibraryBookRecyclerData(bookID, bookTitle, bookAuthors, bookImage))
-                        libraryRecycler.adapter = LibraryBookAdapter(libraryBookList, this@LibraryActivity)
+                        libraryRecyclerBookList.add(
+                            LibraryBookRecyclerData(
+                                books.id,
+                                books.title,
+                                books.authorNames,
+                                books.publicationDate,
+                                books.starRating,
+                                books.publisher,
+                                books.description,
+                                books.prevReadCount,
+                                books.thumbnail,
+                                books.journalEntry,
+                                books.userFinished,
+                                books.isFav,
+                                books.purchasedFrom,
+                                books.mainCharacters,
+                                books.genres,
+                                books.tags,
+                                books.lastReadDate,
+                                books.lastReadTime,
+                                books.prevReadCount,
+                                books.startDate,
+                                books.endDate,
+                            )
+                        )
+                        libraryRecycler.adapter =
+                            LibraryBookAdapter(libraryRecyclerBookList, this@LibraryActivity)
                         libraryRecycler.layoutManager = LinearLayoutManager(this)
                         libraryRecycler.setHasFixedSize(true)
 
@@ -64,15 +84,58 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
             }
             bookRepository.stopBookListener()
         })
-
     }
 
 
-    // What will happen when the user clicks on a book
     override fun onItemClick(position: Int) {
-        val intent = Intent(this, BookPageActivity::class.java)
-        startActivity(intent)
+        val database = FirebaseDatabase.getInstance()
+        val bookRepository = BookRepository(database)
+        bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
+            if (isBookDataReady) {
+                val libraryBookList = ArrayList<LibraryBookRecyclerData>()
+                val bookCount = bookRepository.Library.size
+                if (bookCount > 0) {
+                    for (books in bookRepository.Library) {
+                        libraryBookList.add(
+                            LibraryBookRecyclerData(
+                                books.id,
+                                books.title,
+                                books.authorNames,
+                                books.publicationDate,
+                                books.starRating,
+                                books.publisher,
+                                books.description,
+                                books.prevReadCount,
+                                books.thumbnail,
+                                books.journalEntry,
+                                books.userFinished,
+                                books.isFav,
+                                books.purchasedFrom,
+                                books.mainCharacters,
+                                books.genres,
+                                books.tags,
+                                books.lastReadDate,
+                                books.lastReadTime,
+                                books.prevReadCount,
+                                books.startDate,
+                                books.endDate,
+                            )
+                        )
+                    }
+                }
+                bookRepository.stopBookListener()
 
+                if (libraryBookList.isNotEmpty()) {
+                    val intent = Intent(this, BookPageActivity::class.java)
+                    intent.putExtra("title", libraryBookList[position].bookTitle)
+                    intent.putExtra("author", libraryBookList[position].bookAuthor)
+                    intent.putExtra("rating", libraryBookList[position].bookRating)
+                    intent.putExtra("tags", libraryBookList[position].bookTags)
+                    intent.putExtra("genres", libraryBookList[position].bookGenres)
+                    startActivity(intent)
+                }
+            }
+        })
     }
 }
 

@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.*
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
-import kotlin.random.Random
+import java.util.*
 
 class AddBookPage : AppCompatActivity() {
 
@@ -39,8 +39,7 @@ class AddBookPage : AppCompatActivity() {
         val lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
         val lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
 
-        // Random number generator for book IDs
-        val randNum: Int = Random.nextInt(1000)
+
 
         // Hide Data Finished or Last Page Read based on finished checkbox
         finishedCB.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -67,7 +66,7 @@ class AddBookPage : AppCompatActivity() {
                 val tags = editText2?.text.toString()
 
                 val newBook = Book(
-                    id = randNum.toString(),
+                    id = UUID.randomUUID().toString(),
                     title = titleInput.text.toString(),
                     authorNames = authorInput.text.toString(),
                     publicationDate = publicationDateInput.text.toString(),
@@ -79,8 +78,8 @@ class AddBookPage : AppCompatActivity() {
                     journalEntry = reviewInput.text.toString(),
                     userProgress = 0,
                     userFinished = finishedCB.isChecked,
-                    startDate = setDate(dataStartedInput.text.toString()),
-                    endDate = dateFinishedInput.text.toString(),
+                    startDate = setStartDate(dataStartedInput.text.toString()),
+                    endDate = setFinishedDate(dateFinishedInput.text.toString()),
                     prevReadCount = 0,
                     purchasedFrom = purchasedFromInput.text.toString(),
                     mainCharacters = mainCharactersInput.text.toString(),
@@ -113,7 +112,7 @@ class AddBookPage : AppCompatActivity() {
             val tags = editText2?.text.toString()
 
             val newBook = Book(
-                id = randNum.toString(),
+                id = UUID.randomUUID().toString(),
                 title = titleInput.text.toString(),
                 authorNames = authorInput.text.toString(),
                 publicationDate = publicationDateInput.text.toString(),
@@ -126,8 +125,8 @@ class AddBookPage : AppCompatActivity() {
                 journalEntry = reviewInput.text.toString(),
                 userProgress = 0,
                 userFinished = finishedCB.isChecked,
-                startDate = setDate(dataStartedInput.text.toString()),
-                endDate = dateFinishedInput.text.toString(),
+                startDate = setStartDate(dataStartedInput.text.toString()),
+                endDate = setFinishedDate(dateFinishedInput.text.toString()),
                 prevReadCount = 0,
                 purchasedFrom = purchasedFromInput.text.toString(),
                 mainCharacters = mainCharactersInput.text.toString(),
@@ -161,8 +160,9 @@ class AddBookPage : AppCompatActivity() {
 
     }
 
+
     // If user doesn't input a date, it will autofill with the current date
-    private fun setDate(startDate: String): String {
+    private fun setStartDate(startDate: String): String {
         if (startDate.isNullOrEmpty()) {
             val time = Calendar.getInstance().time
             val formatter = SimpleDateFormat("MMddyyyy")
@@ -172,6 +172,24 @@ class AddBookPage : AppCompatActivity() {
             val dateInput = formatter.parse(startDate)
             return formatter.format(dateInput)
         }
+    }
+
+    private fun setFinishedDate(finishedDate: String): String {
+        val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
+        val userFinished = finishedCB.isChecked
+
+        if (userFinished){
+            if (finishedDate.isNullOrEmpty()) {
+                val time = 0
+                val formatter = SimpleDateFormat("MMddyyyy")
+                return formatter.format(time)
+            } else {
+                val formatter = SimpleDateFormat("MMddyyyy")
+                val dateInput = formatter.parse(finishedDate)
+                return formatter.format(dateInput)
+            }
+        } else
+            return ""
     }
 
     // If user doesn't input last page read, it will default to 0

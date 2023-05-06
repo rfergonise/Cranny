@@ -36,15 +36,15 @@ class LibraryBookAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val libraryBook: LibraryBookRecyclerData = libraryDataToDisplay[position]
 
-        holder.libBookTitle.text = libraryDataToDisplay[position].libraryBookTitle
-        holder.libAuthors.text = libraryDataToDisplay[position].libraryAuthorsName
+        holder.libBookTitle.text = libraryDataToDisplay[position].bookTitle
+        holder.libAuthors.text = libraryDataToDisplay[position].bookAuthor
         // Need to fix when we figure out images
         //holder.libBookImage.imageview = libraryDataToDisplay[position].libraryBookImage
 
         }
 
         inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-            OnClickListener {
+            View.OnClickListener {
 
             val libBookTitle: TextView = itemView.findViewById(R.id.tvrvBookTitle)
             val libAuthors: TextView = itemView.findViewById(R.id.tvrvAuthorName)

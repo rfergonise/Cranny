@@ -32,7 +32,10 @@
                 android:fontFamily="@font/raleway_custom"
                 android:text="Book Page"
                 android:textColor="#000000"
-                android:textSize="40sp"
+                android:textSize="35sp"
+                android:maxEms="7"
+                android:maxLines="1"
+                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +58,7 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
-                android:id="@+id/favoriteButton"
+                android:id="@+id/bpFavoriteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
@@ -112,7 +115,7 @@
                     android:text="Book Title"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textSize="30sp"
+                    android:textSize="40sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -125,7 +128,7 @@
                     android:fontFamily="@font/raleway_custom"
                     android:text="Author Name(s)"
                     android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpBookTitle" />
