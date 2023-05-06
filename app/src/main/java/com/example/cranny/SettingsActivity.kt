@@ -145,7 +145,7 @@ class SettingsActivity : AppCompatActivity() {
             .setPositiveButton("Yes") { _, _ ->
 
                 // Clear user library
-                bookRepository.clearUserLibrary()
+                bookRepository.clearUserLibrary(this)
 
                 // Observe for changes in the library
                 bookRepository.isBookDataReady.observe(this, Observer { isLibraryCleared ->

@@ -384,19 +384,25 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         fetchBookData()
     }
 
-    fun removeBook(book: Book) {
-        val bookDataRef = database.getReference("UserData").child(user.id).child("Books")
-        bookDataRef.orderByChild("Id").equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.child("Id").value == book.id) {
-                        childSnapshot.ref.removeValue()
-                        break
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) { }
-        })
+    fun removeBook(book: Book, owner:LifecycleOwner) {
+       val database = FirebaseDatabase.getInstance()
+        val bookRef = database.reference.child("UserData").child(user.id).child("Books").child(book.id)
+        bookRef.removeValue()
+
+        // update user's book count
+        val userProfileRepo = ProfileRepository(database, user.id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var bookCount = userProfile.bookCount
+            bookCount--
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, userProfile.friendCount, bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
+        // remove the book from the user's friends' recent data
+        val recentRepository = RecentRepository(database, user.username, mutableListOf())
+        recentRepository.removeRecent(SocialFeed(book.id, book.title, book.authorNames!!, book.userFinished, book.pageCount.toString(),
+        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username), owner)
+
     }
 
     fun fetchBookData()
@@ -486,7 +492,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.updateChildren(bookData)
     }
 
-    fun addBook(book: Book)
+    fun addBook(book: Book, owner: LifecycleOwner)
     {
         val bookDataRef = database.getReference("UserData").child(user.id).child("Books")
         bookDataRef.child(book.id).child("AuthorNames").setValue(book.authorNames)
@@ -512,6 +518,15 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.child(book.id).child("UserProgress").setValue(book.userProgress)
         bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
 
+        // update user's book count
+        val userProfileRepo = ProfileRepository(database, user.id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var bookCount = userProfile.bookCount
+            bookCount++
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, userProfile.friendCount, bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
     }
 
     fun updateFavoriteStatus(book: Book)
@@ -530,11 +545,11 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         }
     }
 
-    fun clearUserLibrary() {
+    fun clearUserLibrary(owner: LifecycleOwner) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             for (book in Library) {
-                removeBook(book)
+                removeBook(book, owner)
             }
             // Signal that the user library has been cleared
             _isBookDataReady.postValue(true)
@@ -611,19 +626,26 @@ class RecentRepository(private val database: FirebaseDatabase, private val usern
     }
 
     // Searches the user's recents list and removes the passed in SocialFeed from it
-    fun removeRecent(socialFeed: SocialFeed) {
-        val socialDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents")
-        socialDataRef.orderByChild("Id").equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.child("Id").value == socialFeed.id) {
-                        childSnapshot.ref.removeValue()
-                        break
+    fun removeRecent(socialFeed: SocialFeed, owner: LifecycleOwner) {
+
+        // go through each friend and remove the book from their recent list
+        val friendRepo = FriendRepository(database, username, currentUser!!.uid, owner)
+        friendRepo.fetchFriends()
+        friendRepo.isFriendsReady.observe(owner, Observer { isFriendsReady ->
+            if(isFriendsReady)
+            {
+                val friendCount =  friendRepo.FriendIds.size
+                if(friendCount > 0)
+                {
+                    for(friend in friendRepo.FriendIds)
+                    {
+                        val recentBookRef = database.getReference("UserData").child(friend.id).child("Recents").child(socialFeed.id)
+                        recentBookRef.removeValue()
                     }
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) { }
         })
+        friendRepo.stopFriendListener()
     }
 
     fun stopRecentListener()

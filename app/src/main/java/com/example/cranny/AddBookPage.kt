@@ -110,7 +110,7 @@ class AddBookPage : AppCompatActivity() {
                         isFav = false
                     )
                     val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
-                    bookRepository.addBook(newBook)
+                    bookRepository.addBook(newBook, this)
                     val friendRepo = FriendRepository(database, username, currentUser!!.uid, this)
                     friendRepo.fetchFriends()
                     friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
@@ -192,7 +192,7 @@ class AddBookPage : AppCompatActivity() {
                     isFav = false
                 )
                 val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
-                bookRepository.addBook(newBook)
+                bookRepository.addBook(newBook, this)
                 val friendRepo = FriendRepository(database, username, currentUser!!.uid, this)
                 friendRepo.fetchFriends()
                 friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->

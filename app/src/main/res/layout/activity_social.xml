@@ -80,16 +80,6 @@
         app:layout_constraintTop_toBottomOf="@+id/cvHeader"
         android:layout_marginTop="80dp">
 
-        <TextView
-            android:id="@+id/tvNoSocialFeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Recently Read Books From Friends"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <!-- Friend's Recent Reads -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvBorder"
@@ -100,8 +90,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="5dp">
-
+            app:strokeWidth="5dp"
+            app:cardBackgroundColor="@color/cranny_pink">
+            <TextView
+                android:id="@+id/tvNoSocialFeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Recently Read Books From Friends"
+                android:textColor="@color/black"
+                android:layout_gravity="center"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSocial"

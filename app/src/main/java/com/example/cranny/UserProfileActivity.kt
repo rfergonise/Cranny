@@ -33,6 +33,8 @@ class UserProfileActivity : AppCompatActivity()
     lateinit var tvBooksCount: TextView
     lateinit var cvBookButton: MaterialCardView
     lateinit var cvFriendButton: MaterialCardView
+    lateinit var tvNoRecent: TextView
+    lateinit var ivMainMenu: ImageView
 
     // Used to store what will displayed in the user feed
     private val userSocialFeed = ArrayList<SocialFeed>()
@@ -56,9 +58,16 @@ class UserProfileActivity : AppCompatActivity()
         tvBooksCount = findViewById(R.id.tvTotalBooks)
         cvBookButton = findViewById(R.id.cvBookCount)
         cvFriendButton = findViewById(R.id.cvFriendCount)
+        tvNoRecent = findViewById(R.id.tvNoRecent)
+        ivMainMenu = findViewById(R.id.ivBackToMain)
 
         // load user data from database into profile text views / image view
         setUpSocialProfile()
+
+        ivMainMenu.setOnClickListener {
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
+        }
 
         // Hide Profile On Click Listener
         ivHideProfile.setOnClickListener {
@@ -74,7 +83,8 @@ class UserProfileActivity : AppCompatActivity()
 
         // Book On Click Listener
         cvBookButton.setOnClickListener {
-            // todo open user library activity
+            val i = Intent(this, LibraryActivity::class.java)
+            startActivity(i)
         }
 
     }
@@ -216,18 +226,21 @@ class UserProfileActivity : AppCompatActivity()
                         userSocialFeed.add(socialFeed)
                     }
                 }
+                val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                 // Check if friendSocialFeed is not empty before setting the adapter
                 if (userSocialFeed.isNotEmpty()) {
-                    val sortedFeeds: MutableList<SocialFeed> = userSocialFeed.sortedBy { it.lastReadTime }.toMutableList()
+                    tvNoRecent.visibility = View.INVISIBLE
+                    rvSocial.visibility = View.VISIBLE
+                    val sortedFeeds: MutableList<SocialFeed> = userSocialFeed.sortedByDescending { it.lastReadTime }.toMutableList()
                     bookRepository.stopBookListener()
                     // Set up the adapter
-                    val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                     val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
                 } else {
-                    Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
+                    tvNoRecent.visibility = View.VISIBLE
+                    rvSocial.visibility = View.INVISIBLE
                 }
             }
         })

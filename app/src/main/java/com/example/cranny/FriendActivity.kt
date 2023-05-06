@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -28,6 +29,7 @@ class FriendActivity : AppCompatActivity()
     lateinit var tvBio: TextView
     lateinit var tvFriendsCount: TextView
     lateinit var tvBooksCount: TextView
+    lateinit var tvNoRecent: TextView
 
     // Used to store what will displayed in the user feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
@@ -54,6 +56,7 @@ class FriendActivity : AppCompatActivity()
         tvBio = findViewById(R.id.tvProfileBio)
         tvFriendsCount = findViewById(R.id.tvTotalFriends)
         tvBooksCount = findViewById(R.id.tvTotalBooks)
+        tvNoRecent = findViewById(R.id.tvNoRecent)
 
         // load user data from database into profile text views / image view
         setUpSocialProfile(friendId!!)
@@ -144,18 +147,21 @@ class FriendActivity : AppCompatActivity()
                         friendSocialFeed.add(socialFeed)
                     }
                 }
+                val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                 // Check if friendSocialFeed is not empty before setting the adapter
                 if (friendSocialFeed.isNotEmpty()) {
-                    val sortedFeeds: MutableList<SocialFeed> = friendSocialFeed.sortedBy { it.lastReadTime }.toMutableList()
+                    tvNoRecent.visibility = View.INVISIBLE
+                    rvSocial.visibility = View.VISIBLE
+                    val sortedFeeds: MutableList<SocialFeed> = friendSocialFeed.sortedByDescending { it.lastReadTime }.toMutableList()
                     bookRepository.stopBookListener()
                     // Set up the adapter
-                    val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                     val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
                 } else {
-                    Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
+                    tvNoRecent.visibility = View.VISIBLE
+                    rvSocial.visibility = View.INVISIBLE
                 }
             }
         })

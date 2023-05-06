@@ -86,7 +86,6 @@ class SocialActivity : AppCompatActivity() {
         if (sortedFeeds.isNotEmpty()) {
             tvNoSocialFeed.visibility = android.view.View.INVISIBLE
             rvSocial.visibility = android.view.View.VISIBLE
-            mcvFeedBorder.visibility = android.view.View.VISIBLE
             // Set up the adapter
             val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
             rvSocial.layoutManager = LinearLayoutManager(this)
@@ -97,7 +96,6 @@ class SocialActivity : AppCompatActivity() {
         {
             tvNoSocialFeed.visibility = android.view.View.VISIBLE
             rvSocial.visibility = android.view.View.INVISIBLE
-            mcvFeedBorder.visibility = android.view.View.INVISIBLE
         }
     }
 
