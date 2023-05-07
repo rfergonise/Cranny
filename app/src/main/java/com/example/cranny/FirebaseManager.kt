@@ -401,7 +401,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         // remove the book from the user's friends' recent data
         val recentRepository = RecentRepository(database, user.username, mutableListOf())
         recentRepository.removeRecent(SocialFeed(book.id, book.title, book.authorNames!!, book.userFinished, book.pageCount.toString(),
-        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username), owner)
+        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username, book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!), owner)
 
     }
 
@@ -435,8 +435,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val Title = bookSnapshot.child("Title").value as? String ?: ""
                     val userProgress = bookSnapshot.child("UserProgress").value as? Long
                     val UserProgressInt = userProgress?.toInt()
-                    val StarRating = bookSnapshot.child("StarRating").value as? Long
-                    val StarRatingInt = StarRating?.toInt() ?: 0
+                    val StarRating = bookSnapshot.child("StarRating").value as? Float
                     val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as? Boolean ?: false
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
@@ -446,7 +445,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
 
 
-                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingInt, Publisher, Description, pageCountInt, Thumbnail,
+                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRating, Publisher, Description, pageCountInt, Thumbnail,
                     JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
                     PrevReadCountInt, StartDate, EndDate)
                     Library.add(book)
@@ -597,8 +596,24 @@ class RecentRepository(private val database: FirebaseDatabase, private val usern
                     val TimeRead = bookSnapshot.child("TimeRead").value as Long
                     val Username = bookSnapshot.child("Username").value as String
                     val Status = bookSnapshot.child("Status").value as String
+                    val MainCharacters = bookSnapshot.child("Characters").value as String
+                    val Log = bookSnapshot.child("Log").value as String
+                    val PurchaseFrom = bookSnapshot.child("PurchaseFrom").value as String
+                    val Genres = bookSnapshot.child("Genres").value as String
+                    val Tags = bookSnapshot.child("Tags").value as String
+                    val starRatingObj = bookSnapshot.child("StarRating").value
+                    val starRating = if (starRatingObj != null) {
+                        if (starRatingObj is Float) {
+                            starRatingObj
+                        } else {
+                            starRatingObj.toString().toFloatOrNull() ?: 0f
+                        }
+                    } else {
+                        0f
+                    }
 
-                    SocialFeeds.add(SocialFeed(Id, BookTitle, BookAuthor, IsBookComplete, Status, BookCoverURL, DateRead, TimeRead, Username))
+                    SocialFeeds.add(SocialFeed(Id, BookTitle, BookAuthor, IsBookComplete, Status, BookCoverURL, DateRead, TimeRead, Username,
+                        MainCharacters, Log, PurchaseFrom, Genres, Tags, starRating))
                 }
                 _isRecentDataReady.postValue(true) // inform the caller we have filled the list with each recent book
             }
@@ -622,6 +637,12 @@ class RecentRepository(private val database: FirebaseDatabase, private val usern
             recentDataRef.child(socialFeed.id).child("TimeRead").setValue(socialFeed.lastReadTime)
             recentDataRef.child(socialFeed.id).child("Username").setValue(socialFeed.username)
             recentDataRef.child(socialFeed.id).child("Status").setValue(socialFeed.status)
+            recentDataRef.child(socialFeed.id).child("Characters").setValue(socialFeed.mainCharacters)
+            recentDataRef.child(socialFeed.id).child("Log").setValue(socialFeed.journalEntry)
+            recentDataRef.child(socialFeed.id).child("PurchaseFrom").setValue(socialFeed.purchasedFrom)
+            recentDataRef.child(socialFeed.id).child("Genres").setValue(socialFeed.genres)
+            recentDataRef.child(socialFeed.id).child("Tags").setValue(socialFeed.tags)
+            recentDataRef.child(socialFeed.id).child("StarRating").setValue(socialFeed.starRating)
         }
     }
 

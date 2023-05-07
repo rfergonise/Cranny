@@ -90,7 +90,7 @@ class AddBookPage : AppCompatActivity() {
                         title = titleInput.text.toString(),
                         authorNames = authorInput.text.toString(),
                         publicationDate = publicationDateInput.text.toString(),
-                        starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                        starRating = ratingsInput.rating.toString().toFloat(),
                         publisher = publisherInput.text.toString(),
                         description = summaryInput.text.toString(),
                         pageCount = lastPageRead,
@@ -131,7 +131,8 @@ class AddBookPage : AppCompatActivity() {
                                     "@$username Read $lastPageRead page."
                                 }
                                 recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
-                                    status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username))
+                                    status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,
+                                newBook.journalEntry!!, newBook.purchasedFrom!!, newBook.genres!!, newBook.tags!!, newBook.starRating!!))
                                 Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this, LibraryActivity::class.java)
                                 startActivity(intent)
@@ -172,7 +173,7 @@ class AddBookPage : AppCompatActivity() {
                     title = titleInput.text.toString(),
                     authorNames = authorInput.text.toString(),
                     publicationDate = publicationDateInput.text.toString(),
-                    starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                    starRating = ratingsInput.rating.toString().toFloat(),
                     publisher = publisherInput.text.toString(),
                     description = summaryInput.text.toString(),
                     pageCount = lastPageRead,
@@ -213,7 +214,8 @@ class AddBookPage : AppCompatActivity() {
                                 "@$username Read $lastPageRead page."
                             }
                             recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
-                                status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username))
+                                status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,
+                                newBook.journalEntry!!, newBook.purchasedFrom!!, newBook.genres!!, newBook.tags!!, newBook.starRating!!))
                             Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this, LibraryActivity::class.java)
                             startActivity(intent)

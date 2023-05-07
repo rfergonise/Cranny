@@ -87,7 +87,7 @@ class SocialActivity : AppCompatActivity() {
             tvNoSocialFeed.visibility = android.view.View.INVISIBLE
             rvSocial.visibility = android.view.View.VISIBLE
             // Set up the adapter
-            val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
+            val adapter = SocialFeedRecyclerViewAdapter(this, this, sortedFeeds)
             rvSocial.layoutManager = LinearLayoutManager(this)
             rvSocial.adapter = adapter
             adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed

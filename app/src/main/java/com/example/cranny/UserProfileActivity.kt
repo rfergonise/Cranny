@@ -220,7 +220,8 @@ class UserProfileActivity : AppCompatActivity()
                     val dateRead = book.lastReadDate
                     val timeRead = book.lastReadTime
                     val socialFeed = SocialFeed(bookId, setTitle, bookAuthors!!, isBookComplete,
-                        status, bookCoverURL!!, dateRead!!, timeRead!!, username)
+                        status, bookCoverURL!!, dateRead!!, timeRead!!, username,
+                    book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!)
                     // check if the item is already in the list before adding it
                     if (!userSocialFeed.contains(socialFeed)) {
                         userSocialFeed.add(socialFeed)
@@ -234,7 +235,7 @@ class UserProfileActivity : AppCompatActivity()
                     val sortedFeeds: MutableList<SocialFeed> = userSocialFeed.sortedByDescending { it.lastReadTime }.toMutableList()
                     bookRepository.stopBookListener()
                     // Set up the adapter
-                    val adapter = SocialFeedRecyclerViewAdapter(this, sortedFeeds)
+                    val adapter = SocialFeedRecyclerViewAdapter(this,this, sortedFeeds)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed

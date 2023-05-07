@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.card.MaterialCardView
 import com.squareup.picasso.Picasso
 
 
-class SocialFeedRecyclerViewAdapter(private val context: Context, private val friendSocialFeed: MutableList<SocialFeed>)
+class SocialFeedRecyclerViewAdapter(private val activity: AppCompatActivity, private val context: Context, private val friendSocialFeed: MutableList<SocialFeed>)
     : RecyclerView.Adapter<SocialFeedRecyclerViewAdapter.MyViewHolder>()
 {
 
@@ -30,21 +32,32 @@ class SocialFeedRecyclerViewAdapter(private val context: Context, private val fr
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // assigning values to the views created in the recycler_view_row layout file
         // based on the position of the recycler view
-        holder.tvBookTitle.text = formatBookTitle(friendSocialFeed[position].bookTitle)
+        friendSocialFeed[position].bookTitle = formatBookTitle(friendSocialFeed[position].bookTitle, 17)
+        friendSocialFeed[position].mainCharacters = formatBookTitle(friendSocialFeed[position].mainCharacters, 45)
+        friendSocialFeed[position].journalEntry = formatBookTitle(friendSocialFeed[position].journalEntry, 45)
+        friendSocialFeed[position].purchasedFrom = formatBookTitle(friendSocialFeed[position].purchasedFrom, 45)
+        friendSocialFeed[position].genres = formatBookTitle(friendSocialFeed[position].genres, 45)
+        friendSocialFeed[position].tags = formatBookTitle(friendSocialFeed[position].tags, 45)
+        holder.tvBookTitle.text = friendSocialFeed[position].bookTitle
         holder.tvBookAuthors.text = friendSocialFeed[position].bookAuthor
         holder.tvPageStatus.text = friendSocialFeed[position].status
-        // todo load book covers
+
+        // when they click on the cover, show book info
+        holder.mcvCoverBorder.setOnClickListener {
+            val showBookPopUp = BookInfoFeedFragment.newInstance(friendSocialFeed[position])
+            showBookPopUp.show(activity.supportFragmentManager, "showPopUp")
+        }
     }
-    private fun formatBookTitle(title: String): String
+    private fun formatBookTitle(title: String, formatLength: Int): String
     {
-        if (title.length > 17)
+        if (title.length > formatLength)
         {
             // find the last space before or at 17 characters
-            var replaceThisSpace: Int = title.substring(0, 17).lastIndexOf(' ')
+            var replaceThisSpace: Int = title.substring(0, formatLength).lastIndexOf(' ')
             if (replaceThisSpace <= 0)
             {
-                // no space found before 17 characters, replace at 17
-                replaceThisSpace = 16
+                // no space found before x characters, replace at x
+                replaceThisSpace = formatLength - 1
             }
             return title.substring(0, replaceThisSpace) + "\n" + title.substring(replaceThisSpace+1)
         }
@@ -64,6 +77,7 @@ class SocialFeedRecyclerViewAdapter(private val context: Context, private val fr
         var tvBookTitle: TextView = itemView.findViewById(R.id.tvSocialBookTitle)
         var tvBookAuthors: TextView = itemView.findViewById(R.id.tvSocialBookAuthor)
         var tvPageStatus: TextView = itemView.findViewById(R.id.tvSocialPageStatus)
+        var mcvCoverBorder: MaterialCardView = itemView.findViewById(R.id.mcvCoverBorder)
 
 
     }
