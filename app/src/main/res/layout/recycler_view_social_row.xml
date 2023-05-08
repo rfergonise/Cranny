@@ -22,7 +22,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView"
+                android:id="@+id/mcvCoverBorder"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 app:cardBackgroundColor="@color/cranny_purple_light"

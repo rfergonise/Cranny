@@ -33,11 +33,14 @@ class UserProfileActivity : AppCompatActivity()
     lateinit var tvBooksCount: TextView
     lateinit var cvBookButton: MaterialCardView
     lateinit var cvFriendButton: MaterialCardView
+    lateinit var tvNoRecent: TextView
+    lateinit var ivMainMenu: ImageView
 
     // Used to store what will displayed in the user feed
     private val userSocialFeed = ArrayList<SocialFeed>()
 
     lateinit var username: String
+    lateinit var userId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -55,9 +58,16 @@ class UserProfileActivity : AppCompatActivity()
         tvBooksCount = findViewById(R.id.tvTotalBooks)
         cvBookButton = findViewById(R.id.cvBookCount)
         cvFriendButton = findViewById(R.id.cvFriendCount)
+        tvNoRecent = findViewById(R.id.tvNoRecent)
+        ivMainMenu = findViewById(R.id.ivBackToMain)
 
         // load user data from database into profile text views / image view
         setUpSocialProfile()
+
+        ivMainMenu.setOnClickListener {
+            val i = Intent(this, MainActivity::class.java)
+            startActivity(i)
+        }
 
         // Hide Profile On Click Listener
         ivHideProfile.setOnClickListener {
@@ -73,16 +83,15 @@ class UserProfileActivity : AppCompatActivity()
 
         // Book On Click Listener
         cvBookButton.setOnClickListener {
-            // todo open user library activity
+            val i = Intent(this, LibraryActivity::class.java)
+            startActivity(i)
         }
 
-        // load the user's most recent reads into the recycler view
-        setUpUserRecents()
     }
 
     private fun setUpSocialProfile()
     {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         val database = FirebaseDatabase.getInstance()
         val profileRepo = ProfileRepository(database, userId!!)
         profileRepo.profileData.observe(this) { userProfile ->
@@ -107,7 +116,7 @@ class UserProfileActivity : AppCompatActivity()
 
 
             setUpFavoriteFriendHorizontalLayout(username, id)
-
+            setUpUserRecents()
             profileRepo.stopProfileListener()
         }
     }
@@ -178,47 +187,64 @@ class UserProfileActivity : AppCompatActivity()
     private fun setUpUserRecents()
     {
         val database = FirebaseDatabase.getInstance()
-        val recentRepository = RecentRepository(database)
-        recentRepository.fetchRecentData()
-        recentRepository.isRecentDataReady.observe(this) { isRecentDataReady ->
-            if (isRecentDataReady) {
+        val bookRepository = BookRepository(database, Friend(userId, username, false))
+        bookRepository.fetchBookData()
+        bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
+            if(isBookDataReady)
+            {
                 // clear the list before adding items
                 userSocialFeed.clear()
                 // grab each social feed from recentRepository.SocialFeeds
-                for (feed in recentRepository.SocialFeeds) {
-                    val bookId = feed.id
-                    val bookAuthors = feed.bookAuthor
-                    val bookTitle = feed.bookTitle
+                for (book in bookRepository.Library) {
+                    val bookId = book.id
+                    val bookAuthors = book.authorNames
+                    val bookTitle = book.title
                     // format the title to fit in the recycle view
                     var setTitle: String = formatBookTitle(bookTitle)
-                    val isBookComplete = feed.isBookComplete
-                    val status = feed.status
-                    val bookCoverURL = feed.bookCoverURL
-                    val dateRead = feed.lastReadDate
-                    val timeRead = feed.lastReadTime
-                    var _username: String = ""
-                    if(username != null) _username = username
-                    val socialFeed = SocialFeed(bookId, setTitle, bookAuthors, isBookComplete,
-                        status, bookCoverURL, dateRead, timeRead, _username)
+                    val isBookComplete = book.userFinished
+                    // create the page status screen
+                    var setStatus: String = "@" + username
+                    if(book.userFinished)
+                    {
+                        setStatus += "\nFinished reading!"
+                    }
+                    else
+                    {
+                        setStatus += "\nRead "
+                        setStatus += book.prevReadCount.toString()
+                        if(book.prevReadCount != 1) setStatus += " pages."
+                        else setStatus += " page."
+                    }
+                    val status = setStatus
+                    val bookCoverURL = book.thumbnail
+                    val dateRead = book.lastReadDate
+                    val timeRead = book.lastReadTime
+                    val socialFeed = SocialFeed(bookId, setTitle, bookAuthors!!, isBookComplete,
+                        status, bookCoverURL!!, dateRead!!, timeRead!!, username,
+                    book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!)
                     // check if the item is already in the list before adding it
                     if (!userSocialFeed.contains(socialFeed)) {
                         userSocialFeed.add(socialFeed)
                     }
                 }
+                val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
                 // Check if friendSocialFeed is not empty before setting the adapter
                 if (userSocialFeed.isNotEmpty()) {
-                    recentRepository.stopRecentListener()
+                    tvNoRecent.visibility = View.INVISIBLE
+                    rvSocial.visibility = View.VISIBLE
+                    val sortedFeeds: MutableList<SocialFeed> = userSocialFeed.sortedByDescending { it.lastReadTime }.toMutableList()
+                    bookRepository.stopBookListener()
                     // Set up the adapter
-                    val rvSocial: RecyclerView = findViewById(R.id.rvSocial)
-                    val adapter = SocialFeedRecyclerViewAdapter(this, userSocialFeed)
+                    val adapter = SocialFeedRecyclerViewAdapter(this,this, sortedFeeds)
                     rvSocial.layoutManager = LinearLayoutManager(this)
                     rvSocial.adapter = adapter
                     adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
                 } else {
-                    Toast.makeText(this, "Friend's social feed is empty.", Toast.LENGTH_SHORT).show()
+                    tvNoRecent.visibility = View.VISIBLE
+                    rvSocial.visibility = View.INVISIBLE
                 }
             }
-        }
+        })
     }
     private fun formatBookTitle(title: String): String
     {

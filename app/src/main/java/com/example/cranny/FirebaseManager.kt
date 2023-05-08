@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -76,7 +77,7 @@ friendRepo.removeFriend(friend)
 
 /* How to FETCH friends?
 val database = FirebaseDatabase.getInstance()
-val friendRepo = FriendRepository(database)
+val friendRepo = FriendRepository(database, username, userId, this)
 friendRepo.fetchFriends()
 friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
     if(isFriendsReady)
@@ -369,14 +370,12 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
     }
 }
 
-class BookRepository(private val database: FirebaseDatabase)
+class BookRepository(private val database: FirebaseDatabase, private val user: Friend)
 {
     public var Library = mutableListOf<Book>()
     private val _isBookDataReady = MutableLiveData<Boolean>()
     val isBookDataReady: LiveData<Boolean>
         get() = _isBookDataReady
-
-    private val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     private var listener: ValueEventListener? = null
 
@@ -385,25 +384,31 @@ class BookRepository(private val database: FirebaseDatabase)
         fetchBookData()
     }
 
-    fun removeBook(book: Book) {
-        val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
-        bookDataRef.orderByChild("Id").equalTo(book.id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.child("Id").value == book.id) {
-                        childSnapshot.ref.removeValue()
-                        break
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) { }
-        })
+    fun removeBook(book: Book, owner:LifecycleOwner) {
+       val database = FirebaseDatabase.getInstance()
+        val bookRef = database.reference.child("UserData").child(user.id).child("Books").child(book.id)
+        bookRef.removeValue()
+
+        // update user's book count
+        val userProfileRepo = ProfileRepository(database, user.id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var bookCount = userProfile.bookCount
+            bookCount--
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, userProfile.friendCount, bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
+        // remove the book from the user's friends' recent data
+        val recentRepository = RecentRepository(database, user.username, mutableListOf())
+        recentRepository.removeRecent(SocialFeed(book.id, book.title, book.authorNames!!, book.userFinished, book.pageCount.toString(),
+        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username, book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!), owner)
+
     }
 
     fun fetchBookData()
     {
         // Firebase Path References
-        val profileDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
+        val profileDataRef = database.getReference("UserData").child(user.id).child("Books")
         Library.clear()
         listener = object : ValueEventListener
         {
@@ -412,6 +417,9 @@ class BookRepository(private val database: FirebaseDatabase)
                 _isBookDataReady.postValue(false) // inform the caller the list is not ready
                 for (bookSnapshot in dataSnapshot.children)
                 {
+                    val doesStarRatingExist: Boolean = bookSnapshot.hasChild("StarRating")
+                    val type: String = "StarRating value type: ${bookSnapshot.child("StarRating").value?.javaClass}"
+                    val value: String = "StarRating value: ${bookSnapshot.child("StarRating").value}"
                     val AuthorNames = bookSnapshot.child("AuthorNames").value as? String ?: ""
 
                     val Description = bookSnapshot.child("Description").value as? String ?: ""
@@ -419,8 +427,8 @@ class BookRepository(private val database: FirebaseDatabase)
                     val Genres = bookSnapshot.child("Genres").value as? String ?: ""
                     val Id = bookSnapshot.child("Id").value as? String ?: ""
                     val JournalEntry = bookSnapshot.child("JournalEntry").value as? String ?: ""
-                    val LastReadDate = bookSnapshot.child("LastReadDate").value as? String ?: ""
-                    val LastReadTime = bookSnapshot.child("LastReadTime").value as? String ?: ""
+                    val LastReadDate = bookSnapshot.child("LastReadDate").value as? Long ?: 0
+                    val LastReadTime = bookSnapshot.child("LastReadTime").value as? Long ?: 0
                     val MainCharacters = bookSnapshot.child("MainCharacters").value as? String ?: ""
                     val PublicationDate = bookSnapshot.child("PublicationDate").value as? String ?: ""
                     val Publisher = bookSnapshot.child("Publisher").value as? String ?: ""
@@ -430,8 +438,8 @@ class BookRepository(private val database: FirebaseDatabase)
                     val Title = bookSnapshot.child("Title").value as? String ?: ""
                     val userProgress = bookSnapshot.child("UserProgress").value as? Long
                     val UserProgressInt = userProgress?.toInt()
-                    val StarRating = bookSnapshot.child("StarRating").value as? Long
-                    val StarRatingInt = StarRating?.toInt() ?: 0
+                    val StarRating = bookSnapshot.child("StarRating").getValue(Double::class.java)
+                    val StarRatingFloat = StarRating?.toFloat()
                     val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as? Boolean ?: false
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
@@ -440,8 +448,7 @@ class BookRepository(private val database: FirebaseDatabase)
                     val PrevReadCount = bookSnapshot.child("PrevReadCount").value as? Long
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
 
-
-                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingInt, Publisher, Description, pageCountInt, Thumbnail,
+                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingFloat, Publisher, Description, pageCountInt, Thumbnail,
                     JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
                     PrevReadCountInt, StartDate, EndDate)
                     Library.add(book)
@@ -466,8 +473,8 @@ class BookRepository(private val database: FirebaseDatabase)
         bookData["Genres"] = book.genres.toString()
         bookData["Id"] = book.id
         bookData["JournalEntry"] = book.journalEntry.toString()
-        bookData["LastReadDate"] = book.lastReadDate.toString()
-        bookData["LastReadTime"] = book.lastReadTime.toString()
+        bookData["LastReadDate"] = book.lastReadDate!!
+        bookData["LastReadTime"] = book.lastReadTime!!
         bookData["MainCharacters"] = book.mainCharacters.toString()
         bookData["PageCount"] = book.pageCount!!.toInt()
         bookData["PrevReadCount"] = book.prevReadCount.toString()
@@ -487,9 +494,9 @@ class BookRepository(private val database: FirebaseDatabase)
         bookDataRef.updateChildren(bookData)
     }
 
-    fun addBook(book: Book)
+    fun addBook(book: Book, owner: LifecycleOwner)
     {
-        val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books")
+        val bookDataRef = database.getReference("UserData").child(user.id).child("Books")
         bookDataRef.child(book.id).child("AuthorNames").setValue(book.authorNames)
         bookDataRef.child(book.id).child("Description").setValue(book.description)
         bookDataRef.child(book.id).child("EndDate").setValue(book.endDate)
@@ -513,29 +520,38 @@ class BookRepository(private val database: FirebaseDatabase)
         bookDataRef.child(book.id).child("UserProgress").setValue(book.userProgress)
         bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
 
+        // update user's book count
+        val userProfileRepo = ProfileRepository(database, user.id)
+        userProfileRepo.profileData.observe(owner) { userProfile ->
+            var bookCount = userProfile.bookCount
+            bookCount++
+            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, userProfile.friendCount, bookCount)
+            userProfileRepo.stopProfileListener()
+        }
+
     }
 
     fun updateFavoriteStatus(book: Book)
     {
-        val userDataRef = database.getReference("UserData").child(currentUser?.uid!!).child("Books")
+        val userDataRef = database.getReference("UserData").child(user.id).child("Books")
         userDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
     }
 
     fun stopBookListener()
     {
         listener?.let {
-            val profileDataRef = database.getReference("UserData").child(currentUser!!.uid)
+            val profileDataRef = database.getReference("UserData").child(user.id)
                 .child("Books")
             profileDataRef.removeEventListener(it)
             listener = null
         }
     }
 
-    fun clearUserLibrary() {
+    fun clearUserLibrary(owner: LifecycleOwner) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             for (book in Library) {
-                removeBook(book)
+                removeBook(book, owner)
             }
             // Signal that the user library has been cleared
             _isBookDataReady.postValue(true)
@@ -546,7 +562,7 @@ class BookRepository(private val database: FirebaseDatabase)
     }
 }
 
-class RecentRepository(private val database: FirebaseDatabase)
+class RecentRepository(private val database: FirebaseDatabase, private val username: String, private val friendList: MutableList<Friend>)
 {
     public var SocialFeeds = mutableListOf<SocialFeed>()
     private val _isRecentDataReady = MutableLiveData<Boolean>()
@@ -559,28 +575,7 @@ class RecentRepository(private val database: FirebaseDatabase)
 
     init
     {
-        fetchRecentData()
-    }
-
-    fun updateRecent(socialFeed: SocialFeed)
-    {
-        // gets the path reference to the user's book we are updating
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val recentDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents").child(socialFeed.id)
-        // creates a HashMap of the new data we are setting
-        val recentData = HashMap<String, Any>()
-        recentData["BookAuthor"] = socialFeed.bookAuthor
-        recentData["BookCoverURL"] = socialFeed.bookCoverURL
-        recentData["BookTitle"] = socialFeed.bookTitle
-        recentData["DateRead"] = socialFeed.lastReadDate
-        recentData["Id"] = socialFeed.id
-        recentData["IsBookComplete"] = socialFeed.isBookComplete
-        recentData["Status"] = socialFeed.status
-        recentData["TimeRead"] = socialFeed.lastReadTime
-        recentData["Username"] = socialFeed.username
-
-        // updates the book's current HashMap with the new one
-        recentDataRef.updateChildren(recentData)
+        //fetchRecentData()
     }
 
     fun fetchRecentData()
@@ -598,14 +593,30 @@ class RecentRepository(private val database: FirebaseDatabase)
                     val BookAuthor = bookSnapshot.child("BookAuthor").value as String
                     val BookCoverURL = bookSnapshot.child("BookCoverURL").value as String
                     val BookTitle = bookSnapshot.child("BookTitle").value as String
-                    val DateRead = bookSnapshot.child("DateRead").value as String
+                    val DateRead = bookSnapshot.child("DateRead").value as Long
                     val Id = bookSnapshot.child("Id").value as String
                     val IsBookComplete = bookSnapshot.child("IsBookComplete").value as Boolean
-                    val TimeRead = bookSnapshot.child("TimeRead").value as String
+                    val TimeRead = bookSnapshot.child("TimeRead").value as Long
                     val Username = bookSnapshot.child("Username").value as String
                     val Status = bookSnapshot.child("Status").value as String
+                    val MainCharacters = bookSnapshot.child("Characters").value as String
+                    val Log = bookSnapshot.child("Log").value as String
+                    val PurchaseFrom = bookSnapshot.child("PurchaseFrom").value as String
+                    val Genres = bookSnapshot.child("Genres").value as String
+                    val Tags = bookSnapshot.child("Tags").value as String
+                    val starRatingObj = bookSnapshot.child("StarRating").value
+                    val starRating = if (starRatingObj != null) {
+                        if (starRatingObj is Float) {
+                            starRatingObj
+                        } else {
+                            starRatingObj.toString().toFloatOrNull() ?: 0f
+                        }
+                    } else {
+                        0f
+                    }
 
-                    SocialFeeds.add(SocialFeed(Id, BookTitle, BookAuthor, IsBookComplete, Status, BookCoverURL, DateRead, TimeRead, Username))
+                    SocialFeeds.add(SocialFeed(Id, BookTitle, BookAuthor, IsBookComplete, Status, BookCoverURL, DateRead, TimeRead, Username,
+                        MainCharacters, Log, PurchaseFrom, Genres, Tags, starRating))
                 }
                 _isRecentDataReady.postValue(true) // inform the caller we have filled the list with each recent book
             }
@@ -617,32 +628,48 @@ class RecentRepository(private val database: FirebaseDatabase)
     // Adds whatever SocialFeed that is passed in, to the user's recents data
     fun addRecent(socialFeed: SocialFeed)
     {
-        val recentDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents")
-        recentDataRef.child(socialFeed.id).child("BookAuthor").setValue(socialFeed.bookAuthor)
-        recentDataRef.child(socialFeed.id).child("BookCoverURL").setValue(socialFeed.bookCoverURL)
-        recentDataRef.child(socialFeed.id).child("BookTitle").setValue(socialFeed.bookTitle)
-        recentDataRef.child(socialFeed.id).child("DateRead").setValue(socialFeed.lastReadDate)
-        recentDataRef.child(socialFeed.id).child("Id").setValue(socialFeed.id)
-        recentDataRef.child(socialFeed.id).child("IsBookComplete").setValue(socialFeed.isBookComplete)
-        recentDataRef.child(socialFeed.id).child("TimeRead").setValue(socialFeed.lastReadTime)
-        recentDataRef.child(socialFeed.id).child("Username").setValue(socialFeed.username)
-        recentDataRef.child(socialFeed.id).child("Status").setValue(socialFeed.status)
+        for(friend in friendList)
+        {
+            val recentDataRef = database.getReference("UserData").child(friend.id).child("Recents")
+            recentDataRef.child(socialFeed.id).child("BookAuthor").setValue(socialFeed.bookAuthor)
+            recentDataRef.child(socialFeed.id).child("BookCoverURL").setValue(socialFeed.bookCoverURL)
+            recentDataRef.child(socialFeed.id).child("BookTitle").setValue(socialFeed.bookTitle)
+            recentDataRef.child(socialFeed.id).child("DateRead").setValue(socialFeed.lastReadDate)
+            recentDataRef.child(socialFeed.id).child("Id").setValue(socialFeed.id)
+            recentDataRef.child(socialFeed.id).child("IsBookComplete").setValue(socialFeed.isBookComplete)
+            recentDataRef.child(socialFeed.id).child("TimeRead").setValue(socialFeed.lastReadTime)
+            recentDataRef.child(socialFeed.id).child("Username").setValue(socialFeed.username)
+            recentDataRef.child(socialFeed.id).child("Status").setValue(socialFeed.status)
+            recentDataRef.child(socialFeed.id).child("Characters").setValue(socialFeed.mainCharacters)
+            recentDataRef.child(socialFeed.id).child("Log").setValue(socialFeed.journalEntry)
+            recentDataRef.child(socialFeed.id).child("PurchaseFrom").setValue(socialFeed.purchasedFrom)
+            recentDataRef.child(socialFeed.id).child("Genres").setValue(socialFeed.genres)
+            recentDataRef.child(socialFeed.id).child("Tags").setValue(socialFeed.tags)
+            recentDataRef.child(socialFeed.id).child("StarRating").setValue(socialFeed.starRating)
+        }
     }
 
     // Searches the user's recents list and removes the passed in SocialFeed from it
-    fun removeRecent(socialFeed: SocialFeed) {
-        val socialDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Recents")
-        socialDataRef.orderByChild("Id").equalTo(socialFeed.id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    if (childSnapshot.child("Id").value == socialFeed.id) {
-                        childSnapshot.ref.removeValue()
-                        break
+    fun removeRecent(socialFeed: SocialFeed, owner: LifecycleOwner) {
+
+        // go through each friend and remove the book from their recent list
+        val friendRepo = FriendRepository(database, username, currentUser!!.uid, owner)
+        friendRepo.fetchFriends()
+        friendRepo.isFriendsReady.observe(owner, Observer { isFriendsReady ->
+            if(isFriendsReady)
+            {
+                val friendCount =  friendRepo.FriendIds.size
+                if(friendCount > 0)
+                {
+                    for(friend in friendRepo.FriendIds)
+                    {
+                        val recentBookRef = database.getReference("UserData").child(friend.id).child("Recents").child(socialFeed.id)
+                        recentBookRef.removeValue()
                     }
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) { }
         })
+        friendRepo.stopFriendListener()
     }
 
     fun stopRecentListener()
