@@ -417,6 +417,9 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                 _isBookDataReady.postValue(false) // inform the caller the list is not ready
                 for (bookSnapshot in dataSnapshot.children)
                 {
+                    val doesStarRatingExist: Boolean = bookSnapshot.hasChild("StarRating")
+                    val type: String = "StarRating value type: ${bookSnapshot.child("StarRating").value?.javaClass}"
+                    val value: String = "StarRating value: ${bookSnapshot.child("StarRating").value}"
                     val AuthorNames = bookSnapshot.child("AuthorNames").value as? String ?: ""
 
                     val Description = bookSnapshot.child("Description").value as? String ?: ""
@@ -435,7 +438,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val Title = bookSnapshot.child("Title").value as? String ?: ""
                     val userProgress = bookSnapshot.child("UserProgress").value as? Long
                     val UserProgressInt = userProgress?.toInt()
-                    val StarRating = bookSnapshot.child("StarRating").value as? Float
+                    val StarRating = bookSnapshot.child("StarRating").getValue(Double::class.java)
+                    val StarRatingFloat = StarRating?.toFloat()
                     val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as? Boolean ?: false
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
@@ -444,8 +448,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val PrevReadCount = bookSnapshot.child("PrevReadCount").value as? Long
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
 
-
-                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRating, Publisher, Description, pageCountInt, Thumbnail,
+                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingFloat, Publisher, Description, pageCountInt, Thumbnail,
                     JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
                     PrevReadCountInt, StartDate, EndDate)
                     Library.add(book)
