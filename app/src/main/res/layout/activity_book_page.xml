@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/BookPageLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BookPageActivity">
@@ -9,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/collapsingToolbarLayout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="85dp"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar"
@@ -29,13 +30,14 @@
                 android:id="@+id/tvBookTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/raleway_custom"
+                android:maxEms="7"
+                android:maxLines="2"
                 android:text="Book Page"
+                android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="35sp"
-                android:maxEms="7"
-                android:maxLines="1"
-                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,9 +100,10 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="115dp"
-                    android:layout_height="138dp"
+                    android:layout_width="130dp"
+                    android:layout_height="159dp"
                     android:layout_marginTop="16dp"
+                    android:contentDescription="@string/BookImage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -110,10 +113,12 @@
                     android:id="@+id/tvbpBookTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/lorenta"
-                    android:text="Book Title"
-                    android:textAllCaps="false"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lorenta_custom"
+                    android:text="@string/BookTitle"
+                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="40sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -124,36 +129,70 @@
                     android:id="@+id/tvbpAuthors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="Author Name(s)"
-                    android:textColor="#000000"
+                    android:text="@string/AuthorName"
+                    android:textAlignment="center"
+                    android:textColor="#4E4C4C"
                     android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpBookTitle" />
 
-                <RatingBar
-                    android:id="@+id/ratingBar2"
+                <TextView
+                    android:id="@+id/tvbpPublisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:contentDescription="Rating"
-                    android:scaleX=".75"
-                    android:scaleY=".75"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/publishers"
+                    android:textAlignment="center"
+                    android:textColor="#4E4C4C"
+                    android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpAuthors" />
 
                 <TextView
+                    android:id="@+id/tvbpPublicationDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/publication_date"
+                    android:textAlignment="center"
+                    android:textColor="#4E4C4C"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpPublisher" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/rating"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpPublicationDate" />
+
+                <TextView
                     android:id="@+id/tvbpGenres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="Genre(s):"
-                    android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:text="@string/genres"
+                    android:textAlignment="center"
+                    android:textColor="#4E4C4C"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar2" />
@@ -162,14 +201,51 @@
                     android:id="@+id/tvbpTags"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="Tag(s):"
-                    android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:text="@string/tags"
+                    android:textAlignment="center"
+                    android:textColor="#4E4C4C"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpGenres" />
+
+                <TextView
+                    android:id="@+id/tvbpPurchasedFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/purchased_from"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpTopDivider" />
+
+                <ImageView
+                    android:id="@+id/bpTopDivider"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvbpTags" />
 
                 <TextView
                     android:id="@+id/tvbpBeganReading"
@@ -178,11 +254,11 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="Began reading"
+                    android:text="@string/began_reading"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvbpTags" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpPurchasedFrom" />
 
                 <TextView
                     android:id="@+id/tvbpDateStarted"
@@ -191,11 +267,11 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="00/00/0000"
+                    android:text="@string/date"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvbpTags" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpPurchasedFrom" />
 
                 <TextView
                     android:id="@+id/tvbpFinishedReading"
@@ -203,7 +279,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="Finished reading"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/finished_reading"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -213,18 +290,239 @@
                     android:id="@+id/tvbpDateFinished"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="00/00/0000"
+                    android:text="@string/date"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpDateStarted" />
 
+                <ImageView
+                    android:id="@+id/bpSummaryDivider1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/bpSummaryDivider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvbpDateFinished" />
+
+                <TextView
+                    android:id="@+id/bpSummaryDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="Summary"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpFinishedReading" />
+
+                <ImageView
+                    android:id="@+id/bpSummaryDivider2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bpSummaryDivider"
+                    app:layout_constraintTop_toBottomOf="@id/tvbpDateFinished" />
+
+                <TextView
+                    android:id="@+id/tvbpSummary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/summary"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpSummaryDivider" />
+
+                <TextView
+                    android:id="@+id/tvbpMainCharacters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/main_characters"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpCharacterDivider" />
+
+                <ImageView
+                    android:id="@+id/bpCharacterDivider1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/bpCharacterDivider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvbpSummary" />
+
+                <TextView
+                    android:id="@+id/bpCharacterDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/main_characters"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpSummary" />
+
+                <ImageView
+                    android:id="@+id/bpCharacterDivider2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bpCharacterDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpSummary" />
+
+                <ImageView
+                    android:id="@+id/bpJournalDivider1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toStartOf="@+id/bpReviewDivider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpMainCharacters" />
+
+                <TextView
+                    android:id="@+id/bpReviewDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/my_review"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpMainCharacters" />
+
+                <ImageView
+                    android:id="@+id/bpJournalDivider2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/bpReviewDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tvbpMainCharacters" />
+
+                <TextView
+                    android:id="@+id/tvbpReview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="@string/my_review"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpReviewDivider" />
+
+                <ImageView
+                    android:id="@+id/bpDivider5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/cranny_blue_light"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/divider_horizontal_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvbpReview" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="DELETE BOOK"
+                    android:textColor="#FF0303"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpDivider5" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

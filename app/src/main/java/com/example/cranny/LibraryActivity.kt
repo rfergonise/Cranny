@@ -129,9 +129,17 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                     val intent = Intent(this, BookPageActivity::class.java)
                     intent.putExtra("title", libraryBookList[position].bookTitle)
                     intent.putExtra("author", libraryBookList[position].bookAuthor)
+                    intent.putExtra("publisher", libraryBookList[position].bookPublisher)
+                    intent.putExtra("publicationDate", libraryBookList[position].bookPubDate)
                     intent.putExtra("rating", libraryBookList[position].bookRating)
                     intent.putExtra("tags", libraryBookList[position].bookTags)
                     intent.putExtra("genres", libraryBookList[position].bookGenres)
+                    intent.putExtra("startDate", libraryBookList[position].bookStartDate)
+                    intent.putExtra("finishedDate", libraryBookList[position].bookEndDate)
+                    intent.putExtra("mainCharacters", libraryBookList[position].bookCharacters)
+                    intent.putExtra("purchasedFrom", libraryBookList[position].bookPurchasedFrom)
+                    intent.putExtra("userReview", libraryBookList[position].bookReview)
+                    intent.putExtra("summary", libraryBookList[position].bookSummary)
                     startActivity(intent)
                 }
             }

@@ -99,7 +99,7 @@
         android:layout_marginBottom="16dp"
         android:background="@color/cranny_blue_light"
         android:clickable="true"
-        android:contentDescription="Add book"
+        android:contentDescription="@string/AddBook"
         android:scaleX="1"
         android:scaleY="1"
         app:layout_constraintBottom_toBottomOf="parent"

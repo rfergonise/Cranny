@@ -105,47 +105,50 @@ class AddBookPage : AppCompatActivity() {
         }
 
         saveTopBTN.setOnClickListener {
-            val editText = genresInput.editText
-            val genres = editText?.text.toString()
+            if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
+                val editText = genresInput.editText
+                val genres = editText?.text.toString()
 
-            val editText2 = tagsInput.editText
-            val tags = editText2?.text.toString()
+                val editText2 = tagsInput.editText
+                val tags = editText2?.text.toString()
 
-            val newBook = Book(
-                id = UUID.randomUUID().toString(),
-                title = titleInput.text.toString(),
-                authorNames = authorInput.text.toString(),
-                publicationDate = publicationDateInput.text.toString(),
-                starRating = ratingsInput.rating.toString().toFloat().toInt(),
-                publisher = publisherInput.text.toString(),
-                description = summaryInput.text.toString(),
-                pageCount = setPageRead(lastPageReadInput.text.toString()),
-                // will need to work with Ethan about how to scrape book image from Google API
-                thumbnail = " ",
-                journalEntry = reviewInput.text.toString(),
-                userProgress = 0,
-                userFinished = finishedCB.isChecked,
-                startDate = setStartDate(dataStartedInput.text.toString()),
-                endDate = setFinishedDate(dateFinishedInput.text.toString()),
-                prevReadCount = 0,
-                purchasedFrom = purchasedFromInput.text.toString(),
-                mainCharacters = mainCharactersInput.text.toString(),
-                genres = genres,
-                tags = tags,
-                lastReadDate = " ",
-                lastReadTime = " ",
-                isFav = false
-            )
+                val newBook = Book(
+                    id = UUID.randomUUID().toString(),
+                    title = titleInput.text.toString(),
+                    authorNames = authorInput.text.toString(),
+                    publicationDate = publicationDateInput.text.toString(),
+                    starRating = ratingsInput.rating.toString().toFloat().toInt(),
+                    publisher = publisherInput.text.toString(),
+                    description = summaryInput.text.toString(),
+                    pageCount = setPageRead(lastPageReadInput.text.toString()),
+                    thumbnail = " ",
+                    journalEntry = reviewInput.text.toString(),
+                    userProgress = 0,
+                    userFinished = finishedCB.isChecked,
+                    startDate = setStartDate(dataStartedInput.text.toString()),
+                    endDate = setFinishedDate(dateFinishedInput.text.toString()),
+                    prevReadCount = 0,
+                    purchasedFrom = purchasedFromInput.text.toString(),
+                    mainCharacters = mainCharactersInput.text.toString(),
+                    genres = genres,
+                    tags = tags,
+                    lastReadDate = " ",
+                    lastReadTime = " ",
+                    isFav = false
+                )
 
+                val database = FirebaseDatabase.getInstance()
+                val bookRepository = BookRepository(database)
+                bookRepository.addBook(newBook)
 
-            val database = FirebaseDatabase.getInstance()
-            val bookRepository = BookRepository(database)
-            bookRepository.addBook(newBook)
+                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
 
-            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
+                val intent = Intent(this, LibraryActivity::class.java)
+                startActivity(intent)
+            }
+            else {
+                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
+            }
         }
 
         cancelBottomBTN.setOnClickListener {
@@ -165,10 +168,10 @@ class AddBookPage : AppCompatActivity() {
     private fun setStartDate(startDate: String): String {
         if (startDate.isNullOrEmpty()) {
             val time = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("MMddyyyy")
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
             return formatter.format(time)
         } else {
-            val formatter = SimpleDateFormat("MMddyyyy")
+            val formatter = SimpleDateFormat("MM//dd/yyyy")
             val dateInput = formatter.parse(startDate)
             return formatter.format(dateInput)
         }
@@ -181,10 +184,10 @@ class AddBookPage : AppCompatActivity() {
         if (userFinished){
             if (finishedDate.isNullOrEmpty()) {
                 val time = 0
-                val formatter = SimpleDateFormat("MMddyyyy")
+                val formatter = SimpleDateFormat("MM/dd/yyyy")
                 return formatter.format(time)
             } else {
-                val formatter = SimpleDateFormat("MMddyyyy")
+                val formatter = SimpleDateFormat("MM/dd/yyyy")
                 val dateInput = formatter.parse(finishedDate)
                 return formatter.format(dateInput)
             }
