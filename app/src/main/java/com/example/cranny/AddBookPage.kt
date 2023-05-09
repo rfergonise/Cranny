@@ -5,11 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.example.cranny.databinding.ActivityAddBookPageBinding
+import com.example.cranny.databinding.ActivityLibraryBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.random.Random
 
 class AddBookPage : AppCompatActivity() {
+
+    // Used for view binding
+    lateinit var activityAddBookPageBinding: ActivityAddBookPageBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +35,23 @@ class AddBookPage : AppCompatActivity() {
         val ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
         val cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
         val saveBottomBTN = findViewById<Button>(R.id.btnSave)
-        val cancelTopBTN = findViewById<ImageButton>(R.id.ibCancelButton)
         val saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
         val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
         val dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
         val dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
         val lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
         val lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
+
+        // binding activity to menu
+        activityAddBookPageBinding = ActivityAddBookPageBinding.inflate(layoutInflater)
+        setContentView(activityAddBookPageBinding.root)
+
+        // Go back to Dashboard Activity
+        val btAddBookPage : Button = findViewById(R.id.btAddBookPage)
+        btAddBookPage.setOnClickListener {
+            val i = Intent(this, DashboardActivity::class.java)
+            startActivity(i)
+        }
 
         // Random number generator for book IDs
         val randNum: Int = Random.nextInt(1000)
@@ -161,11 +177,7 @@ class AddBookPage : AppCompatActivity() {
         cancelBottomBTN.setOnClickListener {
             val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
-        }
 
-        cancelTopBTN.setOnClickListener {
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
         }
     }
 }

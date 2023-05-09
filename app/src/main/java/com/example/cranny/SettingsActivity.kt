@@ -30,11 +30,13 @@ class SettingsActivity : AppCompatActivity() {
     val bookRepository = BookRepository(database)
     val profileRepository = ProfileRepository(firebaseDatabase, userId)
 
+    // Used for view binding
     lateinit var activitySettingsBinding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // binding activity to menu
         activitySettingsBinding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(activitySettingsBinding.root)
 

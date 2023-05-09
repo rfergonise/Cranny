@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cranny.databinding.ActivitySettingsBinding
+import com.example.cranny.databinding.ActivitySocialBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -22,10 +24,15 @@ class SocialActivity : AppCompatActivity() {
     // Used to store what will displayed in the social feed
     private val friendSocialFeed = ArrayList<SocialFeed>()
 
-
+    // Used for view binding
+    lateinit var activitySocialBinding: ActivitySocialBinding
    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_social)
+
+       // binding activity to menu
+       activitySocialBinding = ActivitySocialBinding.inflate(layoutInflater)
+       setContentView(activitySocialBinding.root)
 
         // link the ui elements
         ivBackToMain = findViewById(R.id.ivBackToMain)
@@ -36,7 +43,7 @@ class SocialActivity : AppCompatActivity() {
 
         // Back Menu Button On Click Event
         ivBackToMain.setOnClickListener {
-            val i = Intent(this, MainActivity::class.java)
+            val i = Intent(this, DashboardActivity::class.java)
             startActivity(i)
         }
 

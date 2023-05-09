@@ -4,12 +4,15 @@ import android.content.Intent
 import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cranny.databinding.ActivityLibraryBinding
+import com.example.cranny.databinding.ActivitySettingsBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.FirebaseDatabase
 
@@ -18,19 +21,25 @@ class LibraryActivity : AppCompatActivity() {
     private lateinit var libraryRecycler: RecyclerView
     private val libraryBookList = ArrayList<LibraryBookRecyclerData>()
 
+    // Used for view binding
+    lateinit var activityLibraryBinding: ActivityLibraryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
 
+        // binding activity to menu
+        activityLibraryBinding = ActivityLibraryBinding.inflate(layoutInflater)
+        setContentView(activityLibraryBinding.root)
+
         libraryRecycler = findViewById(R.id.rvLibraryBookList)
         getLibraryRecyclerData()
 
-        // Go back to Main Activity until menu is created
-        val menuBTN = findViewById<ImageButton>(R.id.menuButton)
-        menuBTN.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        // Go back to Dashboard Activity
+        val btLibraryActivity : Button = findViewById(R.id.btLibraryActivity)
+        btLibraryActivity.setOnClickListener {
+            val i = Intent(this, DashboardActivity::class.java)
+            startActivity(i)
         }
 
         // Floating add book button, goes to Add Book Page

@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView
 
 open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    // Used for layout
     lateinit var drawerLayout: DrawerLayout
 
     override fun setContentView(view: View?) {
@@ -35,12 +36,27 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
         toggle.syncState()
     }
 
+
+    //menu nav to click events activity
      override fun onNavigationItemSelected(item: MenuItem): Boolean {
          drawerLayout.closeDrawer(GravityCompat.START)
 
+        // switch between activities click events
          when (item.itemId) {
              R.id.nav_settings -> {
                  startActivity(Intent(this, SettingsActivity::class.java))
+                 overridePendingTransition(0, 0)
+             }
+             R.id.nav_social -> {
+                 startActivity(Intent(this, SocialActivity::class.java))
+                 overridePendingTransition(0, 0)
+             }
+             R.id.nav_library -> {
+                 startActivity(Intent(this, LibraryActivity::class.java))
+                 overridePendingTransition(0, 0)
+             }
+             R.id.nav_addabook -> {
+                 startActivity(Intent(this, AddBookPage::class.java))
                  overridePendingTransition(0, 0)
              }
          }
@@ -48,6 +64,7 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
     }
 
     fun allocateActivityTitle(titleString: String) {
+        // will display whatever title you want on the tool bar
         supportActionBar?.title = titleString
     }
 

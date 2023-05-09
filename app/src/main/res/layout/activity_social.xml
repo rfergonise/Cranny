@@ -60,7 +60,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/tvTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_arrow_back_24" />
+                app:srcCompat="@drawable/baseline_home_24" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

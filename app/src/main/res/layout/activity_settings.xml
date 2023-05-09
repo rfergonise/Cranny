@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
 
+
     <TextView
         android:id="@+id/settingsText"
-        android:layout_width="320dp"
-        android:layout_height="87dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Settings"
         android:textAlignment="center"
-        android:textSize="65dp"
+        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,14 +67,14 @@
 
     <Button
         android:id="@+id/btSettingsActivity"
-        android:layout_width="83dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Home"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
