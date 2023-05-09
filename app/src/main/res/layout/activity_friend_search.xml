@@ -122,13 +122,14 @@
             app:strokeColor="@color/cranny_purple_dark"
             app:strokeWidth="3dp"
             app:cardElevation="0dp"
-            android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginEnd="44dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="50dp">
+            app:cardCornerRadius="30dp"
+            app:cardBackgroundColor="@color/cranny_purple_light">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

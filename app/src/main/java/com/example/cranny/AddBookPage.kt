@@ -6,38 +6,68 @@ import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
 class AddBookPage : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private val auth = FirebaseAuth.getInstance()
+    private var currentUser = auth.currentUser
+
+    lateinit var titleInput : EditText
+    lateinit var dataStartedInput : TextView
+    lateinit var authorInput : EditText
+            lateinit var summaryInput : EditText
+    lateinit var purchasedFromInput : EditText
+            lateinit var reviewInput : EditText
+    lateinit var publisherInput : EditText
+            lateinit var publicationDateInput : EditText
+    lateinit var mainCharactersInput : EditText
+            lateinit var genresInput : TextInputLayout
+    lateinit var tagsInput : TextInputLayout
+            lateinit var ratingsInput : RatingBar
+    lateinit var cancelBottomBTN : Button
+            lateinit var saveBottomBTN : Button
+    lateinit var cancelTopBTN : ImageButton
+            lateinit var saveTopBTN : ImageButton
+    lateinit var finishedCB : CheckBox
+            lateinit var dateFinishedTextView : TextView
+    lateinit var dateFinishedInput : EditText
+            lateinit var lastPageReadTextView : TextView
+    lateinit var lastPageReadInput : EditText
+
+            override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_book_page)
 
-        val titleInput = findViewById<EditText>(R.id.etTitleInput)
-        val dataStartedInput = findViewById<TextView>(R.id.tdStarted)
-        val authorInput = findViewById<EditText>(R.id.etAuthorInput)
-        val summaryInput = findViewById<EditText>(R.id.etSummaryInput)
-        val purchasedFromInput = findViewById<EditText>(R.id.etPurchasedFrom)
-        val reviewInput = findViewById<EditText>(R.id.etReview)
-        val publisherInput = findViewById<EditText>(R.id.etPublisherInput)
-        val publicationDateInput = findViewById<EditText>(R.id.etnPublicationDateInput)
-        val mainCharactersInput = findViewById<EditText>(R.id.etMainCharactersInput)
-        val genresInput = findViewById<TextInputLayout>(R.id.tiGenres)
-        val tagsInput = findViewById<TextInputLayout>(R.id.tiTags)
-        val ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
-        val cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
-        val saveBottomBTN = findViewById<Button>(R.id.btnSave)
-        val cancelTopBTN = findViewById<ImageButton>(R.id.ibCancelButton)
-        val saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
-        val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
-        val dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
-        val dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
-        val lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
-        val lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
+        titleInput = findViewById<EditText>(R.id.etTitleInput)
+        dataStartedInput = findViewById<TextView>(R.id.tdStarted)
+        authorInput = findViewById<EditText>(R.id.etAuthorInput)
+        summaryInput = findViewById<EditText>(R.id.etSummaryInput)
+        purchasedFromInput = findViewById<EditText>(R.id.etPurchasedFrom)
+        reviewInput = findViewById<EditText>(R.id.etReview)
+        publisherInput = findViewById<EditText>(R.id.etPublisherInput)
+        publicationDateInput = findViewById<EditText>(R.id.etnPublicationDateInput)
+        mainCharactersInput = findViewById<EditText>(R.id.etMainCharactersInput)
+        genresInput = findViewById<TextInputLayout>(R.id.tiGenres)
+        tagsInput = findViewById<TextInputLayout>(R.id.tiTags)
+        ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
+        cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
+        saveBottomBTN = findViewById<Button>(R.id.btnSave)
+        cancelTopBTN = findViewById<ImageButton>(R.id.ibCancelButton)
+        saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
+        finishedCB = findViewById<CheckBox>(R.id.cbFinished)
+        dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
+        dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
+        lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
+        lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
 
 
 
@@ -58,97 +88,11 @@ class AddBookPage : AppCompatActivity() {
 
 
         saveBottomBTN.setOnClickListener {
-            if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
-                val editText = genresInput.editText
-                val genres = editText?.text.toString()
-
-                val editText2 = tagsInput.editText
-                val tags = editText2?.text.toString()
-
-                val newBook = Book(
-                    id = UUID.randomUUID().toString(),
-                    title = titleInput.text.toString(),
-                    authorNames = authorInput.text.toString(),
-                    publicationDate = publicationDateInput.text.toString(),
-                    starRating = ratingsInput.rating.toString().toFloat().toInt(),
-                    publisher = publisherInput.text.toString(),
-                    description = summaryInput.text.toString(),
-                    pageCount = setPageRead(lastPageReadInput.text.toString()),
-                    thumbnail = " ",
-                    journalEntry = reviewInput.text.toString(),
-                    userProgress = 0,
-                    userFinished = finishedCB.isChecked,
-                    startDate = setStartDate(dataStartedInput.text.toString()),
-                    endDate = setFinishedDate(dateFinishedInput.text.toString()),
-                    prevReadCount = 0,
-                    purchasedFrom = purchasedFromInput.text.toString(),
-                    mainCharacters = mainCharactersInput.text.toString(),
-                    genres = genres,
-                    tags = tags,
-                    lastReadDate = " ",
-                    lastReadTime = " ",
-                    isFav = false
-                )
-
-                val database = FirebaseDatabase.getInstance()
-                val bookRepository = BookRepository(database)
-                bookRepository.addBook(newBook)
-
-                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, LibraryActivity::class.java)
-                startActivity(intent)
-            }
-            else {
-                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
-            }
+            saveNewBook()
         }
 
         saveTopBTN.setOnClickListener {
-            if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
-                val editText = genresInput.editText
-                val genres = editText?.text.toString()
-
-                val editText2 = tagsInput.editText
-                val tags = editText2?.text.toString()
-
-                val newBook = Book(
-                    id = UUID.randomUUID().toString(),
-                    title = titleInput.text.toString(),
-                    authorNames = authorInput.text.toString(),
-                    publicationDate = publicationDateInput.text.toString(),
-                    starRating = ratingsInput.rating.toString().toFloat().toInt(),
-                    publisher = publisherInput.text.toString(),
-                    description = summaryInput.text.toString(),
-                    pageCount = setPageRead(lastPageReadInput.text.toString()),
-                    thumbnail = " ",
-                    journalEntry = reviewInput.text.toString(),
-                    userProgress = 0,
-                    userFinished = finishedCB.isChecked,
-                    startDate = setStartDate(dataStartedInput.text.toString()),
-                    endDate = setFinishedDate(dateFinishedInput.text.toString()),
-                    prevReadCount = 0,
-                    purchasedFrom = purchasedFromInput.text.toString(),
-                    mainCharacters = mainCharactersInput.text.toString(),
-                    genres = genres,
-                    tags = tags,
-                    lastReadDate = " ",
-                    lastReadTime = " ",
-                    isFav = false
-                )
-
-                val database = FirebaseDatabase.getInstance()
-                val bookRepository = BookRepository(database)
-                bookRepository.addBook(newBook)
-
-                Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, LibraryActivity::class.java)
-                startActivity(intent)
-            }
-            else {
-                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
-            }
+            saveNewBook()
         }
 
         cancelBottomBTN.setOnClickListener {
@@ -163,6 +107,92 @@ class AddBookPage : AppCompatActivity() {
 
     }
 
+    private fun saveNewBook() {
+
+        if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
+            val editText = genresInput.editText
+            val genres = editText?.text.toString()
+
+            val editText2 = tagsInput.editText
+            val tags = editText2?.text.toString()
+
+
+
+            val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
+                lastPageReadInput.text.toString().toInt()
+            } else {
+                0 // or any other default value you want to use
+            }
+
+
+            val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
+            Toast.makeText(applicationContext, "Saving book...", Toast.LENGTH_SHORT).show()
+            val database = FirebaseDatabase.getInstance()
+            val profileRepo = ProfileRepository(database, currentUser!!.uid)
+            profileRepo.profileData.observe(this, Observer { userProfile ->
+                val username: String = userProfile.username
+                val newBook = Book(
+                    id = UUID.randomUUID().toString(),
+                    title = titleInput.text.toString(),
+                    authorNames = authorInput.text.toString(),
+                    publicationDate = publicationDateInput.text.toString(),
+                    starRating = ratingsInput.rating.toString().toFloat(),
+                    publisher = publisherInput.text.toString(),
+                    description = summaryInput.text.toString(),
+                    pageCount = setPageRead(lastPageReadInput.text.toString()),
+                    thumbnail = " ",
+                    journalEntry = reviewInput.text.toString(),
+                    userProgress = 0,
+                    userFinished = finishedCB.isChecked,
+                    startDate = setStartDate(dataStartedInput.text.toString()),
+                    endDate = setFinishedDate(dateFinishedInput.text.toString()),
+                    prevReadCount = 0,
+                    purchasedFrom = purchasedFromInput.text.toString(),
+                    mainCharacters = mainCharactersInput.text.toString(),
+                    genres = genres,
+                    tags = tags,
+                    lastReadDate = currentMillis,
+                    lastReadTime = currentMillis,
+                    isFav = false
+                )
+                val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
+                bookRepository.addBook(newBook, this)
+                val friendRepo = FriendRepository(database, username, currentUser!!.uid, this)
+                friendRepo.fetchFriends()
+                friendRepo.isFriendsReady.observe(this, Observer { isFriendsReady ->
+                    if(isFriendsReady)
+                    {
+                        val friendCount = friendRepo.FriendIds.size
+                        if(friendCount > 0) {
+                            val recentRepository = RecentRepository(database, username, friendRepo.FriendIds)
+                            val status = if (newBook.userFinished) {
+                                "@$username Finished Reading!"
+                            }
+                            else if(lastPageRead > 1)
+                            {
+                                "@$username Read $lastPageRead pages."
+                            }
+                            else
+                            {
+                                "@$username Read $lastPageRead page."
+                            }
+                            recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
+                                status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,
+                                newBook.journalEntry!!, newBook.purchasedFrom!!, newBook.genres!!, newBook.tags!!, newBook.starRating!!))
+                            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, LibraryActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                })
+                friendRepo.stopFriendListener()
+            })
+            profileRepo.stopProfileListener()
+        }
+        else {
+            Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     // If user doesn't input a date, it will autofill with the current date
     private fun setStartDate(startDate: String): String {

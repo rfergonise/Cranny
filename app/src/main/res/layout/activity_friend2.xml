@@ -340,7 +340,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cvBio"
             app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="5dp">
+            app:strokeWidth="5dp"
+            app:cardBackgroundColor="@color/cranny_pink">
+
+            <TextView
+                android:id="@+id/tvNoRecent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="No Recently Read Books Available"
+                android:textColor="@color/black"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSocial"
