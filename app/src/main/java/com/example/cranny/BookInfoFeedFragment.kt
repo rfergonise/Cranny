@@ -10,6 +10,8 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+
 
 class BookInfoFeedFragment : DialogFragment() {
 
@@ -48,15 +50,17 @@ class BookInfoFeedFragment : DialogFragment() {
         val rbRating = view.findViewById<RatingBar>(R.id.rbRating)
         val ivCover = view.findViewById<ImageView>(R.id.ivCover)
 
-        tvTitle.text = book!!.bookTitle
-        tvAuthor.text = book!!.bookAuthor
-        tvMainCharacters.text = "Main Characters:\n" + book!!.mainCharacters
-        tvGenres.text = "Genres:\n" + book!!.genres
-        tvTags.text = "Tags:\n" + book!!.tags
-        tvPurchaseFrom.text = "Purchased From:\n" + book!!.purchasedFrom
-        tvLog.text = "Journal Entry:\n" + book.journalEntry
-        tvStatus.text = book!!.status
-        rbRating.rating = book!!.starRating
+        view.apply {
+            tvTitle.text = book?.bookTitle
+            tvAuthor.text = book?.bookAuthor
+            tvMainCharacters.text = "Main Characters:\n" + book?.mainCharacters
+            tvGenres.text = "Genres:\n" + book?.genres
+            tvTags.text = "Tags:\n" + book?.tags
+            tvPurchaseFrom.text = "Purchased From:\n" + book?.purchasedFrom
+            tvLog.text = "Journal Entry:\n" + book?.journalEntry
+            tvStatus.text = book?.status
+            rbRating.rating = book?.starRating ?: 0.0f
+        }
 
     }
 }
