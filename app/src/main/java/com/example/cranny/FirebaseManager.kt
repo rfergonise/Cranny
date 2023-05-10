@@ -718,26 +718,26 @@ class ServerRepository(private val database: FirebaseDatabase)
         addUser(friendNew)
     }
 
-    fun fetchUsers()
-    {
+    fun fetchUsers() {
         val userRef = database.getReference("ServerData").child("UserList")
 
-        listener = object : ValueEventListener
-        {
-            override fun onDataChange(dataSnapshot: DataSnapshot)
-            {
+        listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Users.clear()
                 _isUserListReady.postValue(false)
-                for (user in dataSnapshot.children)
-                {
-                    val username = user.child("Username").value as String
-                    val id = user.child("Id").value as String
-                    Users.add(Friend(id, username, false))
+                for (user in dataSnapshot.children) {
+                    val username = user.child("Username").value as? String
+                    val id = user.child("Id").value as? String
+                    if (username != null && id != null) {
+                        Users.add(Friend(id, username, false))
+                    }
                 }
-                _isUserListReady.postValue(true) // inform the caller we have filled the list with each recent book
+                _isUserListReady.postValue(true)
             }
+
             override fun onCancelled(error: DatabaseError) { }
         }
+
         userRef.addListenerForSingleValueEvent(listener!!)
     }
 
