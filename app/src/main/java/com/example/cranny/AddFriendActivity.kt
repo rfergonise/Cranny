@@ -93,8 +93,13 @@ class AddFriendActivity : AppCompatActivity()
                 val userCount = serverRepository.Users.size // Retrieves the number of users in the repository
 
                 if (userCount > 0) { // Checks if there are users in the repository
+                    var friendUsernames = mutableListOf<String>()
+                    for(friend in FriendList)
+                    {
+                        friendUsernames.add(friend.username)
+                    }
                     for (publicUser in serverRepository.Users) { // Iterates over each public user in the repository
-                        if (publicUser.username != user.username && !FriendList.contains(publicUser)) { // Checks if the public user is not the current user and not already a friend
+                        if (publicUser.username != user.username && !friendUsernames.contains(publicUser.username)) { // Checks if the public user is not the current user and not already a friend
                             UserList.add(publicUser) // Adds the public user to the UserList
                         }
                     }
