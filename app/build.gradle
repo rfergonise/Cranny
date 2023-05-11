@@ -1,9 +1,17 @@
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
 }
+
+def localPropertiesFile = rootProject.file('gradle.properties_local')
+def localProperties = new Properties()
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+def GOOGLE_BOOKS_API_KEY = localProperties.getProperty('googleBooksApiKey')
 
 android {
     namespace 'com.example.cranny'
@@ -23,6 +31,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "GOOGLE_BOOKS_API_KEY", "\"${GOOGLE_BOOKS_API_KEY}\"" //imports your local gradle.properties_local from the location on our computer thats secure
+        }
+        debug {
+            buildConfigField "String", "GOOGLE_BOOKS_API_KEY", "\"${GOOGLE_BOOKS_API_KEY}\""
         }
     }
     compileOptions {
@@ -83,6 +95,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 
+
+    //Dependencies for Glide used for the google books scrape
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
 
 

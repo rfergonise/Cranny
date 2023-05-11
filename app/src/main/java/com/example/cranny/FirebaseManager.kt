@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.cranny.network.googlebooks.RetrofitInstance
+import com.example.cranny.network.googlebooks.apiKey
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -16,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.HashMap
 
 
 // How to use each class?
@@ -543,6 +547,40 @@ class BookRepository(private val database: FirebaseDatabase)
             Log.e("BookRepository", "User ID is null. Cannot clear the library.")
             _isBookDataReady.postValue(false)
         }
+    }
+
+     suspend fun getBookDetails(id: String): Book? {
+        val response = RetrofitInstance.googleBooksApi.getBookDetails(id, apiKey)
+        if (response.isSuccessful) {
+            val bookDetailsResponse = response.body()
+            return bookDetailsResponse?.let {
+                Book(
+                    id = UUID.randomUUID().toString(),
+                    title = it.volumeInfo.title,
+                    authorNames = it.volumeInfo.authors.toString(),
+                    publicationDate = it.volumeInfo.publishedDate,
+                    starRating = 0,
+                    publisher = it.volumeInfo.publisher,
+                    description = it.volumeInfo.description,
+                    pageCount = it.volumeInfo.pageCount,
+                    thumbnail = it.volumeInfo.imageLinks?.thumbnail,//HA! the ?. makes the thumbnail nullable, so if there isnt a thumbnail itll still work
+                    journalEntry = "",
+                    userProgress = 0,
+                    userFinished = false,
+                    startDate = "",
+                    endDate = "",
+                    prevReadCount = 0,
+                    purchasedFrom = "",
+                    mainCharacters = "",
+                    genres = it.volumeInfo.categories.toString(),
+                    tags = "",
+                    lastReadDate = "",
+                    lastReadTime = "",
+                    isFav = false
+                )
+            }
+        }
+        return null
     }
 }
 
