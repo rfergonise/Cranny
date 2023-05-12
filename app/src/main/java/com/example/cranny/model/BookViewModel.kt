@@ -42,7 +42,7 @@ class BooksViewModel(private val bookRepository: BookRepository) : ViewModel() {
                         title = volumeInfo.title,
                         authorNames = volumeInfo.authors?.joinToString(", "),
                         publicationDate = "",
-                        starRating = 0,
+                        starRating = 0f,
                         publisher = volumeInfo.publisher,
                         description = volumeInfo.description,
                         pageCount = 0,
@@ -57,8 +57,8 @@ class BooksViewModel(private val bookRepository: BookRepository) : ViewModel() {
                         mainCharacters = "",
                         genres = "",
                         tags = "",
-                        lastReadDate = "",
-                        lastReadTime = "",
+                        lastReadDate = 0,
+                        lastReadTime = 0,
                         isFav = false
                     )
                 } ?: emptyList()

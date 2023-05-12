@@ -342,7 +342,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             app:strokeWidth="2dp"
-            app:strokeColor="@color/cranny_purple_dark">
+            app:strokeColor="@color/cranny_purple_dark"
+            app:cardBackgroundColor="@color/cranny_pink">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -397,7 +398,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cvFavorites"
             app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="5dp">
+            app:strokeWidth="5dp"
+            app:cardBackgroundColor="@color/cranny_pink">
+            <TextView
+                android:id="@+id/tvNoRecent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="No Recently Read Books Available"
+                android:textColor="@color/black"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSocial"

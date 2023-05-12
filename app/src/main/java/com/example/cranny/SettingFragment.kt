@@ -2,6 +2,7 @@ package com.example.cranny
 
 import android.content.Context
 import android.content.Intent
+import android.icu.util.Freezable
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -20,6 +21,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         return firebaseUser?.uid
     }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
@@ -35,7 +37,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         //account notification switch
-        val accountNotificationSwitch: SwitchPreferenceCompat? = findPreference("enable_notifications")
+        val accountNotificationSwitch: SwitchPreferenceCompat? =
+            findPreference("enable_notifications")
         accountNotificationSwitch?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
 
@@ -59,22 +62,28 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
     }
+
     //account privacy
     private fun savePrivateAccountSetting(userID: String, isPrivate: Boolean) {
         val database = FirebaseDatabase.getInstance()
-        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        val userPreferencesRef =
+            database.getReference("UserData").child(userID).child("Preferences")
         userPreferencesRef.child("account_private").setValue(isPrivate)
     }
+
     //account notifications
     private fun saveNotificationsAccountSetting(userID: String, isNotified: Boolean) {
         val database = FirebaseDatabase.getInstance()
-        val userPreferencesRef = database.getReference("UserData").child(userID).child("Preferences")
+        val userPreferencesRef =
+            database.getReference("UserData").child(userID).child("Preferences")
         userPreferencesRef.child("enable_notifications").setValue(isNotified)
     }
+
     //account change username
     private fun updateUsername(userID: String, newUsername: String) {
         val database = FirebaseDatabase.getInstance()
         val userRef = database.reference.child("UserData").child(userID).child("Profile")
+
         val serverRepository = ServerRepository(database)
 
         serverRepository.isUserListReady.observe(this, Observer { isUserListReady ->
@@ -102,8 +111,47 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 serverRepository.stopUserListener()
             }
         })
+
+
+        // need to get old username in order to update it
+        val profileRepo = ProfileRepository(database, userID)
+        profileRepo.profileData.observe(this, Observer { userProfile ->
+            val oldUsername: String = userProfile.username
+            val ServerRepository = ServerRepository(database)
+            ServerRepository.isUserListReady.observe(this, Observer { isUserListReady ->
+                if (isUserListReady) {
+                    for (user in ServerRepository.Users) {
+                        if (newUsername == user.username) {
+                            // Username exists
+                            Toast.makeText(
+                                requireContext(),
+                                "Username is already in user",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            // Username doesn't exist
+                            ServerRepository.updateUser(
+                                Friend(userID, oldUsername, false),
+                                Friend(userID, newUsername, false)
+                            )
+                            userRef.child("Username").setValue(newUsername)
+                            Toast.makeText(
+                                requireContext(),
+                                "Username changed to $newUsername",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        // Stop the database listener checking usernames
+                        ServerRepository.stopUserListener()
+                    }
+                }
+            })
+        })
+        profileRepo.stopProfileListener() // free the listener to stop memory leaks
+
     }
-    }
+}
 
 
 
