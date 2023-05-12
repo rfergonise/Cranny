@@ -98,109 +98,10 @@ class AddBookPage : AppCompatActivity() {
             //boodSuggestionAdapter Body
         })
         saveBottomBTN.setOnClickListener {
-
-//            if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
-//                val editText = genresInput.editText
-//                val genres = editText?.text.toString()
-//
-//                val editText2 = tagsInput.editText
-//                val tags = editText2?.text.toString()
-//
-//                val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
-//                    lastPageReadInput.text.toString().toInt()
-//                } else {
-//                    0 // or any other default value you want to use
-//                }
-//
-//                //created CoroutineScope to access suspended functions
-//                val selectedBookSuggestion: BookSuggestion? = bookSuggestionAdapter?.selectedBook
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                    val selectedBook: Book? = selectedBookSuggestion?.let { bookSuggestionToBook(it) }
-//
-//                    withContext(Dispatchers.Main) {
-//                        // Use CreateBook Here so we can use bookSuggestionAdapter
-//                        //use selectedBook in this coroutineScope
-//                        //used Create book function
-//                        val newBook = createBook(
-//                            title = selectedBook?.title ?: titleInput.text.toString(),
-//                            author = selectedBook?.authorNames ?: authorInput.text.toString(),
-//                            publicationDate = selectedBook?.publicationDate ?: publicationDateInput.text.toString(),
-//                            starRating = ratingsInput.rating,
-//                            publisher = selectedBook?.publisher ?: publisherInput.text.toString(),
-//                            description = selectedBook?.description ?: summaryInput.text.toString(),
-//                            pageCount = lastPageRead,
-//                            thumbnail = selectedBook?.thumbnail ?: "",
-//                            journalEntry = reviewInput.text.toString(),
-//                            finished = finishedCB.isChecked,
-//                            startDate = dataStartedInput.text.toString(),
-//                            endDate = dateFinishedInput.text.toString(),
-//                            purchasedFrom = purchasedFromInput.text.toString(),
-//                            mainCharacters = mainCharactersInput.text.toString(),
-//                            genres = selectedBook?.genres ?: genres,
-//                            tags = tags
-//                        )
-//
-//                        // need to work with Ethan about how to add books to database
-//                        val database = FirebaseDatabase.getInstance()
-//                        val bookRepository = BookRepository(database)
-//                        bookRepository.addBook(newBook)
-//
-//                        Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-//
-//                        val intent = Intent(this@AddBookPage, LibraryActivity::class.java)
-//                        startActivity(intent)
-//                    }
-//                }
-//            } else {
-//                Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT).show()
-//            }
             saveNewBook()
         }
 
         saveTopBTN.setOnClickListener {
-//            val editText = genresInput.editText
-//            val genres = editText?.text.toString()
-//
-//            val editText2 = tagsInput.editText
-//            val tags = editText2?.text.toString()
-//
-//            val newBook = Book(
-//                // need to create new id with each book
-//                id = randNum.toString(),
-//                title = titleInput.text.toString(),
-//                authorNames = authorInput.text.toString(),
-//                publicationDate = publicationDateInput.text.toString(),
-//                starRating = 0,
-//                publisher = publisherInput.text.toString(),
-//                description = summaryInput.text.toString(),
-//                pageCount = lastPageReadInput.text.toString().toInt(),
-//                // will need to work with Ethan about how to scrape book image from Google API
-//                thumbnail = " ",
-//                journalEntry = reviewInput.text.toString(),
-//                userProgress = 0,
-//                userFinished = finishedCB.isChecked,
-//                startDate = dataStartedInput.text.toString(),
-//                endDate = dateFinishedInput.text.toString(),
-//                prevReadCount = 0,
-//                purchasedFrom = purchasedFromInput.text.toString(),
-//                mainCharacters = mainCharactersInput.text.toString(),
-//                genres = genres,
-//                tags = tags,
-//                lastReadDate = 0,
-//                lastReadTime = 0,
-//                isFav = false
-//            )
-//
-//
-//            val database = FirebaseDatabase.getInstance()
-//            val bookRepository = BookRepository(database)
-//            bookRepository.addBook(newBook)
-//
-//            Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
-//
-//            val intent = Intent(this, LibraryActivity::class.java)
-//            startActivity(intent)
-
             saveNewBook()
         }
 
@@ -254,7 +155,7 @@ class AddBookPage : AppCompatActivity() {
                     val selectedBook: Book? = selectedBookSuggestion?.let { bookSuggestionToBook(it,user) }
                     withContext(Dispatchers.Main) {
 
-
+                        val totalPageCount: Int = 400 // todo change to total page count from api
                         val newBook = Book(
                             id = UUID.randomUUID().toString(),
                             title = titleInput.text.toString(),
@@ -277,7 +178,9 @@ class AddBookPage : AppCompatActivity() {
                             tags = tags,
                             lastReadDate = currentMillis,
                             lastReadTime = currentMillis,
-                            isFav = false
+                            isFav = false,
+                            totalPageCount = totalPageCount,
+                            totalPagesRead = lastPageReadInput.text.toString().toInt()
                         )
                         val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
                         bookRepository.addBook(newBook, this@AddBookPage)
@@ -302,7 +205,7 @@ class AddBookPage : AppCompatActivity() {
                                     }
                                     recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
                                         status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,
-                                        newBook.journalEntry!!, newBook.purchasedFrom!!, newBook.genres!!, newBook.tags!!, newBook.starRating!!))
+                                        newBook.journalEntry!!, newBook.purchasedFrom!!, newBook.genres!!, newBook.tags!!, newBook.starRating!!, newBook.totalPageCount!!, newBook.totalPagesRead!!))
                                     Toast.makeText(applicationContext, "Book saved", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this@AddBookPage, LibraryActivity::class.java)
                                     startActivity(intent)
@@ -392,7 +295,9 @@ class AddBookPage : AppCompatActivity() {
             tags = tags,
             lastReadDate = currentMillis,
             lastReadTime = currentMillis,
-            isFav = false
+            isFav = false,
+            totalPageCount = 0,
+            totalPagesRead = 0
         )
     }
 
@@ -427,7 +332,9 @@ class AddBookPage : AppCompatActivity() {
                 tags = "",
                 lastReadDate = 0,
                 lastReadTime = 0,
-                isFav = false
+                isFav = false,
+                totalPageCount = 0,
+                totalPagesRead = 0
             )
         }
 
@@ -455,7 +362,9 @@ class AddBookPage : AppCompatActivity() {
             tags = "",
             lastReadDate = 0,
             lastReadTime = 0,
-            isFav = false
+            isFav = false,
+            totalPageCount = 0,
+            totalPagesRead = 0
         )
     }
 }

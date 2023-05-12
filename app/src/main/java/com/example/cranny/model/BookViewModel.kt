@@ -59,7 +59,9 @@ class BooksViewModel(private val bookRepository: BookRepository) : ViewModel() {
                         tags = "",
                         lastReadDate = 0,
                         lastReadTime = 0,
-                        isFav = false
+                        isFav = false,
+                        totalPagesRead = 0,
+                        totalPageCount = 0
                     )
                 } ?: emptyList()
                 searchResults.postValue(results)

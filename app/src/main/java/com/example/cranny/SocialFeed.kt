@@ -18,7 +18,10 @@ data class SocialFeed(
     var purchasedFrom: String,
     var genres: String,
     var tags: String,
-    var starRating: Float
+    var starRating: Float,
+    var totalPageCount: Int,
+    var totalPagesRead: Int
+
 ): Parcelable {
 
     // Implement the describeContents() function
@@ -43,6 +46,8 @@ data class SocialFeed(
         parcel.writeString(genres)
         parcel.writeString(tags)
         parcel.writeFloat(starRating)
+        parcel.writeInt(totalPageCount)
+        parcel.writeInt(totalPagesRead)
     }
 
     // Companion object with a CREATOR field that implements the Parcelable.Creator interface
@@ -63,7 +68,9 @@ data class SocialFeed(
                 parcel.readString()!!,
                 parcel.readString()!!,
                 parcel.readString()!!,
-                parcel.readFloat()
+                parcel.readFloat(),
+                parcel.readInt()!!,
+                parcel.readInt()!!
             )
         }
 

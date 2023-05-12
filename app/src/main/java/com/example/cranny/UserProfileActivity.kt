@@ -285,7 +285,9 @@ class UserProfileActivity : AppCompatActivity()
                         book.purchasedFrom!!,
                         book.genres!!,
                         book.tags!!,
-                        book.starRating!!
+                        book.starRating!!,
+                        book.totalPageCount!!,
+                        book.totalPagesRead!!
                     )
 
                     // Check if the social feed is already in the list before adding it

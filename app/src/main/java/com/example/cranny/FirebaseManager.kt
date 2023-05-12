@@ -405,7 +405,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         // remove the book from the user's friends' recent data
         val recentRepository = RecentRepository(database, user.username, mutableListOf())
         recentRepository.removeRecent(SocialFeed(book.id, book.title, book.authorNames!!, book.userFinished, book.pageCount.toString(),
-        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username, book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!), owner)
+        book.thumbnail!!, book.lastReadDate!!, book.lastReadTime!!, user.username, book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!, book.genres!!, book.tags!!, book.starRating!!,
+        book.totalPageCount!!, book.totalPagesRead!!), owner)
 
     }
 
@@ -451,10 +452,12 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val pageCountInt = pageCount?.toInt() ?: 0
                     val PrevReadCount = bookSnapshot.child("PrevReadCount").value as? Long
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
+                    val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int ?: 0
+                    val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int ?: 0
 
                     var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingFloat, Publisher, Description, pageCountInt, Thumbnail,
                     JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
-                    PrevReadCountInt, StartDate, EndDate)
+                    PrevReadCountInt, StartDate, EndDate, TotalPageCount!!, TotalPageRead!!)
                     Library.add(book)
                 }
                 _isBookDataReady.postValue(true) // inform the caller we have filled the list with each book
@@ -466,6 +469,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
 
     fun updateBookData(book: Book)
     {
+        // todo update the update function to match new data types
         // gets the path reference to the user's book we are updating
         val currentUser = FirebaseAuth.getInstance().currentUser
         val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books").child(book.id)
@@ -493,6 +497,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookData["UserFinished"] = book.userFinished
         bookData["UserProgress"] = book.userProgress!!.toInt()
         bookData["IsFavorite"] = book.isFav!!
+        //val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int
+        //val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int
 
         // updates the book's current HashMap with the new one
         bookDataRef.updateChildren(bookData)
@@ -523,6 +529,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.child(book.id).child("UserFinished").setValue(book.userFinished)
         bookDataRef.child(book.id).child("UserProgress").setValue(book.userProgress)
         bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
+        bookDataRef.child(book.id).child("TotalPageCount").setValue(book.totalPageCount)
+        bookDataRef.child(book.id).child("TotalPageRead").setValue(book.totalPagesRead)
 
         // update user's book count
         val userProfileRepo = ProfileRepository(database, user.id)
@@ -570,7 +578,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         val response = RetrofitInstance.googleBooksApi.getBookDetails(id, apiKey)
         if (response.isSuccessful) {
             val bookDetailsResponse = response.body()
-            return bookDetailsResponse?.let {
+            /*return bookDetailsResponse?.let {
                 Book(
                     id = UUID.randomUUID().toString(),
                     title = it.volumeInfo.title,
@@ -593,9 +601,37 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     tags = "",
                     lastReadDate = 0,
                     lastReadTime = 0,
-                    isFav = false
+                    isFav = false,
+                    totalPageCount = 0,
+                    totalPagesRead = 0
                 )
-            }
+            }*/
+            return Book(
+                id = UUID.randomUUID().toString(),
+                title = bookDetailsResponse?.volumeInfo?.title!!,
+                authorNames = bookDetailsResponse?.volumeInfo?.authors?.toString(),
+                publicationDate = bookDetailsResponse?.volumeInfo?.publishedDate,
+                starRating = 0f,
+                publisher = bookDetailsResponse?.volumeInfo?.publisher,
+                description = bookDetailsResponse?.volumeInfo?.description,
+                pageCount = bookDetailsResponse?.volumeInfo?.pageCount,
+                thumbnail = bookDetailsResponse?.volumeInfo?.imageLinks?.thumbnail,
+                journalEntry = "",
+                userProgress = 0,
+                userFinished = false,
+                startDate = "",
+                endDate = "",
+                prevReadCount = 0,
+                purchasedFrom = "",
+                mainCharacters = "",
+                genres = bookDetailsResponse?.volumeInfo?.categories?.toString(),
+                tags = "",
+                lastReadDate = 0,
+                lastReadTime = 0,
+                isFav = false,
+                totalPageCount = 0,
+                totalPagesRead = 0
+            )
         }
         return null
     }
@@ -653,9 +689,11 @@ class RecentRepository(private val database: FirebaseDatabase, private val usern
                     } else {
                         0f
                     }
+                    val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int ?: 0
+                    val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int ?: 0
 
                     SocialFeeds.add(SocialFeed(Id, BookTitle, BookAuthor, IsBookComplete, Status, BookCoverURL, DateRead, TimeRead, Username,
-                        MainCharacters, Log, PurchaseFrom, Genres, Tags, starRating))
+                        MainCharacters, Log, PurchaseFrom, Genres, Tags, starRating, TotalPageCount!!, TotalPageRead!!))
                 }
                 _isRecentDataReady.postValue(true) // inform the caller we have filled the list with each recent book
             }

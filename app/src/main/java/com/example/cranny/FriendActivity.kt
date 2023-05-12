@@ -156,7 +156,7 @@ class FriendActivity : AppCompatActivity()
                         bookId, setTitle, bookAuthors!!, isBookComplete,
                         status, bookCoverURL!!, dateRead!!, timeRead!!, username,
                         book.mainCharacters!!, book.journalEntry!!, book.purchasedFrom!!,
-                        book.genres!!, book.tags!!, book.starRating!!
+                        book.genres!!, book.tags!!, book.starRating!!, book.totalPageCount!!, book.totalPagesRead!!
                     )
 
                     // Check if the item is already in the list before adding it
