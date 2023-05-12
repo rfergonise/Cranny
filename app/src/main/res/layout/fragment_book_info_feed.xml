@@ -69,7 +69,7 @@
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/raleway_custom"
                 android:text="MainCharacters"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivCover" />
@@ -115,33 +115,58 @@
                 android:id="@+id/tvLog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/raleway_custom"
                 android:text="Summary"
                 android:textColor="@color/black"
-                android:layout_marginStart="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/rbRating"
+                app:layout_constraintBottom_toTopOf="@+id/tvStatus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPurchaseFrom" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPurchaseFrom"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Progress Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/rbRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/cranny_purple_dark"
+                app:strokeWidth="2dp"
+                android:layout_marginBottom="15dp">
+
+
+                <ProgressBar
+                    android:id="@+id/pbPagesRead"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="250dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:scaleY="3" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status"
                 android:fontFamily="@font/raleway_custom"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Status"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/materialCardView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:textColor="@color/black"/>
+                android:layout_marginBottom="10dp"/>
 
             <RatingBar
                 android:id="@+id/rbRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/tvStatus"
+                android:isIndicator="true"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:isIndicator="true"/>
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
