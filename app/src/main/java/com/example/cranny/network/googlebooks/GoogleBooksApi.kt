@@ -11,7 +11,6 @@ import retrofit2.http.Query
 import java.util.*
 
 val apiKey = "AIzaSyCAHY3tQWLYAxLa6guoUR_rlO5nM3eKF8Q"//will api key
-val query = "android"
 interface GoogleBooksApi {
 
     @GET("volumes")

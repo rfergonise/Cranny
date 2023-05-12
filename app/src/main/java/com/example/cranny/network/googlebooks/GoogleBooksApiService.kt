@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object GoogleBooksApiService {
-    private const val BASE_URL = "https://www.googleapis.com/books/v1/"
+    private const val BASE_URL = "https://www.googleapis.com/books/v1/volumes/volumeId"
 
     private val gson = GsonBuilder().create()
 

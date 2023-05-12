@@ -63,9 +63,9 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
-        //
+        //bookSuggestionAdaptor is used to display the list of book suggestions
         val bookSuggestionAdapter = bookSuggestionAdapter(this, mutableListOf(), AdapterView.OnItemClickListener { parent, view, position, id ->
-            // Handle item click here
+
         })
         saveBottomBTN.setOnClickListener {
             if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
@@ -81,7 +81,7 @@ class AddBookPage : AppCompatActivity() {
                     0 // or any other default value you want to use
                 }
 
-
+                //created CoroutineScope to access suspended functions
                 val selectedBookSuggestion: BookSuggestion? = bookSuggestionAdapter?.selectedBook
                 CoroutineScope(Dispatchers.IO).launch {
                     val selectedBook: Book? = selectedBookSuggestion?.let { bookSuggestionToBook(it) }
@@ -89,7 +89,7 @@ class AddBookPage : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         // Use CreateBook Here so we can use bookSuggestionAdapter
                         //use selectedBook in this coroutineScope
-
+                        //used Create book function
                         val newBook = createBook(
                             title = selectedBook?.title ?: titleInput.text.toString(),
                             author = selectedBook?.authorNames ?: authorInput.text.toString(),
@@ -182,7 +182,7 @@ class AddBookPage : AppCompatActivity() {
         }
     }
 
-    //function to reduce code duplication
+    //function to create a book
     private fun createBook(title: String, author: String, publicationDate: String, starRating: Float,
                            publisher: String, description: String, pageCount: Int, thumbnail: String,
                            journalEntry: String, finished: Boolean, startDate: String, endDate: String,
@@ -215,6 +215,8 @@ class AddBookPage : AppCompatActivity() {
             isFav = false
         )
     }
+
+    //function that allows us to take the book suggestion we click on and turn it into a book so we can populate the required fields.
     private suspend fun bookSuggestionToBook(suggestion: BookSuggestion): Book {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val bookRepository = BookRepository(firebaseDatabase)

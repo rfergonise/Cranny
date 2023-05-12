@@ -549,6 +549,7 @@ class BookRepository(private val database: FirebaseDatabase)
         }
     }
 
+    //suspend function because network requests take so long, we put it in a suspend function and access in a corusinScope
      suspend fun getBookDetails(id: String): Book? {
         val response = RetrofitInstance.googleBooksApi.getBookDetails(id, apiKey)
         if (response.isSuccessful) {
