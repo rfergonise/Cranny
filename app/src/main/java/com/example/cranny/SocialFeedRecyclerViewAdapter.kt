@@ -2,17 +2,20 @@ package com.example.cranny
 
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat.getColor
+import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
-import com.squareup.picasso.Picasso
 
 
 class SocialFeedRecyclerViewAdapter(private val activity: AppCompatActivity, private val context: Context, private val friendSocialFeed: MutableList<SocialFeed>)
@@ -32,6 +35,15 @@ class SocialFeedRecyclerViewAdapter(private val activity: AppCompatActivity, pri
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // assigning values to the views created in the recycler_view_row layout file
         // based on the position of the recycler view
+        val progressBarColor = ContextCompat.getColor(context, R.color.cranny_purple_blue)
+        holder.pbPagesRead.indeterminateDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
+        holder.pbPagesRead.progressDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
+        //todo pass in the total page count instead of hard coding
+        // todo calculate the total pages read from all logs and not just the hardcoded value
+        val totalPagesInBook: Int = 400
+        val totalPagesRead: Int = 100
+        holder.pbPagesRead.max = totalPagesInBook
+        holder.pbPagesRead.progress = totalPagesRead
         friendSocialFeed[position].bookTitle = formatBookTitle(friendSocialFeed[position].bookTitle, 17)
         friendSocialFeed[position].mainCharacters = formatBookTitle(friendSocialFeed[position].mainCharacters, 45)
         friendSocialFeed[position].journalEntry = formatBookTitle(friendSocialFeed[position].journalEntry, 45)
@@ -78,10 +90,6 @@ class SocialFeedRecyclerViewAdapter(private val activity: AppCompatActivity, pri
         var tvBookAuthors: TextView = itemView.findViewById(R.id.tvSocialBookAuthor)
         var tvPageStatus: TextView = itemView.findViewById(R.id.tvSocialPageStatus)
         var mcvCoverBorder: MaterialCardView = itemView.findViewById(R.id.mcvCoverBorder)
-
-
+        var pbPagesRead: ProgressBar = itemView.findViewById(R.id.pbPagesRead)
     }
-
-
-
 }

@@ -1,14 +1,17 @@
 package com.example.cranny
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 
@@ -49,6 +52,16 @@ class BookInfoFeedFragment : DialogFragment() {
         val tvStatus = view.findViewById<TextView>(R.id.tvStatus)
         val rbRating = view.findViewById<RatingBar>(R.id.rbRating)
         val ivCover = view.findViewById<ImageView>(R.id.ivCover)
+        var pbPagesRead: ProgressBar = view.findViewById(R.id.pbPagesRead)
+
+        // set the color of the progress bar
+        val progressBarColor = ContextCompat.getColor(requireContext(), R.color.cranny_purple_blue)
+        pbPagesRead.indeterminateDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
+        pbPagesRead.progressDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
+        //todo pass in the total page count instead of hard coding
+        // todo calculate the total pages read from all logs and not just the hardcoded value
+        val totalPagesInBook: Int = 400
+        val totalPagesRead: Int = 100
 
         view.apply {
             tvTitle.text = book?.bookTitle
@@ -60,6 +73,8 @@ class BookInfoFeedFragment : DialogFragment() {
             tvLog.text = "Journal Entry:\n" + book?.journalEntry
             tvStatus.text = book?.status
             rbRating.rating = book?.starRating ?: 0.0f
+            pbPagesRead.max = totalPagesInBook
+            pbPagesRead.progress = totalPagesRead
         }
 
     }
