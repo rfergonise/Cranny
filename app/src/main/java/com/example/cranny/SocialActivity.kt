@@ -27,9 +27,6 @@ class SocialActivity : AppCompatActivity() {
     private lateinit var tvNoSocialFeed: TextView
     private lateinit var mcvFeedBorder: MaterialCardView
 
-    // Used to store what will displayed in the social feed
-    private val friendSocialFeed = ArrayList<SocialFeed>()
-
 
    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
