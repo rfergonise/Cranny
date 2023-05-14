@@ -59,9 +59,8 @@ class BookInfoFeedFragment : DialogFragment() {
         pbPagesRead.indeterminateDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
         pbPagesRead.progressDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
         //todo pass in the total page count instead of hard coding
-        // todo calculate the total pages read from all logs and not just the hardcoded value
         val totalPagesInBook: Int = 400
-        val totalPagesRead: Int = 100
+        val totalPagesRead: Int = book!!.totalPagesRead
 
         view.apply {
             tvTitle.text = book?.bookTitle

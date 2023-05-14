@@ -20,6 +20,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import java.util.concurrent.CountDownLatch
 
 class SocialRequestFragment : Fragment() {
 
@@ -30,15 +31,12 @@ class SocialRequestFragment : Fragment() {
     lateinit var etSearchBar: EditText
     lateinit var rvFeed: RecyclerView
     lateinit var mcvSearchButton: MaterialCardView
-    lateinit var mcvRefreshButton: MaterialCardView
     lateinit var mcvClearButton: MaterialCardView
     lateinit var tvNoFriendRequest: TextView
     lateinit var SearchPage: ConstraintLayout
 
     // List of users to be displayed in the feed
     lateinit var mlUsersToDisplay: MutableList<Friend>
-
-    var isAdapterAttached = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +48,6 @@ class SocialRequestFragment : Fragment() {
         // setup UI
         etSearchBar = fragmentView.findViewById(R.id.etSearchBar)
         mcvSearchButton = fragmentView.findViewById(R.id.mcvSearchButton)
-        mcvRefreshButton = fragmentView.findViewById(R.id.mcvRefreshButton)
         mcvClearButton = fragmentView.findViewById(R.id.mcvClearButton)
         rvFeed = fragmentView.findViewById(R.id.rvUserSearchFeed)
         tvNoFriendRequest = fragmentView.findViewById(R.id.tvFeedIsEmpty)
@@ -117,7 +114,9 @@ class SocialRequestFragment : Fragment() {
                                             for (publicUser in serverRepository.Users) { // Iterates over each public user in the repository
                                                 val isFriend = isStringMatchingUsername(publicUser.username, friendRepo.FriendIds)
                                                 val isAlreadyRequested = isStringMatchingUsername(publicUser.username, requestedUsersRepository.RequestedUsers)
-                                                if (publicUser.username != username && !isFriend && !isAlreadyRequested) { // Checks if the public user is not the current user and not already a friend
+                                                val isRequestingUs = isStringMatchingUsername(publicUser.username, friendRequestRepository.RequestedUsers)
+                                                // We can only send friend request to users who ares 1) The same user 2) Already friended 3) Already sent a request to 4) They sent us a request
+                                                if (publicUser.username != username && !isFriend && !isAlreadyRequested && !isRequestingUs) { // Checks if the public user is not the current user and not already a friend
                                                     mlAvailableUsersToAdd.add(Friend(publicUser.id, publicUser.username, false)) // Adds the public user to the UserList
                                                     // true means it's a friend request
                                                 }
@@ -143,8 +142,8 @@ class SocialRequestFragment : Fragment() {
                                                 tvNoFriendRequest.visibility = View.VISIBLE
                                                 rvFeed.visibility = View.INVISIBLE
                                             }
+                                            AllowClear()
                                             AllowSearch(userProfile, owner, context!!, mlAvailableUsersToAdd, database)
-                                            AllowRefresh(userProfile, owner, context!!, mlAvailableUsersToAdd, database)
                                             SearchPage.visibility = View.VISIBLE
                                         }
                                     })
@@ -160,73 +159,45 @@ class SocialRequestFragment : Fragment() {
         profileRepo.stopProfileListener()
     }
 
-    private fun AllowRefresh(user: User, owner: LifecycleOwner, context: Context, mlAvailableUsersToAdd: MutableList<Friend>, database: FirebaseDatabase)
-    {
-        mcvRefreshButton.setOnClickListener{
-            if(!isAdapterAttached)
-            {
-                rvFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) // Sets the layout manager for the RecyclerView
-                rvFeed.setHasFixedSize(true) // Optimizes performance by indicating that the item size in the RecyclerView is fixed
-            }
-            rvFeed.adapter = RequestFragmentAdapter(owner, context, mlUsersToDisplay, user, tvNoFriendRequest, rvFeed, database)
-            mcvRefreshButton.setOnClickListener(null)
-            Toast.makeText(context, "Successfully refreshed!", Toast.LENGTH_SHORT).show()
-            AllowRefresh(user, owner, context, mlAvailableUsersToAdd, database)
-
-        }
-    }
-
     private fun AllowSearch(user: User, owner: LifecycleOwner, context: Context, mlAvailableUsersToAdd: MutableList<Friend>, database: FirebaseDatabase)
     {
         mcvSearchButton.setOnClickListener {
             val strUserTheySearchedFor = etSearchBar.text.toString()
-            val filteredList = mlAvailableUsersToAdd.filter { findUser -> findUser.username.equals(strUserTheySearchedFor, ignoreCase = true) }
-            if (filteredList.isNotEmpty())
-            {
-                val isUserAlreadyInDisplay = isStringMatchingUsername(filteredList[0].username, mlUsersToDisplay)
-                if(!isUserAlreadyInDisplay)
-                {
-                    mlUsersToDisplay.add(filteredList[0])
-                    if(mlUsersToDisplay.size > 1)
-                    {
-                        tvNoFriendRequest.visibility = View.INVISIBLE
-                        rvFeed.visibility = View.VISIBLE
-                    }
-                    if(!isAdapterAttached)
-                    {
-                        rvFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) // Sets the layout manager for the RecyclerView
-                        rvFeed.setHasFixedSize(true) // Optimizes performance by indicating that the item size in the RecyclerView is fixed
-                    }
-                    rvFeed.adapter = RequestFragmentAdapter(owner, context, mlUsersToDisplay, user, tvNoFriendRequest, rvFeed, database)
-
-                    mcvSearchButton.setOnClickListener(null)
-                    Toast.makeText(context, "@${strUserTheySearchedFor} was found!", Toast.LENGTH_SHORT).show()
-                    AllowSearch(user, owner, context, mlAvailableUsersToAdd, database)
-                }
-                else
-                {
-                    Toast.makeText(context, "@${strUserTheySearchedFor} is already displayed.", Toast.LENGTH_SHORT).show()
+            if (etSearchBar.text.isNotBlank()) {
+                val filteredList = mlAvailableUsersToAdd.filter { findUser -> findUser.username.equals(strUserTheySearchedFor, ignoreCase = true) }
+                if (filteredList.isNotEmpty()) {
+                    val showSearchUserPopUp = SocialSearchedUserFragment.newInstance(filteredList[0], user)
+                    showSearchUserPopUp.setOnDialogDismissedListener(object : SocialSearchedUserFragment.OnDialogDismissedListener {
+                        override fun onDismiss(isFriendRequestSent: Boolean) {
+                            if (isFriendRequestSent)
+                            {
+                                // remove the user from the list of users to add
+                                mlAvailableUsersToAdd.remove(filteredList[0])
+                            }
+                            mcvSearchButton.setOnClickListener(null)
+                            AllowSearch(user, owner, context, mlAvailableUsersToAdd, database)
+                        }
+                    })
+                    showSearchUserPopUp.show(requireActivity().supportFragmentManager, "showPopUp")
+                } else {
+                    Toast.makeText(context, "@${strUserTheySearchedFor} was not found.", Toast.LENGTH_SHORT).show()
                     mcvSearchButton.setOnClickListener(null)
                     AllowSearch(user, owner, context, mlAvailableUsersToAdd, database)
                 }
-
-                if(mlUsersToDisplay.size == 0)
-                {
-                    tvNoFriendRequest.visibility = View.VISIBLE
-                    rvFeed.visibility = View.INVISIBLE
-                }
-            }
-            else
-            {
+            } else {
+                Toast.makeText(context, "Search bar is empty.", Toast.LENGTH_SHORT).show()
                 mcvSearchButton.setOnClickListener(null)
-                if(mlUsersToDisplay.size == 0)
-                {
-                    tvNoFriendRequest.visibility = View.VISIBLE
-                    rvFeed.visibility = View.INVISIBLE
-                }
-                Toast.makeText(context, "@${strUserTheySearchedFor} was not found.", Toast.LENGTH_SHORT).show()
                 AllowSearch(user, owner, context, mlAvailableUsersToAdd, database)
             }
+        }
+    }
+
+
+
+    private fun AllowClear()
+    {
+        mcvClearButton.setOnClickListener {
+            etSearchBar.text.clear()
         }
     }
 
@@ -242,7 +213,6 @@ class RequestFragmentAdapter(private val owner: LifecycleOwner, val context: Con
         return MyViewHolder(itemView)
     }
     override fun getItemCount(): Int {
-        // Return the size of the usernames list
         return mlUsersToDisplay.size
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -257,9 +227,6 @@ class RequestFragmentAdapter(private val owner: LifecycleOwner, val context: Con
 
         if(isFriendRequest) // we got a friend request from the user
         {
-            holder.mcvRequestButton.visibility = View.INVISIBLE
-            holder.mcvAcceptButton.visibility = View.VISIBLE
-            holder.mcvDeclineButton.visibility = View.VISIBLE
             holder.mcvAcceptButton.setOnClickListener{
                 if(holder.mcvDeclineButton.hasOnClickListeners()) holder.mcvDeclineButton.setOnClickListener(null)
                 holder.mcvDeclineButton.visibility = View.INVISIBLE
@@ -271,27 +238,10 @@ class RequestFragmentAdapter(private val owner: LifecycleOwner, val context: Con
                 RequestedFriendsFate(false, Friend(id, username, false), user, mlUsersToDisplay, position, holder.mcvCard)
             }
         }
-        else // send a friend request to the user
-        {
-            holder.mcvRequestButton.visibility = View.VISIBLE
-            holder.mcvAcceptButton.visibility = View.INVISIBLE
-            holder.mcvDeclineButton.visibility = View.INVISIBLE
-            holder.mcvRequestButton.setOnClickListener {
-                val requestRepo = FriendRequestRepository(database, id) // Creates an instance of the FriendRequestRepository
-                requestRepo.addFriendRequest(Friend(user.userId, user.username, false)) // Adds a friend request to the repository
-                val requestedRepo = RequestedRepository(database, user.userId)
-                requestedRepo.addRequestedUser(Friend(id, username, false)) // tracks what users they send a friend request to
-                mlUsersToDisplay.removeAt(position)
-                notifyItemRemoved(position)
-                if(mlUsersToDisplay.size == 0)
-                {
-                    tvNoFriend.visibility = View.VISIBLE
-                    rvRecycleView.visibility = View.INVISIBLE
-                }
-                Toast.makeText(context, "Friend Request Sent!", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
+
+
+
     fun RequestedFriendsFate(isAdd: Boolean, friend: Friend, user: User, mlUsersToDisplay: MutableList<Friend>, position: Int, mcvCard: MaterialCardView)
     {
         val database = FirebaseDatabase.getInstance()
@@ -322,12 +272,9 @@ class RequestFragmentAdapter(private val owner: LifecycleOwner, val context: Con
         // Initialize the views in the item view
         val tvUsername: TextView = itemView.findViewById(R.id.tvUsername)
         val ivProfilePicture: ImageView = itemView.findViewById(R.id.ivProfilePicture)
-        val mcvRequestButton: MaterialCardView = itemView.findViewById(R.id.mcvRequestButton)
         val mcvAcceptButton: MaterialCardView = itemView.findViewById(R.id.mcvAcceptButton)
         val mcvDeclineButton: MaterialCardView = itemView.findViewById(R.id.mcvDeclineButton)
         val mcvCard: MaterialCardView = itemView.findViewById(R.id.mcvFriendBox)
-
-
     }
 
 }
