@@ -15,5 +15,7 @@
     <color name="cranny_purple_dark">#c392ca</color>
     <color name="cranny_purple_blue">#CFD3FC</color>
     <color name="cranny_blue_light">#ACF2F2</color>
+    <color name="cranny_darkmode_background">#04090D</color>
+    <color name="cranny_darkmode_foreground">#202540</color>
 
 </resources>

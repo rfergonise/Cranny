@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SocialActivity">
+    tools:context=".TestSocialActivity"
+    android:orientation="vertical">
 
     <!-- Header -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvHeader"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        app:cardBackgroundColor="@color/cranny_purple_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardElevation="0dp">
+        app:cardBackgroundColor="@color/cranny_purple_blue">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,20 +37,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/ivProfileVisibility"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxWidth="42dp"
-                android:maxHeight="42dp"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvTitle"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/show_profile" />
-
-            <ImageView
                 android:id="@+id/ivBackToMain"
                 android:layout_width="52dp"
                 android:layout_height="43dp"
@@ -63,7 +45,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_arrow_back_24" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
     </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Fragment Holder -->
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"
+        android:background="@color/cranny_darkmode_background"
+        android:layout_weight="1">
+
+    </androidx.viewpager.widget.ViewPager>
+
+</LinearLayout>

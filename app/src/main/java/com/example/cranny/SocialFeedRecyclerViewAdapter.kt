@@ -39,12 +39,11 @@ class SocialFeedRecyclerViewAdapter(private val activity: AppCompatActivity, pri
         holder.pbPagesRead.indeterminateDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
         holder.pbPagesRead.progressDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
         //todo pass in the total page count instead of hard coding
-        // todo calculate the total pages read from all logs and not just the hardcoded value
         val totalPagesInBook: Int = 400
-        val totalPagesRead: Int = 100
+        val totalPagesRead: Int = friendSocialFeed[position].totalPagesRead
         holder.pbPagesRead.max = totalPagesInBook
         holder.pbPagesRead.progress = totalPagesRead
-        friendSocialFeed[position].bookTitle = formatBookTitle(friendSocialFeed[position].bookTitle, 17)
+        friendSocialFeed[position].bookTitle = formatBookTitle(friendSocialFeed[position].bookTitle, 25)
         friendSocialFeed[position].mainCharacters = formatBookTitle(friendSocialFeed[position].mainCharacters, 45)
         friendSocialFeed[position].journalEntry = formatBookTitle(friendSocialFeed[position].journalEntry, 45)
         friendSocialFeed[position].purchasedFrom = formatBookTitle(friendSocialFeed[position].purchasedFrom, 45)
