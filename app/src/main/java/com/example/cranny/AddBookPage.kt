@@ -180,7 +180,9 @@ class AddBookPage : AppCompatActivity() {
                             lastReadTime = currentMillis,
                             isFav = false,
                             totalPageCount = totalPageCount,
-                            totalPagesRead = lastPageReadInput.text.toString().toInt()
+                            totalPagesRead = setPageRead(lastPageRead.toString())
+
+                            //totalPagesRead = lastPageReadInput.text.toString().toInt()
                         )
                         val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
                         bookRepository.addBook(newBook, this@AddBookPage)

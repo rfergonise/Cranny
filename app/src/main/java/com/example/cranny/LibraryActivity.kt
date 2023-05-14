@@ -156,6 +156,8 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("userReview", libraryBookList[position].bookReview)
                         intent.putExtra("summary", libraryBookList[position].bookSummary)
                         intent.putExtra("lastPageRead", libraryBookList[position].bookLastPage)
+                        intent.putExtra("id", libraryBookList[position].bookID)
+                        intent.putExtra("isFav", libraryBookList[position].bookIsFav)
                         startActivity(intent)
                     }
                 }
