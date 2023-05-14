@@ -24,5 +24,6 @@ data class LibraryBookRecyclerData(
     var bookLastReadTime: Long?,
     var bookPrevReadCount: Int?,
     var bookStartDate: String,
-    var bookEndDate: String?
+    var bookEndDate: String?,
+    var totalPagesRead: Int
 )

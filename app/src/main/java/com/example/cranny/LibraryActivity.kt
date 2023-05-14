@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase
 class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListener {
 
     private lateinit var libraryRecycler: RecyclerView
-    private val libraryBookList = ArrayList<LibraryBookRecyclerData>()
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
     var username : String = "admin"
@@ -82,6 +81,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.prevReadCount,
                                     books.startDate,
                                     books.endDate,
+                                    books.totalPagesRead
                                 )
                             )}
                             libraryRecycler.adapter =
@@ -133,6 +133,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.prevReadCount,
                                     books.startDate,
                                     books.endDate,
+                                    books.totalPagesRead
                                 )
                             )
                         }
@@ -151,12 +152,10 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("startDate", libraryBookList[position].bookStartDate)
                         intent.putExtra("finishedDate", libraryBookList[position].bookEndDate)
                         intent.putExtra("mainCharacters", libraryBookList[position].bookCharacters)
-                        intent.putExtra(
-                            "purchasedFrom",
-                            libraryBookList[position].bookPurchasedFrom
-                        )
+                        intent.putExtra("purchasedFrom", libraryBookList[position].bookPurchasedFrom)
                         intent.putExtra("userReview", libraryBookList[position].bookReview)
                         intent.putExtra("summary", libraryBookList[position].bookSummary)
+                        intent.putExtra("lastPageRead", libraryBookList[position].bookLastPage)
                         startActivity(intent)
                     }
                 }

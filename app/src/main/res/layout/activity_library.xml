@@ -55,7 +55,7 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
-                android:id="@+id/bpFavoriteButton"
+                android:id="@+id/btnbpUnFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
