@@ -931,5 +931,59 @@ class FriendRequestRepository(private val database: FirebaseDatabase, private va
         }
     }
 }
+class RequestedRepository(private val database: FirebaseDatabase, private val id: String)
+{
+    public var RequestedUsers = mutableListOf<Friend>()
+    private val _isFriendRequestReady = MutableLiveData<Boolean>()
+    val isFriendsReady: LiveData<Boolean>
+        get() = _isFriendRequestReady
+    private var listener: ValueEventListener? = null
+
+    fun fetchRequestedUsers()
+    {
+        // Firebase Path References
+        val friendDataRef = database.getReference("UserData").child(id).child("SentFriendRequestToTheseUsers")
+        listener = object : ValueEventListener
+        {
+            override fun onDataChange(dataSnapshot: DataSnapshot)
+            {
+                _isFriendRequestReady.postValue(false) // inform the caller the list is not ready
+                for (friend in dataSnapshot.children)
+                {
+                    val temp_friend = Friend(friend.child("id").value as? String ?: "", friend.child("username").value as? String ?: "", false)
+                    RequestedUsers.add(temp_friend)
+                }
+                _isFriendRequestReady.postValue(true) // inform the caller we have filled the list with each book
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        }
+        friendDataRef.addListenerForSingleValueEvent(listener!!)
+    }
+
+    // Adds whatever friendId that is passed in to the user's friend list
+    fun addRequestedUser(friend: Friend)
+    {
+        val friendDataRef = database.getReference("UserData").child(id).child("SentFriendRequestToTheseUsers")
+        friendDataRef.child(friend.id).child("id").setValue(friend.id)
+        friendDataRef.child(friend.id).child("username").setValue(friend.username)
+    }
+
+    // Searches the user's friend list and removes the passed in friendId from it
+    fun removeRequestedUser(friend: Friend)
+    {
+
+        val friendDataRef = database.getReference("UserData").child(id).child("SentFriendRequestToTheseUsers").child(friend.id)
+        friendDataRef.removeValue()
+    }
+
+    fun stopRequestedUsersListener()
+    {
+        listener?.let {
+            val friendDataRef = database.getReference("UserData").child(id).child("Friends")
+            friendDataRef.removeEventListener(it)
+            listener = null
+        }
+    }
+}
 
 

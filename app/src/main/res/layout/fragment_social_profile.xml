@@ -290,14 +290,17 @@
                     android:id="@+id/tvNoFavorites"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See Your Favorite Friends Here"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="See your favorite friends here"
+                    android:textColor="@color/cranny_blue_light"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="invisible"/>
+                    app:layout_constraintTop_toTopOf="@+id/horizontalScrollView" />
 
                 <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -310,7 +313,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
 
 
                     </LinearLayout>
@@ -335,13 +337,15 @@
             app:strokeColor="@color/cranny_purple_dark"
             app:strokeWidth="5dp"
             app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+
             <TextView
                 android:id="@+id/tvNoRecent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="No Recently Read Books Available"
-                android:textColor="@color/black"/>
+                android:text="See your shared books here"
+                android:textColor="@color/cranny_blue_light"
+                android:fontFamily="@font/raleway_custom"
+                android:layout_gravity="center"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSocial"

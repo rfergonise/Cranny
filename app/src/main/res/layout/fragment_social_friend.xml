@@ -23,12 +23,14 @@
         app:strokeColor="@color/cranny_purple_dark"
         app:strokeWidth="5dp"
         app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+
         <TextView
             android:id="@+id/tvNoSocialFeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Recently Read Books From Friends"
-            android:textColor="@color/black"
+            android:text="No recently read books from friends"
+            android:textColor="@color/cranny_blue_light"
+            android:fontFamily="@font/raleway_custom"
             android:layout_gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView

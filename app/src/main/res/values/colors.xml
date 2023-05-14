@@ -17,5 +17,6 @@
     <color name="cranny_blue_light">#ACF2F2</color>
     <color name="cranny_darkmode_background">#04090D</color>
     <color name="cranny_darkmode_foreground">#202540</color>
+    <color name="cranny_darkmode_adapter_background">#4D4A8C</color>
 
 </resources>
