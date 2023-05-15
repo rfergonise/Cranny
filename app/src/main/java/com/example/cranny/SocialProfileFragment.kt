@@ -60,12 +60,6 @@ class SocialProfileFragment : Fragment() {
         setUpSocialProfile()
 
 
-        // Friend On Click Listener
-        cvFriendButton.setOnClickListener {
-            val i = Intent(requireContext(), FriendSearchActivity::class.java)
-            startActivity(i)
-        }
-
         // Book On Click Listener
         cvBookButton.setOnClickListener {
             val i = Intent(requireContext(), LibraryActivity::class.java)
@@ -166,12 +160,7 @@ class SocialProfileFragment : Fragment() {
                             imageView.layoutParams = ViewGroup.LayoutParams(-1, -1)
                             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
 
-                            // Set an onClick listener for the friend's profile picture
-                            imageView.setOnClickListener {
-                                val friendIntent = Intent(context, FriendActivity::class.java)
-                                friendIntent.putExtra("friendId", friendRepo.FriendIds[i].id)
-                                startActivity(friendIntent)
-                            }
+                            // todo Set an onClick listener for the friend's profile picture
 
                             // Load the friend's profile picture from the database into the ImageView
                             val profilePictureRepository = ProfilePictureRepository(database, friendRepo.FriendIds[i].id)
@@ -293,10 +282,10 @@ class SocialProfileFragment : Fragment() {
 
                     // Set up the adapter for the RecyclerView
                     val context = requireContext()
-                    val adapter = SocialFeedRecyclerViewAdapter(requireActivity() as AppCompatActivity, context, sortedFeeds)
+                    //val adapter = SocialFeedRecyclerViewAdapter(requireActivity() as AppCompatActivity, context, sortedFeeds)
                     rvSocial.layoutManager = LinearLayoutManager(context)
-                    rvSocial.adapter = adapter
-                    adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
+                    //.adapter = adapter
+                    //adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
                 } else {
                     // Show the "No Recent Activity" text view if the user's social feed is empty
                     tvNoRecent.visibility = View.VISIBLE

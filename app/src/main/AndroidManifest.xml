@@ -21,21 +21,6 @@
             android:name=".BookPageActivity"
             android:exported="false" />
         <activity
-            android:name=".FriendRequestActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddFriendActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".FriendSearchActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".FriendActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Cranny.NoActionBar" />
-        <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
@@ -56,9 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".LibraryData"
-            android:exported="false" />
-        <activity
-            android:name=".SocialActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

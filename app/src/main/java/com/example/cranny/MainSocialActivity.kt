@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 
 class TestSocialActivity : AppCompatActivity() {
 

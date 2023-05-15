@@ -156,6 +156,12 @@ class AddBookPage : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
 
                         val totalPageCount: Int = 400 // todo change to total page count from api
+                        val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
+                            lastPageReadInput.text.toString().toInt()
+                        } else {
+                            0 // or any other default value you want to use
+                        }
+
                         val newBook = Book(
                             id = UUID.randomUUID().toString(),
                             title = titleInput.text.toString(),
@@ -180,7 +186,7 @@ class AddBookPage : AppCompatActivity() {
                             lastReadTime = currentMillis,
                             isFav = false,
                             totalPageCount = totalPageCount,
-                            totalPagesRead = lastPageReadInput.text.toString().toInt()
+                            totalPagesRead = lastPageRead
                         )
                         val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
                         bookRepository.addBook(newBook, this@AddBookPage)

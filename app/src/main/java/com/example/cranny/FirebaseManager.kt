@@ -986,4 +986,109 @@ class RequestedRepository(private val database: FirebaseDatabase, private val id
     }
 }
 
+class FriendsLibraryRepository(
+    private val database: FirebaseDatabase,
+    private val userIdThatHasFriends: String,
+    private val context: Context
+) {
+    public var mlFriendLibraryData = mutableListOf<FriendLibraryData>()
+    private val _isLibraryDataRead = MutableLiveData<Boolean>()
+    val isLibraryDataRead: LiveData<Boolean>
+        get() = _isLibraryDataRead
+    private var listener: ValueEventListener? = null
+
+    init {
+        fetchFriendLibraryData()
+    }
+
+    fun fetchFriendLibraryData() {
+        val userDataRef = database.getReference("UserData")
+        _isLibraryDataRead.value = false // Inform the caller that the FriendLibraryData list is not ready
+
+        userDataRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val friendLibraryDataList = mutableListOf<FriendLibraryData>()
+
+                val userSnapshot = dataSnapshot.child(userIdThatHasFriends) // Fetch the user's snapshot using the provided userIdThatHasFriends
+                val friendDataRef = userSnapshot.child("Friends")
+
+                for (friendSnapshot in friendDataRef.children) {
+                    val friendId = friendSnapshot.child("id").value as String
+                    val friendUsername = friendSnapshot.child("username").value as String
+                    val friendPreferenceRef = dataSnapshot.child(friendId).child("Preferences")
+                    val isPrivate = friendPreferenceRef.child("account_private").value as Boolean? ?: false
+
+                    val friendLibraryRef = userDataRef.child(friendId).child("Books")
+
+                    friendLibraryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(librarySnapshot: DataSnapshot) {
+                            val books = mutableListOf<DisplayFeedBookInfo>()
+
+                            for (bookSnapshot in librarySnapshot.children) {
+                                val strTitle = bookSnapshot.child("Title").getValue(String::class.java) ?: ""
+                                val strAuthor = bookSnapshot.child("AuthorNames").getValue(String::class.java) ?: ""
+                                val strCoverURL = bookSnapshot.child("Thumbnail").getValue(String::class.java) ?: ""
+                                val nTotalReadPages = bookSnapshot.child("TotalPageRead").getValue(Long::class.java)?.toInt() ?: 0
+                                val nCountPage = bookSnapshot.child("TotalPageCount").getValue(Long::class.java)?.toInt() ?: 0
+                                val nTotalReadChapters = 0 // Modify this based on your logic
+                                val nCountChapter = 0 // Modify this based on your logic
+                                val strMainCharacters = bookSnapshot.child("MainCharacters").getValue(String::class.java) ?: ""
+                                val strGenres = bookSnapshot.child("Genres").getValue(String::class.java) ?: ""
+                                val strTags = bookSnapshot.child("Tags").getValue(String::class.java) ?: ""
+                                val fRating = when (val starRatingValue = bookSnapshot.child("StarRating").getValue(Float::class.java) ?: 0f) {
+                                    is Float -> starRatingValue
+                                    else -> 0f
+                                }
+
+                                val strPurchasedFrom = bookSnapshot.child("PurchaseFrom").getValue(String::class.java) ?: ""
+                                val lLastTimeRead = bookSnapshot.child("LastReadTime").getValue(Long::class.java) ?: 0
+
+                                val book = DisplayFeedBookInfo(
+                                    friendUsername,
+                                    strTitle,
+                                    strAuthor,
+                                    strCoverURL,
+                                    nTotalReadPages,
+                                    nCountPage,
+                                    nTotalReadChapters,
+                                    nCountChapter,
+                                    strMainCharacters,
+                                    strGenres,
+                                    strTags,
+                                    fRating,
+                                    strPurchasedFrom,
+                                    lLastTimeRead
+                                )
+                                books.add(book)
+                            }
+
+                            val friendLibraryData = FriendLibraryData(friendUsername, friendId, books, isPrivate)
+                            friendLibraryDataList.add(friendLibraryData)
+
+                            // Check if all library data has been fetched for all friends
+                            if (friendLibraryDataList.size == friendDataRef.childrenCount.toInt()) {
+                                mlFriendLibraryData = friendLibraryDataList // Update the mlFriendLibraryData list with fetched data
+                                _isLibraryDataRead.value = true // Inform the caller that we have filled the list with each FriendLibraryData
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // Handle the error
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle the error
+            }
+        })
+    }
+}
+
+
+
+
+
+
 

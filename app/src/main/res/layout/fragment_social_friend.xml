@@ -1,44 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/cvHeader"
-    android:layout_marginTop="80dp">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <!-- Friend's Recent Reads -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvBorder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/cranny_purple_dark"
-        app:strokeWidth="5dp"
-        app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="140dp">
 
         <TextView
             android:id="@+id/tvNoSocialFeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No recently read books from friends"
-            android:textColor="@color/cranny_blue_light"
+            android:layout_gravity="center"
             android:fontFamily="@font/raleway_custom"
-            android:layout_gravity="center"/>
+            android:text="No recently read books from friends"
+            android:textColor="@color/cranny_blue_light" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSocial"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity ="center"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvViewBorder"
+        android:layout_width="match_parent"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/cranny_purple_dark"
+        android:layout_height="14dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        android:layout_gravity ="top"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cranny_darkmode_foreground"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
 
 
     </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
