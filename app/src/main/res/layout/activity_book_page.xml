@@ -271,7 +271,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="Genres(s):"
+                    android:text="Genre(s):"
                     android:textAlignment="center"
                     android:textColor="#4E4C4C"
                     android:textSize="25sp"
@@ -669,14 +669,34 @@
                     app:layout_constraintTop_toBottomOf="@id/tvbpReview" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btnbpEditBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="Edit Book"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toStartOf="@+id/btnbpDelete"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bpDivider5" />
+
+                <Button
+                    android:id="@+id/btnbpDelete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/raleway_custom"
                     android:text="DELETE BOOK"
                     android:textColor="#FF0303"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btnbpEditBook"
                     app:layout_constraintTop_toBottomOf="@+id/bpDivider5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

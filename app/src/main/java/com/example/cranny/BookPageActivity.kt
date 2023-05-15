@@ -1,14 +1,14 @@
 package com.example.cranny
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import androidx.lifecycle.Observer
 
 
 class BookPageActivity : AppCompatActivity() {
@@ -31,10 +31,16 @@ class BookPageActivity : AppCompatActivity() {
     private lateinit var isFavorite: ImageButton
     private lateinit var notFavorite: ImageButton
 
+    private val auth = FirebaseAuth.getInstance()
+    private var currentUser = auth.currentUser
+    private lateinit var username: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_page)
+
+
 
         abTitle = findViewById(R.id.tvBookTitle)
         title = findViewById(R.id.tvbpBookTitle)
@@ -54,15 +60,14 @@ class BookPageActivity : AppCompatActivity() {
         isFavorite = findViewById(R.id.btnbpIsFavorite)
         notFavorite = findViewById(R.id.btnbpNotFavorite)
 
-
-        nullCheck()
+        //nullCheck()
 
         val bundle: Bundle? = intent.extras
         val exTitle = bundle!!.getString("title")
         val exAuthor = bundle.getString("author")
         val exGenres = bundle.getString("genres")
         val exTags = bundle.getString("tags")
-        val exRating = bundle.getInt("rating")
+        val exRating = bundle.getFloat("rating")
         val exStartDate = bundle.getString("startDate")
         val exFinishedDate = bundle.getString("finishedDate")
         val exPublisher = bundle.getString("publisher")
@@ -93,18 +98,12 @@ class BookPageActivity : AppCompatActivity() {
 
         nullCheck()
 
-        val backBTN = findViewById<ImageButton>(R.id.bpBackButton)
-        backBTN.setOnClickListener {
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
-        }
-
         val currentBook = Book(
             exBookID.toString(),
             title.toString(),
             author.toString(),
             publicationDate.toString(),
-            rating.rating.toFloat(),
+            rating.rating,
             publisher.toString(),
             summary.toString(),
             0,
@@ -128,69 +127,104 @@ class BookPageActivity : AppCompatActivity() {
 
         bookFavorite(currentBook, notFavorite, isFavorite)
 
+        val backBTN = findViewById<ImageButton>(R.id.bpBackButton)
+        backBTN.setOnClickListener {
+            val intent = Intent(this, LibraryActivity::class.java)
+            startActivity(intent)
+        }
+
+        val deleteBTN = findViewById<Button>(R.id.btnbpDelete)
+        deleteBTN.setOnClickListener {
+            val alertBox = AlertDialog.Builder(this@BookPageActivity)
+                .setTitle("Remove Book")
+                .setMessage("Are you sure you want to delete this book?")
+                .setPositiveButton("Yes") { dialog, id ->
+                    val database = FirebaseDatabase.getInstance()
+                    val profileRepo = ProfileRepository(database, currentUser!!.uid)
+                    profileRepo.profileData.observe(this, Observer { userProfile ->
+                        username = userProfile.username
+                        val bookRepository =
+                            BookRepository(database, Friend(currentUser!!.uid, username, false))
+                        bookRepository.removeBook(currentBook, this@BookPageActivity)
+
+                        bookRepository.stopBookListener()
+                    })
+                    profileRepo.stopProfileListener()
+                    val intent = Intent(this, LibraryActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(applicationContext, "Book deleted", Toast.LENGTH_SHORT).show()
+                }
+
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = alertBox.create()
+            alert.show()
+        }
     }
 
-
-    private fun nullCheck() {
-        if (publisher.text.toString().isBlank()) {
-            publisher.text = "Not Available"
+        fun nullCheck() {
+            if (publisher.text.toString().isBlank()) {
+                publisher.text = "Not Available"
+            }
+            if (publicationDate.text.toString().isBlank()) {
+                publicationDate.text = "Not Available"
+            }
+            if (summary.text.toString().isBlank()) {
+                summary.text = "Not Available"
+            }
+            if (mainCharacters.text.toString().isBlank()) {
+                mainCharacters.text = "Not Available"
+            }
+            if (userReview.text.toString().isBlank()) {
+                userReview.text = "Not Available"
+            }
+            if (purchasedFrom.text.toString().isBlank()) {
+                purchasedFrom.text = "Not Available"
+            }
         }
-        if (publicationDate.text.toString().isBlank()) {
-            publicationDate.text = "Not Available"
-        }
-        if (summary.text.toString().isBlank()) {
-            summary.text = "Not Available"
-        }
-        if (mainCharacters.text.toString().isBlank()) {
-            mainCharacters.text = "Not Available"
-        }
-        if (userReview.text.toString().isBlank()) {
-            userReview.text = "Not Available"
-        }
-        if (purchasedFrom.text.toString().isBlank()) {
-            purchasedFrom.text = "Not Available"
-        }
-    }
 
-    //Creating a "Friend" when the favorite button is clicked and updating the isFav variable for it. Need to fix
-    fun bookFavorite(book: Book, btnbpNotFavorite: ImageButton, btnbpIsFavorite: ImageButton) {
-        if (book.isFav == false) {
-            btnbpIsFavorite.visibility = View.INVISIBLE
-            btnbpNotFavorite.visibility = View.VISIBLE
+    // Not updating and goes back to library screen when clicked
+        fun bookFavorite(currentBook: Book, notFavorite: ImageButton, favorite: ImageButton) {
+            if (currentBook.isFav == false) {
+                favorite.visibility = View.INVISIBLE
+                notFavorite.visibility = View.VISIBLE
 
-            btnbpNotFavorite.setOnClickListener {
-                val database = FirebaseDatabase.getInstance()
-                val bookRepo = BookRepository(database, Friend(book.id, book.title, book.isFav!!))
+                notFavorite.setOnClickListener {
+                    val database = FirebaseDatabase.getInstance()
+                    val bookRepository =
+                        BookRepository(database, Friend(currentUser!!.uid, username, false))
 
-                book.isFav = true
-                bookRepo.updateFavoriteStatus(book)
+                    currentBook.isFav = true
+                    bookRepository.updateFavoriteStatus(currentBook)
 
-                btnbpIsFavorite.visibility = View.VISIBLE
-                btnbpNotFavorite.visibility = View.INVISIBLE
+                    favorite.visibility = View.VISIBLE
+                    notFavorite.visibility = View.INVISIBLE
 
-                btnbpIsFavorite.setOnClickListener {
-                    bookFavorite(book, btnbpNotFavorite, btnbpIsFavorite)
+                    favorite.setOnClickListener {
+                        bookFavorite(currentBook, notFavorite, favorite)
+                    }
+                }
+            } else {
+                favorite.visibility = View.VISIBLE
+                notFavorite.visibility = View.INVISIBLE
+
+                favorite.setOnClickListener {
+                    val database = FirebaseDatabase.getInstance()
+                    val bookRepository =
+                        BookRepository(database, Friend(currentUser!!.uid, username, false))
+
+                    currentBook.isFav = false
+                    bookRepository.updateFavoriteStatus(currentBook)
+
+                    favorite.visibility = View.INVISIBLE
+                    notFavorite.visibility = View.VISIBLE
+
+                    notFavorite.setOnClickListener {
+                        bookFavorite(currentBook, notFavorite, favorite)
+                    }
                 }
             }
         }
-        else {
-            btnbpIsFavorite.visibility = View.VISIBLE
-            btnbpNotFavorite.visibility = View.INVISIBLE
-
-            btnbpIsFavorite.setOnClickListener {
-                val database = FirebaseDatabase.getInstance()
-                val bookRepo = BookRepository(database, Friend(book.id, book.title, book.isFav!!))
-
-                book.isFav = false
-                bookRepo.updateFavoriteStatus(book)
-
-                btnbpIsFavorite.visibility = View.INVISIBLE
-                btnbpNotFavorite.visibility = View.VISIBLE
-
-                btnbpNotFavorite.setOnClickListener {
-                    bookFavorite(book, btnbpNotFavorite, btnbpIsFavorite)
-                }
-            }
-        }
     }
-}

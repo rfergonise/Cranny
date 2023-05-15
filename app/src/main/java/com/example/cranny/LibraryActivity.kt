@@ -91,7 +91,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                     }
                 }
                 bookRepository.stopBookListener()
-                })
+            })
         })
         profileRepo.stopProfileListener()
     }
