@@ -17,7 +17,8 @@ data class DisplayFeedBookInfo(
     var strTags: String,
     var fRating: Float,
     var strPurchasedFrom: String,
-    var lLastReadTime: Long
+    var lLastReadTime: Long,
+    var strUserSummary: String
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -34,7 +35,8 @@ data class DisplayFeedBookInfo(
         parcel.readString() ?: "",
         parcel.readFloat(),
         parcel.readString() ?: "",
-        parcel.readLong()
+        parcel.readLong(),
+        parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -52,6 +54,7 @@ data class DisplayFeedBookInfo(
         parcel.writeFloat(fRating)
         parcel.writeString(strPurchasedFrom)
         parcel.writeLong(lLastReadTime)
+        parcel.writeString(strUserSummary)
     }
 
     override fun describeContents(): Int {

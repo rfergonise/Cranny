@@ -1,227 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ImprovedDisplayFeedBookInfoFragment">
+    tools:context=".ImprovedDisplayFeedBookInfoFragment"
+    android:id="@+id/Layout">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvBorder"
         android:layout_width="375dp"
-        android:layout_height="575dp"
+        android:layout_height="600dp"
+        android:layout_gravity="center"
         app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="@color/cranny_purple_blue"
-        app:strokeWidth="5dp"
-        app:cardCornerRadius="25dp"
-        android:layout_gravity="center">
+        app:strokeWidth="5dp">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="220dp"
-            android:layout_height="62dp"
-            android:text="Title: 19 max / 2 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_gravity="left"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <!-- Author -->
-        <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="220dp"
-            android:layout_height="62dp"
-            android:text="Author: 19 max / 2 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/lorenta_custom"
-            android:textSize="20dp"
-            android:layout_marginTop="87dp"
-            android:layout_marginLeft="25dp"
-            android:layout_gravity="left"/>
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="220dp"
+                android:layout_height="62dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/raleway_custom"
+                android:text="Title: 19 max / 2 line"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Book Cover -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvBook"
-            android:layout_width="100dp"
-            android:layout_height="125dp"
-            app:cardCornerRadius="10dp"
-            android:layout_gravity="right"
-            app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="0dp"
-            app:strokeWidth="1dp"
-            app:cardElevation="5dp"
-            app:strokeColor="@color/cranny_purple_blue">
+            <!-- Author -->
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="220dp"
+                android:layout_height="62dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="25dp"
+                android:fontFamily="@font/lorenta_custom"
+                android:text="Author: 19 max / 2 line"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-            <ImageView
-                android:id="@+id/ivBook"
+            <!-- Book Cover -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvBook"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvProgressHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/cranny_purple_blue"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:id="@+id/ivBook"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/example_bookcover" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Progress Header -->
+            <TextView
+                android:id="@+id/tvProgressHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:text="\@123456789123456's Progress"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/view2"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="3dp"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/view2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/example_bookcover" />
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/tvProgressPages"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Progress Header -->
-        <TextView
-            android:id="@+id/tvProgressHeader"
-            android:layout_width="325dp"
-            android:layout_height="62dp"
-            android:text="\@123456789123456's Progress"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="20dp"
-            android:layout_marginTop="142dp"
-            android:layout_marginLeft="25dp"
-            android:layout_gravity="left"
-            android:gravity="center"/>
-        <View
-            android:layout_width="290dp"
-            android:layout_height="1dp"
-            android:background="#FFFFFF"
-            android:layout_marginBottom="85dp"
-            android:layout_gravity="center"/>
 
-        <!-- Progress Pages -->
-        <TextView
-            android:id="@+id/tvProgressPages"
-            android:layout_width="270dp"
-            android:layout_height="35dp"
-            android:text="Pages Read: #######/#######"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginBottom="65dp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
 
-        <!-- Progress Chapters -->
-        <TextView
-            android:id="@+id/tvProgressChapters"
-            android:layout_width="270dp"
-            android:layout_height="35dp"
-            android:text="Chapters Read: ######/######"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginBottom="35dp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
 
-        <!-- Progress Bar -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:strokeColor="@color/cranny_darkmode_adapter_foreground"
-            app:strokeWidth="2dp"
-            android:layout_marginBottom="5dp"
-            android:layout_gravity="center"
-            app:cardBackgroundColor="@color/cranny_darkmode_background">
 
-            <!-- Dynamically change the fill color to cranny_blue_light -->
-            <ProgressBar
-                android:id="@+id/pbProgress"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="290dp"
-                android:layout_height="20dp"
+
+            <!-- Progress Pages -->
+            <TextView
+                android:id="@+id/tvProgressPages"
+                android:layout_width="270dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:scaleY="4" />
+                android:fontFamily="@font/raleway_custom"
+                android:gravity="center"
+                android:text="Pages Read: #######/#######"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvProgressChapters"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </com.google.android.material.card.MaterialCardView>
+            <!-- Progress Chapters -->
+            <TextView
+                android:id="@+id/tvProgressChapters"
+                android:layout_width="270dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:fontFamily="@font/raleway_custom"
+                android:gravity="center"
+                android:text="Chapters Read: ######/######"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Book Information Header -->
-        <TextView
-            android:id="@+id/tvInfoHeader"
-            android:layout_width="325dp"
-            android:layout_height="62dp"
-            android:text="Book Insight"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            <!-- Progress Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                app:cardBackgroundColor="@color/cranny_darkmode_background"
+                app:layout_constraintBottom_toTopOf="@+id/tvInfoHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/cranny_darkmode_foreground"
+                app:strokeWidth="2dp">
 
-        <View
-            android:layout_width="120dp"
-            android:layout_height="1dp"
-            android:background="#FFFFFF"
-            android:layout_marginTop="38dp"
-            android:layout_gravity="center"/>
+                <!-- Dynamically change the fill color to cranny_blue_light -->
+                <ProgressBar
+                    android:id="@+id/pbProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="290dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:scaleY="4" />
 
-        <!-- Main Characters -->
-        <TextView
-            android:id="@+id/tvMainCharacters"
-            android:layout_width="270dp"
-            android:layout_height="37dp"
-            android:text="Main Characters:\n\t\t23 chars, 1 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginTop="60dp"
-            android:layout_gravity="center"
-            android:gravity="left"/>
+            </com.google.android.material.card.MaterialCardView>
 
-        <!-- Genres -->
-        <TextView
-            android:id="@+id/tvGenres"
-            android:layout_width="270dp"
-            android:layout_height="37dp"
-            android:text="Genres:\n\t\t23 chars, 1 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginTop="105dp"
-            android:layout_gravity="center"
-            android:gravity="left"/>
+            <!-- Book Information Header -->
+            <TextView
+                android:id="@+id/tvInfoHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/raleway_custom"
+                android:gravity="center"
+                android:text="Book Insight"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Tags -->
-        <TextView
-            android:id="@+id/tvTags"
-            android:layout_width="270dp"
-            android:layout_height="37dp"
-            android:text="Tags:\n\t\t23 chars, 1 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginTop="150dp"
-            android:layout_gravity="center"
-            android:gravity="left"/>
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toTopOf="@+id/rvBookInsight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="10dp"/>
 
-        <!-- Purchase From -->
-        <TextView
-            android:id="@+id/tvPurchaseFrom"
-            android:layout_width="270dp"
-            android:layout_height="37dp"
-            android:text="Purchased From:\n\t\t23 chars, 1 line"
-            android:textColor="@color/white"
-            android:fontFamily="@font/raleway_custom"
-            android:textSize="16dp"
-            android:layout_marginTop="195dp"
-            android:layout_gravity="center"
-            android:gravity="left"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBookInsight"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                app:layout_constraintBottom_toTopOf="@+id/rbRating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Rating Bar -->
-        <RatingBar
-            android:id="@+id/rbRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="3.5"
-            android:stepSize="0.5"
-            android:isIndicator="true"
-            android:layout_marginTop="250dp"
-            android:layout_gravity="center"
-            />
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="40dp"
+                android:layout_marginLeft="40dp"
+                android:background="@color/cranny_darkmode_background"
+                app:layout_constraintBottom_toBottomOf="@+id/rvBookInsight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+            <RatingBar
+                android:id="@+id/rbRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:isIndicator="true">
+
+            </RatingBar>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 
     </com.google.android.material.card.MaterialCardView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

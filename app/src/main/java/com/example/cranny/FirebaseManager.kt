@@ -1028,17 +1028,20 @@ class FriendsLibraryRepository(
                                 val strTitle = bookSnapshot.child("Title").getValue(String::class.java) ?: ""
                                 val strAuthor = bookSnapshot.child("AuthorNames").getValue(String::class.java) ?: ""
                                 val strCoverURL = bookSnapshot.child("Thumbnail").getValue(String::class.java) ?: ""
-                                val nTotalReadPages = bookSnapshot.child("TotalPageRead").getValue(Long::class.java)?.toInt() ?: 0
+                                var nTotalReadPages = bookSnapshot.child("TotalPageRead").getValue(Long::class.java)?.toInt() ?: 0
                                 val nCountPage = bookSnapshot.child("TotalPageCount").getValue(Long::class.java)?.toInt() ?: 0
-                                val nTotalReadChapters = 0 // Modify this based on your logic
-                                val nCountChapter = 0 // Modify this based on your logic
+                                val nTotalReadChapters = 1 // todo remove hard coded values for chapter
+                                val nCountChapter = 3
                                 val strMainCharacters = bookSnapshot.child("MainCharacters").getValue(String::class.java) ?: ""
                                 val strGenres = bookSnapshot.child("Genres").getValue(String::class.java) ?: ""
                                 val strTags = bookSnapshot.child("Tags").getValue(String::class.java) ?: ""
+                                val strUserSummary = bookSnapshot.child("Description").getValue(String::class.java) ?: ""
                                 val fRating = when (val starRatingValue = bookSnapshot.child("StarRating").getValue(Float::class.java) ?: 0f) {
                                     is Float -> starRatingValue
                                     else -> 0f
                                 }
+                                val isBookFinished = bookSnapshot.child("UserFinished").getValue(Boolean::class.java) ?: false
+                                if(isBookFinished) nTotalReadPages = nCountPage
 
                                 val strPurchasedFrom = bookSnapshot.child("PurchaseFrom").getValue(String::class.java) ?: ""
                                 val lLastTimeRead = bookSnapshot.child("LastReadTime").getValue(Long::class.java) ?: 0
@@ -1057,7 +1060,8 @@ class FriendsLibraryRepository(
                                     strTags,
                                     fRating,
                                     strPurchasedFrom,
-                                    lLastTimeRead
+                                    lLastTimeRead,
+                                    strUserSummary
                                 )
                                 books.add(book)
                             }

@@ -14,7 +14,8 @@
         app:cardBackgroundColor="@color/cranny_darkmode_background"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="140dp">
+        android:layout_marginBottom = "15dp"
+        android:layout_marginTop="125dp">
 
         <TextView
             android:id="@+id/tvNoSocialFeed"
@@ -48,8 +49,23 @@
             android:background="@color/cranny_darkmode_foreground"/>
 
     </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvViewBorder2"
+        android:layout_width="match_parent"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/cranny_purple_dark"
+        android:layout_height="14dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cranny_darkmode_foreground"/>
 
     </com.google.android.material.card.MaterialCardView>
 

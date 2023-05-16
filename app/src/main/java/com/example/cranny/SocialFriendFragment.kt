@@ -1,6 +1,7 @@
 package com.example.cranny
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -43,6 +44,17 @@ class SocialFriendFragment : Fragment() {
         return fragmentView
     }
 
+    fun filterBooksByLastReadTime(
+        bookList: MutableList<DisplayFeedBookInfo>,
+        numBooks: Int
+    ): MutableList<DisplayFeedBookInfo> {
+        val filteredList = bookList.sortedByDescending { it.lLastReadTime }
+            .take(numBooks)
+            .toMutableList()
+
+        return filteredList
+    }
+
     private fun getFriendsLibraryData() {
         val database = FirebaseDatabase.getInstance()
         val userId = FirebaseAuth.getInstance().uid!! // Get the current user's ID
@@ -60,16 +72,14 @@ class SocialFriendFragment : Fragment() {
                 // set up the list needed for the adapter, but only pass the first 6 books
                 var mlFriendDisplayData = mutableListOf<FriendAdapterData>()
                 var i = 0
-                for(DisplayBook in mlNewest)
+                for(mlFriendData in mlNewest)
                 {
-                    mlFriendDisplayData.add(FriendAdapterData(DisplayBook.friendUserID, DisplayBook.friendUsername, DisplayBook.friendLibrary, DisplayBook.isFriendPrivate))
-                    ++i
-                    if(i == 6) break
+                    mlFriendDisplayData.add(FriendAdapterData(mlFriendData.friendUserID, mlFriendData.friendUsername, filterBooksByLastReadTime(mlFriendData.friendLibrary, 6), mlFriendData.isFriendPrivate))
                 }
                 // attach the adapter
                 rvFriendFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) // Sets the layout manager for the RecyclerView
                 rvFriendFeed.setHasFixedSize(true) // Optimizes performance by indicating that the item size in the RecyclerView is fixed
-                rvFriendFeed.adapter = FriendFragmentAdapter(requireActivity() as TestSocialActivity,this,requireContext(), mlFriendDisplayData, database)
+                rvFriendFeed.adapter = FriendFragmentAdapter(requireActivity() as TestSocialActivity,this,requireContext(), mlFriendDisplayData, database, resources)
 
             }
         })
@@ -77,7 +87,8 @@ class SocialFriendFragment : Fragment() {
 }
 
 class FriendFragmentAdapter(private val activity: TestSocialActivity,private val owner: LifecycleOwner, val context: Context, private val mlFriends: MutableList<FriendAdapterData>,
-                              private var database: FirebaseDatabase): RecyclerView.Adapter<FriendFragmentAdapter.MyViewHolder>()
+                              private var database: FirebaseDatabase, private var resource: Resources
+): RecyclerView.Adapter<FriendFragmentAdapter.MyViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         // Inflate the layout for each item
@@ -96,11 +107,44 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
         profilePictureRepository.loadProfilePictureIntoImageView(holder.ivProfilePicture) // load profile picture
 
         // todo load book covers
+        // todo start friend profile click listener
+
         SetUpBooks(usernameText,mlFriends[position].isPrivateProfile ,mlFriends[position].mlBooksToDisplay, holder)
-
-
     }
 
+    private fun formatTextViewSize(numLines: Int, tv: TextView, tvId: Int)
+    {
+        var newHeight: Int = 0
+        when(tvId)
+        {
+            0 ->
+            {
+                // title
+                if(numLines == 0)
+                {
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_title_1line)
+                }
+                else if(numLines == 1)
+                {
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_title_2line)
+                }
+            }
+            1 ->
+            {
+                // author
+                if(numLines == 0)
+                {
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_author_1line)
+                }
+                else if(numLines == 1)
+                {
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_author_2line)
+                }
+            }
+        }
+        tv.layoutParams.height = newHeight
+        tv.requestLayout()
+    }
     private fun SetUpBooks(username: String, isPrivate: Boolean, books: MutableList<DisplayFeedBookInfo>, holder: MyViewHolder)
     {
         holder.mcvBookButton1.visibility = View.INVISIBLE
@@ -112,6 +156,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
         holder.tvPrivateBooks.visibility = View.INVISIBLE
         val strPrivate = "${username}'s books are private"
         val strEmpty = "${username} has no books"
+        var newHeight = 0
         if(!isPrivate)
         {
             // they got a public profile
@@ -120,11 +165,13 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     // no book, sadge
                     holder.tvPrivateBooks.text = strEmpty
                     holder.tvPrivateBooks.visibility = View.VISIBLE
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
                 }
                 1 -> {
                     // show book container
                     holder.mcvBookButton1.visibility = View.VISIBLE
                     StartBookOnClick(books[0], holder.mcvBookButton1)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
                 }
                 2 -> {
                     // show book containers
@@ -132,6 +179,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     holder.mcvBookButton2.visibility = View.VISIBLE
                     StartBookOnClick(books[0], holder.mcvBookButton1)
                     StartBookOnClick(books[1], holder.mcvBookButton2)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
                 }
                 3 -> {
                     // show book containers
@@ -141,6 +189,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     StartBookOnClick(books[0], holder.mcvBookButton1)
                     StartBookOnClick(books[1], holder.mcvBookButton2)
                     StartBookOnClick(books[2], holder.mcvBookButton3)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
                 }
                 4 -> {
                     // show book containers
@@ -152,6 +201,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     StartBookOnClick(books[1], holder.mcvBookButton2)
                     StartBookOnClick(books[2], holder.mcvBookButton3)
                     StartBookOnClick(books[3], holder.mcvBookButton4)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
                 }
                 5 -> {
                     // show book containers
@@ -165,6 +215,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     StartBookOnClick(books[2], holder.mcvBookButton3)
                     StartBookOnClick(books[3], holder.mcvBookButton4)
                     StartBookOnClick(books[4], holder.mcvBookButton5)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
                 }
                 6 -> {
                     // show book containers
@@ -180,6 +231,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
                     StartBookOnClick(books[3], holder.mcvBookButton4)
                     StartBookOnClick(books[4], holder.mcvBookButton5)
                     StartBookOnClick(books[5], holder.mcvBookButton6)
+                    newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
                 }
                 else -> {
                     // you should not be here, how did you get here?? \_(x_x)_/
@@ -192,7 +244,11 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
             // friend's profile is private so don't show any books
             holder.tvPrivateBooks.text = strPrivate
             holder.tvPrivateBooks.visibility = View.VISIBLE
+            newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
         }
+
+        holder.mcvBookContainer.layoutParams.height = newHeight
+        holder.mcvBookContainer.requestLayout()
     }
     private fun StartBookOnClick(book: DisplayFeedBookInfo, button: MaterialCardView)
     {
@@ -213,6 +269,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
         val ivBook5 = itemView.findViewById<ImageView>(R.id.ivBook5)
         val ivBook6 = itemView.findViewById<ImageView>(R.id.ivBook6)
 
+        val mcvBookContainer = itemView.findViewById<MaterialCardView>(R.id.mcvBooksContainer)
         val mcvBookButton1 = itemView.findViewById<MaterialCardView>(R.id.mcvBook1)
         val mcvBookButton2 = itemView.findViewById<MaterialCardView>(R.id.mcvBook2)
         val mcvBookButton3 = itemView.findViewById<MaterialCardView>(R.id.mcvBook3)

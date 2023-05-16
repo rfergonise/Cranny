@@ -9,7 +9,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvFriendBox"
         android:layout_width="334dp"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
         app:strokeWidth="1dp"
         app:strokeColor="@color/white"
