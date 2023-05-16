@@ -15,17 +15,16 @@ class DashboardActivity : DrawerBaseActivity() {
     // What is view Binding in Android?
     // View Binding is a way of connecting your code to specific views in your layout.
     // This lets you access and modifies the view properties directly from your code.
-    /* lateinit var activityDashboardBinding: ActivityDashboardBinding
-     private lateinit var binding: ActivityDashboardBinding*/
+    lateinit var activityDashboardBinding: ActivityDashboardBinding
+     private lateinit var binding: ActivityDashboardBinding
      lateinit var ivBackToMainButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_layout)
         // binding activity to menu
-        /*activityDashboardBinding = ActivityDashboardBinding.inflate(layoutInflater)
-        setContentView(activityDashboardBinding.root)*/
+        activityDashboardBinding = ActivityDashboardBinding.inflate(layoutInflater)
+        setContentView(activityDashboardBinding.root)
 
         // title attached to toolbar
         allocateActivityTitle("Dashboard")

@@ -5,6 +5,7 @@ import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,9 +31,9 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
         getLibraryRecyclerData()
 
         // Go back to Main Activity until menu is created
-        val menuBTN = findViewById<ImageButton>(R.id.bpBackButton)
+        val menuBTN = findViewById<Button>(R.id.btLibraryActivity)
         menuBTN.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
         }
 
