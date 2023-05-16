@@ -12,7 +12,7 @@
         android:id="@+id/cvHeader"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        app:cardBackgroundColor="@color/cranny_purple_blue">
+        app:cardBackgroundColor="@color/cranny_purple_light">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
