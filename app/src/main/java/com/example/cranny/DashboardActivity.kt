@@ -1,11 +1,15 @@
 package com.example.cranny
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.widget.Button
 import android.widget.ImageView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.example.cranny.databinding.ActivityDashboardBinding
 
@@ -18,6 +22,21 @@ class DashboardActivity : DrawerBaseActivity() {
     lateinit var activityDashboardBinding: ActivityDashboardBinding
      private lateinit var binding: ActivityDashboardBinding
      lateinit var ivBackToMainButton: ImageView
+     lateinit var viewPager: ViewPager
+
+    companion object {
+        const val ACTION_CHANGE_VIEWPAGER_ITEM = "com.example.ACTION_CHANGE_VIEWPAGER_ITEM"
+        const val EXTRA_VIEWPAGER_ITEM = "extra_viewpager_item"
+    }
+
+    private val viewPagerReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val itemId = intent?.getIntExtra(EXTRA_VIEWPAGER_ITEM, 0)
+            if (itemId != null) {
+                viewPager.currentItem = itemId
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +48,10 @@ class DashboardActivity : DrawerBaseActivity() {
         // title attached to toolbar
         allocateActivityTitle("Dashboard")
 
-        // button navigates to temp home screen
-        /*val btMainActivity : Button = findViewById(R.id.btMain)
-        btMainActivity.setOnClickListener {
-            val i = Intent (this, MainActivity::class.java)
-            startActivity(i)
-        }*/
+        viewPager = findViewById<ViewPager>(R.id.viewPager)
 
-        var viewPager = findViewById<ViewPager>(R.id.viewPager)
+        val intentFilter = IntentFilter(ACTION_CHANGE_VIEWPAGER_ITEM)
+        LocalBroadcastManager.getInstance(this).registerReceiver(viewPagerReceiver, intentFilter)
 
         val socialFragmentAdapter = SocialFragmentAdapter(supportFragmentManager)
         socialFragmentAdapter.addFragment(SocialRequestFragment(), "Find Friends")
@@ -45,6 +60,14 @@ class DashboardActivity : DrawerBaseActivity() {
 
         viewPager.adapter = socialFragmentAdapter
         viewPager.currentItem = 1
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Unregister the broadcast receiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(viewPagerReceiver)
     }
 
 

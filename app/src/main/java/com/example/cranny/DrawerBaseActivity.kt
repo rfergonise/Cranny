@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.navigation.NavigationView
 
 
@@ -18,6 +19,8 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
 
     // Used for layout
     lateinit var drawerLayout: DrawerLayout
+
+
 
     override fun setContentView(view: View?) {
         drawerLayout = layoutInflater.inflate(R.layout.activity_drawer_base_activity, null) as DrawerLayout
@@ -47,9 +50,20 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
                  startActivity(Intent(this, SettingsActivity::class.java))
                  overridePendingTransition(0, 0)
              }
-             R.id.nav_socialfeed -> {
-                 startActivity(Intent(this, TestSocialActivity::class.java))
-                 overridePendingTransition(0, 0)
+             R.id.nav_profile  -> {
+                 val intent = Intent(DashboardActivity.ACTION_CHANGE_VIEWPAGER_ITEM)
+                 intent.putExtra(DashboardActivity.EXTRA_VIEWPAGER_ITEM, 1)
+                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+             }
+             R.id.nav_socialfeed  -> {
+                 val intent = Intent(DashboardActivity.ACTION_CHANGE_VIEWPAGER_ITEM)
+                 intent.putExtra(DashboardActivity.EXTRA_VIEWPAGER_ITEM, 2)
+                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+             }
+             R.id.nav_friends  -> {
+                 val intent = Intent(DashboardActivity.ACTION_CHANGE_VIEWPAGER_ITEM)
+                 intent.putExtra(DashboardActivity.EXTRA_VIEWPAGER_ITEM, 0)
+                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
              }
              R.id.nav_library -> {
                  startActivity(Intent(this, LibraryActivity::class.java))
