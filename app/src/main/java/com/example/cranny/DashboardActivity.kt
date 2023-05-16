@@ -34,9 +34,6 @@ class DashboardActivity : DrawerBaseActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_drawer_menu, menu)
-        return true
-    }
+
 
 }

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
