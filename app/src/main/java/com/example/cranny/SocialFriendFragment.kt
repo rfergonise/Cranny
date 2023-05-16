@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +26,13 @@ class SocialFriendFragment : Fragment() {
     private lateinit var tvNoSocialFeed: TextView
     private lateinit var mcvFeedBorder: MaterialCardView
     private lateinit var rvFriendFeed: RecyclerView
+    private lateinit var etSearchBar: EditText
+
+    private lateinit var mcvSearchButton: MaterialCardView
+    private lateinit var mcvClearButton: MaterialCardView
+    private lateinit var mcvFavFilterButton: MaterialCardView
+    private lateinit var ivFavIcon: ImageView
+    private var isShowingFavorite: Boolean = false
 
     lateinit var fragmentView: View
 
@@ -38,6 +46,12 @@ class SocialFriendFragment : Fragment() {
         tvNoSocialFeed = fragmentView.findViewById(R.id.tvNoSocialFeed)
         mcvFeedBorder = fragmentView.findViewById(R.id.mcvBorder)
         rvFriendFeed = fragmentView.findViewById(R.id.rvSocial)
+        etSearchBar = fragmentView.findViewById(R.id.etSearchBar)
+        mcvSearchButton = fragmentView.findViewById(R.id.mcvSearchButton)
+        mcvClearButton = fragmentView.findViewById(R.id.mcvClearButton)
+        mcvFavFilterButton = fragmentView.findViewById(R.id.mcvFavoriteFilterButton)
+        ivFavIcon = fragmentView.findViewById(R.id.ivFavFilterButton)
+
 
         getFriendsLibraryData()
 
@@ -66,23 +80,131 @@ class SocialFriendFragment : Fragment() {
             {
                 // repoFriendLibraryData.mlFriendLibraryData // every friend's username, id, and books
                 //order the list from newest to oldest
-                val mlNewest = repoFriendLibraryData.mlFriendLibraryData
-                    .filter { friendLibraryData -> friendLibraryData.friendLibrary.isNotEmpty() } // Filter out empty friend libraries
-                    .sortedByDescending { friendLibraryData -> friendLibraryData.friendLibrary.maxOfOrNull { it.lLastReadTime } }
-                // set up the list needed for the adapter, but only pass the first 6 books
-                var mlFriendDisplayData = mutableListOf<FriendAdapterData>()
-                var i = 0
-                for(mlFriendData in mlNewest)
-                {
-                    mlFriendDisplayData.add(FriendAdapterData(mlFriendData.friendUserID, mlFriendData.friendUsername, filterBooksByLastReadTime(mlFriendData.friendLibrary, 6), mlFriendData.isFriendPrivate))
+                if(repoFriendLibraryData.mlFriendLibraryData.size > 0) {
+                    tvNoSocialFeed.visibility = View.INVISIBLE
+                    val mlNewest = repoFriendLibraryData.mlFriendLibraryData
+                        .filter { friendLibraryData -> friendLibraryData.friendLibrary.isNotEmpty() } // Filter out empty friend libraries
+                        .sortedByDescending { friendLibraryData -> friendLibraryData.friendLibrary.maxOfOrNull { it.lLastReadTime } }
+                    // set up the list needed for the adapter, but only pass the first 6 books
+                    var mlFriendDisplayData = mutableListOf<FriendAdapterData>()
+                    var i = 0
+                    for (mlFriendData in mlNewest) {
+                        mlFriendDisplayData.add(
+                            FriendAdapterData(
+                                mlFriendData.friendUserID,
+                                mlFriendData.friendUsername,
+                                filterBooksByLastReadTime(mlFriendData.friendLibrary, 6),
+                                mlFriendData.isFriendPrivate,
+                                mlFriendData.isFriendPrivate
+                            )
+                        )
+                    }
+                    // attach the adapter
+                    rvFriendFeed.layoutManager = LinearLayoutManager(
+                        context,
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    ) // Sets the layout manager for the RecyclerView
+                    rvFriendFeed.setHasFixedSize(true) // Optimizes performance by indicating that the item size in the RecyclerView is fixed
+                    rvFriendFeed.adapter = FriendFragmentAdapter(
+                        requireActivity() as TestSocialActivity,
+                        this,
+                        requireContext(),
+                        mlFriendDisplayData,
+                        database,
+                        resources
+                    )
+                    allowSearch(mlFriendDisplayData, database)
+                    allowClear(mlFriendDisplayData, database)
+                    allowFavoriteFilter(mlFriendDisplayData, database)
                 }
-                // attach the adapter
-                rvFriendFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) // Sets the layout manager for the RecyclerView
-                rvFriendFeed.setHasFixedSize(true) // Optimizes performance by indicating that the item size in the RecyclerView is fixed
-                rvFriendFeed.adapter = FriendFragmentAdapter(requireActivity() as TestSocialActivity,this,requireContext(), mlFriendDisplayData, database, resources)
+                else tvNoSocialFeed.visibility = View.VISIBLE
 
             }
         })
+    }
+
+    private fun allowSearch(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+        mcvSearchButton.setOnClickListener {
+            val strUserTheySearchedFor = etSearchBar.text.toString()
+            if (etSearchBar.text.isNotBlank()) {
+                val mlFilteredList = mlAvailableUsersToAdd.filter { friend ->
+                    friend.username.contains(strUserTheySearchedFor, ignoreCase = true)
+                }.toMutableList()
+
+                rvFriendFeed.adapter = FriendFragmentAdapter(
+                    requireActivity() as TestSocialActivity,
+                    this,
+                    requireContext(),
+                    mlFilteredList,
+                    database,
+                    resources
+                )
+
+                rvFriendFeed.adapter?.notifyDataSetChanged()
+            } else {
+                Toast.makeText(context, "Search bar is empty.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun allowFavoriteFilter(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+        mcvFavFilterButton.setOnClickListener {
+
+            if(!isShowingFavorite)
+            {
+                ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
+                val mlFilteredList = mlAvailableUsersToAdd.filter { friend ->
+                    friend.isFavorite
+                }.toMutableList()
+
+                if(mlFilteredList.size > 0)
+                {
+                    rvFriendFeed.adapter = FriendFragmentAdapter(
+                        requireActivity() as TestSocialActivity,
+                        this,
+                        requireContext(),
+                        mlFilteredList,
+                        database,
+                        resources
+                    )
+                    rvFriendFeed.adapter?.notifyDataSetChanged()
+                }
+                else
+                {
+                    Toast.makeText(requireContext(), "No favorite friends found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else
+            {
+                ivFavIcon.setImageResource(R.drawable.favorite_filter_icon)
+                rvFriendFeed.adapter = FriendFragmentAdapter(
+                    requireActivity() as TestSocialActivity,
+                    this,
+                    requireContext(),
+                    mlAvailableUsersToAdd,
+                    database,
+                    resources
+                )
+                rvFriendFeed.adapter?.notifyDataSetChanged()
+            }
+
+        }
+    }
+
+    private fun allowClear(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+        mcvClearButton.setOnClickListener {
+
+            etSearchBar.text.clear()
+            rvFriendFeed.adapter = FriendFragmentAdapter(
+                requireActivity() as TestSocialActivity,
+                this,
+                requireContext(),
+                mlAvailableUsersToAdd,
+                database,
+                resources
+            )
+        }
     }
 }
 
@@ -110,41 +232,18 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
         // todo start friend profile click listener
 
         SetUpBooks(usernameText,mlFriends[position].isPrivateProfile ,mlFriends[position].mlBooksToDisplay, holder)
+        if (position == mlFriends.size - 1)
+        {
+            // change bottom margin to be larger
+            val layoutParams = holder.mcvFriendBox.layoutParams as ViewGroup.MarginLayoutParams
+            val bottomMarginDp = 8
+            val density = resource.displayMetrics.density
+            val bottomMarginPx = (bottomMarginDp * density).toInt()
+            layoutParams.bottomMargin = bottomMarginPx
+            holder.mcvFriendBox.layoutParams = layoutParams
+        }
     }
 
-    private fun formatTextViewSize(numLines: Int, tv: TextView, tvId: Int)
-    {
-        var newHeight: Int = 0
-        when(tvId)
-        {
-            0 ->
-            {
-                // title
-                if(numLines == 0)
-                {
-                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_title_1line)
-                }
-                else if(numLines == 1)
-                {
-                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_title_2line)
-                }
-            }
-            1 ->
-            {
-                // author
-                if(numLines == 0)
-                {
-                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_author_1line)
-                }
-                else if(numLines == 1)
-                {
-                    newHeight = resource.getDimensionPixelSize(R.dimen.bookdisplay_author_2line)
-                }
-            }
-        }
-        tv.layoutParams.height = newHeight
-        tv.requestLayout()
-    }
     private fun SetUpBooks(username: String, isPrivate: Boolean, books: MutableList<DisplayFeedBookInfo>, holder: MyViewHolder)
     {
         holder.mcvBookButton1.visibility = View.INVISIBLE
@@ -269,6 +368,7 @@ class FriendFragmentAdapter(private val activity: TestSocialActivity,private val
         val ivBook5 = itemView.findViewById<ImageView>(R.id.ivBook5)
         val ivBook6 = itemView.findViewById<ImageView>(R.id.ivBook6)
 
+        val mcvFriendBox = itemView.findViewById<MaterialCardView>(R.id.mcvFriendBox)
         val mcvBookContainer = itemView.findViewById<MaterialCardView>(R.id.mcvBooksContainer)
         val mcvBookButton1 = itemView.findViewById<MaterialCardView>(R.id.mcvBook1)
         val mcvBookButton2 = itemView.findViewById<MaterialCardView>(R.id.mcvBook2)
