@@ -82,7 +82,8 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.prevReadCount,
                                     books.startDate,
                                     books.endDate,
-                                    books.totalPagesRead
+                                    books.totalPagesRead,
+                                    username
                                 )
                             )}
                             libraryRecycler.adapter =
@@ -134,7 +135,8 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.prevReadCount,
                                     books.startDate,
                                     books.endDate,
-                                    books.totalPagesRead
+                                    books.totalPagesRead,
+                                    username
                                 )
                             )
                         }
@@ -159,6 +161,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("lastPageRead", libraryBookList[position].bookLastPage)
                         intent.putExtra("id", libraryBookList[position].bookID)
                         intent.putExtra("isFav", libraryBookList[position].bookIsFav)
+                        intent.putExtra("username", libraryBookList[position].username)
                         startActivity(intent)
                     }
                 }
