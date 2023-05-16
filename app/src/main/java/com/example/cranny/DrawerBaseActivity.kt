@@ -1,6 +1,7 @@
 package com.example.cranny
 
 import android.content.Intent
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 
@@ -36,18 +37,17 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
         toggle.syncState()
     }
 
-
     //menu nav to click events activity
      override fun onNavigationItemSelected(item: MenuItem): Boolean {
          drawerLayout.closeDrawer(GravityCompat.START)
 
-        // switch between activities click events
+        // switch between activities on the dashboards menu drawer
          when (item.itemId) {
              R.id.nav_settings -> {
                  startActivity(Intent(this, SettingsActivity::class.java))
                  overridePendingTransition(0, 0)
              }
-             R.id.nav_social -> {
+             R.id.nav_socialfeed -> {
                  startActivity(Intent(this, SocialActivity::class.java))
                  overridePendingTransition(0, 0)
              }
