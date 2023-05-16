@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/SearchPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cvHeader"
+    android:layout_marginTop="80dp">
+
+    <!-- Search Bar -->
+    <com.google.android.material.card.MaterialCardView
+    android:id="@+id/mcvSearchBox"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="30dp"
+    app:cardBackgroundColor="@color/cranny_blue_light"
+    app:cardCornerRadius="180dp"
+    app:cardElevation="0dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+    <EditText
+        android:id="@+id/etSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="4dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="Search"
+        android:inputType="textPersonName"
+        android:maxLength="15"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        />
+</com.google.android.material.card.MaterialCardView>
+
+    <!-- Search Button -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvSearchButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+        app:strokeWidth="3dp"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardCornerRadius="180dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox">
+        <ImageView
+            android:id="@+id/ivSearchButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/purple_blue_search" />
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!-- Clear Button -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvClearButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardCornerRadius="180dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="3dp">
+
+        <ImageView
+            android:id="@+id/ivClearButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/purple_blue_clear" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Feed -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvFeed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="3dp">
+
+        <TextView
+            android:id="@+id/tvFeedIsEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No friend requests found"
+            android:textColor="@color/cranny_blue_light"
+            android:fontFamily="@font/raleway_custom"
+            android:layout_gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUserSearchFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

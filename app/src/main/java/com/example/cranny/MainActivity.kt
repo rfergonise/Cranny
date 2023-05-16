@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         // Social Button On Click Event Handling
         buttonSocial = findViewById(R.id.bSocial)
         buttonSocial.setOnClickListener{
-            val i = Intent(this, SocialActivity::class.java)
+            val i = Intent(this, TestSocialActivity::class.java)
             startActivity(i)
         }
         // Log Out Button On Click Event Handling
