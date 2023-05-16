@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <!-- Body -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvHeader"
+        android:layout_marginTop="80dp">
+
+        <!-- Profile Picture -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvPFPBorder"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        app:cardCornerRadius="65dp"
+        app:layout_constraintBottom_toTopOf="@+id/cvDisplayName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cvUsername"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="5dp">
+
+        <ImageView
+            android:id="@+id/ivProfilePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/default_profile_picture" />
+    </com.google.android.material.card.MaterialCardView>
+
+        <!-- Username -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvUsername"
+        android:layout_width="200dp"
+        android:layout_marginEnd="38dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/tvProfileUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:shadowColor="@color/cranny_darkmode_foreground"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="\@Username"
+                android:textColor="@color/cranny_purple_light"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+        <!-- Friend Count -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvFriendCount"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardElevation="0dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/cvBookCount"
+        app:layout_constraintTop_toBottomOf="@+id/cvUsername"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/tvFriendsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:shadowColor="#000000"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="Friends"
+                android:textColor="@color/cranny_purple_light"
+                android:textSize="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTotalFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/lorenta_custom"
+                android:gravity="center"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="000,000"
+                android:textColor="@color/cranny_purple_blue"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFriendsHeader" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+        <!-- Book Count -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvBookCount"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardElevation="0dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvUsername"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/tvBooksHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:shadowColor="#000000"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="Books"
+                android:textColor="@color/cranny_purple_light"
+                android:textSize="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTotalBooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/lorenta_custom"
+                android:gravity="center"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="000,000"
+                android:textColor="@color/cranny_purple_blue"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvBooksHeader" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+        <!-- Display Name -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvDisplayName"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="10dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvFriendCount"
+        app:strokeWidth="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/tvProfileDisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_custom"
+                android:shadowColor="#000000"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="5"
+                android:text="\Display Name"
+                android:textColor="@color/cranny_purple_light"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+        <!-- Bio -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvBorder2"
+            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/cranny_darkmode_background"
+            android:layout_height="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvDisplayName"
+            app:strokeWidth="0dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="5dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvBio"
+                android:layout_width="match_parent"
+                app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+                android:layout_height="match_parent"
+                app:cardElevation="0dp"
+                android:layout_gravity="center"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/cranny_purple_dark">
+                <TextView
+                        android:id="@+id/tvProfileBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/lorenta_custom"
+                        android:text="User BIO"
+                        android:textColor="@color/cranny_purple_blue"
+                        android:textSize="18dp"
+                        android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="10dp"/>
+            </com.google.android.material.card.MaterialCardView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Favorite Friends -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvBorder2"
+            app:cardElevation="0dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/cranny_purple_dark"
+            app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:id="@+id/tvNoFavorites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway_custom"
+                    android:text="See your favorite friends here"
+                    android:textColor="@color/cranny_blue_light"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/horizontalScrollView" />
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:id="@+id/horizontal_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Recent Read Feed -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvFeed"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cvFavorites"
+            app:strokeColor="@color/cranny_purple_dark"
+            app:strokeWidth="5dp"
+            app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+
+            <TextView
+                android:id="@+id/tvNoRecent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See your shared books here"
+                android:textColor="@color/cranny_blue_light"
+                android:fontFamily="@font/raleway_custom"
+                android:layout_gravity="center"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSocial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

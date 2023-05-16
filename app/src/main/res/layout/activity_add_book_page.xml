@@ -2,8 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-
     android:id="@+id/clAddBookLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,15 +30,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/raleway"
-                android:text="@string/alAddBook"
+                android:text="@string/AddBook"
                 android:textColor="#000000"
-                android:textSize="45sp"
+                android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
+            <ImageView
+                android:id="@+id/ivBackToMain"
+                android:layout_width="52dp"
+                android:layout_height="43dp"
+                android:layout_marginEnd="39dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_home_24" />
 
             <ImageButton
                 android:id="@+id/ibSaveButton"
@@ -48,20 +54,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/btnSave"
+                android:contentDescription="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/diskettesmall" />
-
-            <Button
-                android:id="@+id/btAddBookPage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -97,7 +94,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:elevation="10dp"
-                    android:hint="@string/title"
+                    android:hint="@string/BookTitle"
                     app:errorEnabled="false"
                     app:helperText="Required"
                     app:helperTextTextColor="#830101"
@@ -123,7 +120,7 @@
                     android:layout_marginTop="16dp"
                     android:contentDescription="@string/date_started"
                     android:fontFamily="@font/raleway"
-                    android:text="@string/datestarted"
+                    android:text="@string/date_started"
                     android:textColor="#000000"
                     android:textSize="30sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +134,7 @@
                     android:layout_marginEnd="8dp"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
-                    android:hint="@string/mm_dd_yyyy"
+                    android:hint="@string/date"
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:textAlignment="textEnd"
@@ -191,7 +188,7 @@
                     android:layout_marginEnd="8dp"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
-                    android:hint="@string/mm_dd_yyyy"
+                    android:hint="@string/date"
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:textAlignment="textEnd"
@@ -262,7 +259,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="@string/publisher_s"
+                    android:hint="@string/publishers"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiAuthorInput">
@@ -298,7 +295,7 @@
                     android:layout_marginEnd="8dp"
                     android:ems="10"
                     android:fontFamily="@font/raleway"
-                    android:hint="@string/mm_dd_yyyy"
+                    android:hint="@string/date"
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:textAlignment="textEnd"
@@ -313,7 +310,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="@string/main_character_s"
+                    android:hint="@string/main_characters"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etnPublicationDateInput">
@@ -406,7 +403,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="@string/genre_s"
+                    android:hint="@string/genres"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiMyReview">
@@ -429,7 +426,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:hint="@string/tag_s"
+                    android:hint="@string/tags"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiGenres">
@@ -450,7 +447,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/rating_bar"
+                    android:contentDescription="@string/rating"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiTags" />
 
@@ -477,7 +474,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="@string/save_btn"
+                    android:text="@string/save"
                     android:textSize="15sp"
                     app:cornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -490,7 +487,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/raleway_custom"
-                    android:text="@string/cancel_btn"
+                    android:text="@string/cancel"
                     android:textSize="15sp"
                     app:cornerRadius="8dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -499,11 +496,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <!--
-        Will need to fix autofill for date if no date is entered
--->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

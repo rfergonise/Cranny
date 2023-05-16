@@ -2,4 +2,10 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="height_of_app_bar">80dip</dimen>
+    <dimen name="bookdisplay_title_1line">62dp</dimen>
+    <dimen name="bookdisplay_title_2line">31dp</dimen>
+    <dimen name="bookdisplay_author_1line">62dp</dimen>
+    <dimen name="bookdisplay_author_2line">31dp</dimen>
+    <dimen name="bookfriend_1row">125dp</dimen>
+    <dimen name="bookfriend_2row">230dp</dimen>
 </resources>

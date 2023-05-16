@@ -7,7 +7,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvFriendBox"
-        android:layout_width="275dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         app:cardBackgroundColor="@color/cranny_pink"
         app:strokeWidth="3dp"
@@ -18,8 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="45dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +37,28 @@
                 app:srcCompat="@drawable/remove_friend"
                 android:layout_marginEnd="15dp"/>
 
+            <ImageView
+                android:id="@+id/ivUnFavorite"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivRemoveFriend"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.533"
+                app:srcCompat="@drawable/favorite_yes"
+                android:layout_marginEnd="10dp"/>
+
+            <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivRemoveFriend"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.533"
+                app:srcCompat="@drawable/favorite_no"
+                android:layout_marginEnd="10dp"/>
+
             <TextView
                 android:id="@+id/tvFriendName"
                 android:layout_width="wrap_content"
@@ -45,7 +67,7 @@
                 android:textColor="@color/black"
                 android:fontFamily="@font/raleway_custom"
                 android:textSize="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

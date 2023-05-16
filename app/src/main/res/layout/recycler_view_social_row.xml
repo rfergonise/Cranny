@@ -20,9 +20,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
+            <!-- Progress Bar -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/cranny_purple_dark"
+                app:strokeWidth="2dp">
+
+
+                <ProgressBar
+                    android:id="@+id/pbPagesRead"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:scaleY="3" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+            <!-- Cover -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvCoverBorder"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 app:cardBackgroundColor="@color/cranny_purple_light"
@@ -39,6 +64,7 @@
                     app:srcCompat="@drawable/example_bookcover" />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Title -->
             <TextView
                 android:id="@+id/tvSocialBookTitle"
                 android:layout_width="wrap_content"
@@ -51,7 +77,7 @@
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
+            <!-- Author -->
             <TextView
                 android:id="@+id/tvSocialBookAuthor"
                 android:layout_width="wrap_content"
@@ -64,18 +90,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSocialBookTitle"
                 app:layout_constraintVertical_bias="0.0" />
-
+            <!-- Status -->
             <TextView
                 android:id="@+id/tvSocialPageStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/raleway_custom"
+                android:layout_marginBottom="5dp"
                 android:text="Page Status"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/materialCardView"
                 app:layout_constraintStart_toStartOf="parent" />
 
 

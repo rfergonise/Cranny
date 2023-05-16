@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 
@@ -20,12 +21,12 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
 
     override fun setContentView(view: View?) {
         drawerLayout = layoutInflater.inflate(R.layout.activity_drawer_base_activity, null) as DrawerLayout
-        val container = drawerLayout.findViewById<FrameLayout>(R.id.activityContainer)
+        val container = drawerLayout.findViewById<ConstraintLayout>(R.id.container)
         container.addView(view)
 
         super.setContentView(drawerLayout)
 
-        val toolbar = drawerLayout.findViewById<Toolbar>(R.id.toolBar)
+        val toolbar = drawerLayout.findViewById<Toolbar>(R.id.tvMenu)
         setSupportActionBar(toolbar)
 
         val navigationView = drawerLayout.findViewById<NavigationView>(R.id.nav_view)
@@ -47,7 +48,7 @@ open class DrawerBaseActivity : AppCompatActivity(), NavigationView.OnNavigation
                  overridePendingTransition(0, 0)
              }
              R.id.nav_socialfeed -> {
-                 startActivity(Intent(this, SocialActivity::class.java))
+                 startActivity(Intent(this, TestSocialActivity::class.java))
                  overridePendingTransition(0, 0)
              }
              R.id.nav_library -> {

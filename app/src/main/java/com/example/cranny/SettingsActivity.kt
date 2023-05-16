@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val userId: String = currentUser!!.uid
     val database = FirebaseDatabase.getInstance()
-    val bookRepository = BookRepository(database)
+    lateinit var bookRepository: BookRepository
     val profileRepository = ProfileRepository(firebaseDatabase, userId)
 
     // Used for view binding
@@ -61,11 +61,18 @@ class SettingsActivity : AppCompatActivity() {
             .commit()
 
 
-        //Clear Library Function
-        clearLibraryButton = findViewById(R.id.clearLibraryButton)
-        clearLibraryButton.setOnClickListener {
-            showClearLibraryDialog()
-        }
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
+        profileRepo.profileData.observe(this, Observer { userProfile ->
+            val username: String = userProfile.username
+            bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
+            //Clear Library Function
+            clearLibraryButton = findViewById(R.id.clearLibraryButton)
+            clearLibraryButton.setOnClickListener {
+                showClearLibraryDialog()
+            }
+        })
+        profileRepo.stopProfileListener()
+
         //delete button logic
         deleteAccountButton = findViewById(R.id.deleteAccountButton)
         deleteAccountButton.setOnClickListener {
@@ -103,12 +110,12 @@ class SettingsActivity : AppCompatActivity() {
                     val friends = mutableListOf<Friend>()
                     for(friend in friendRepo.FriendIds)
                     {
-                        friends.add(Friend(friend.id, friend.username))
+                        friends.add(Friend(friend.id, friend.username, false))
                     }
                     for (friend in friends)
                     {
                         val friends = FriendRepository(database, friend.username, friend.id, this)
-                        friends.removeFriend(Friend(userId, username))
+                        friends.removeFriend(Friend(userId, username, false))
                     }
                     signOut() // sign the user out of the app
                 }
@@ -153,7 +160,7 @@ class SettingsActivity : AppCompatActivity() {
             .setPositiveButton("Yes") { _, _ ->
 
                 // Clear user library
-                bookRepository.clearUserLibrary()
+                bookRepository.clearUserLibrary(this)
 
                 // Observe for changes in the library
                 bookRepository.isBookDataReady.observe(this, Observer { isLibraryCleared ->

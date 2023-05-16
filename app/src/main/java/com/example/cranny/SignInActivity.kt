@@ -1,5 +1,18 @@
 package com.example.cranny
 
+/**
+This Kotlin file represents the SignInActivity, which handles the sign-in process with Google accounts using Firebase authentication.
+It provides UI elements for signing in, initializes Firebase and Google Sign-In client, and manages the sign-in flow.
+The user can click the sign-in button to initiate the sign-in process, which starts the sign-in intent.
+After the user signs in with their Google account, the onActivityResult() method is called, retrieving the user's signed-in account and authenticating the user with Firebase.
+If the sign-in is successful, the user's information is retrieved and checked against the database. If the user exists, they are directed to the DashboardActivity; otherwise, they are prompted to create a profile in the SignUpActivity.
+This file utilizes the following dependencies:
+AndroidX libraries
+Firebase Authentication and Realtime Database
+Google Sign-In API
+Note: The RC_SIGN_IN constant is a custom request code used to handle the sign-in intent.
+ */
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,96 +41,92 @@ class SignInActivity : AppCompatActivity()
     // Custom RC Sign In number to handle our sign in intent
     val RC_SIGN_IN = 40
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        // link the ui elements
+        // Link the UI elements
         btnSignIn = findViewById(R.id.bGoogleSignIn)
 
-        // link the firebase stuff
+        // Link the Firebase stuff
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-
-        // This code sets up a GoogleSignInOptions object with default sign-in options
-        // Such as requesting the user's information and ID token.
-
-        // The requestIdToken method sets the web client ID to authenticate the user with Google
-        // While the requestEmail method requests the user's email.
-
-        // The GoogleSignInOptions object is then used to create a GoogleSignInClient object.
+        // Create GoogleSignInOptions with the specified options
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
-            .build() // creates the gso object with the specified options^
+            .build()
+
+        // Create a GoogleSignInClient with the GoogleSignInOptions
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // OnClickListener that calls the signIn() function when clicked.
-        btnSignIn.setOnClickListener{
+        // Set up OnClickListener for the sign-in button
+        btnSignIn.setOnClickListener {
             signIn()
         }
-
     }
 
-    private fun signIn()
-    {
-        // user wants to sign in so start our intent
+    /**
+     * Initiates the sign-in process by starting the sign-in intent.
+     */
+    private fun signIn() {
+        // User wants to sign in, so start the sign-in intent
         val intent = mGoogleSignInClient.signInIntent
         startActivityForResult(intent, RC_SIGN_IN)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
-    {
+    /**
+     * Called after the user signs in with their Google account.
+     *
+     * @param requestCode The request code.
+     * @param resultCode The result code.
+     * @param data The intent data.
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         // This function is called after the user signs in with their Google account.
         // It retrieves the user's signed-in account from the intent data and passes the user's ID token to the firebaseAuth() function to authenticate the user with Firebase.
         // If the account retrieval is unsuccessful, it throws a RuntimeException with the caught ApiException as its cause.
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RC_SIGN_IN)
-        {
+
+        if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try
-            {
+            try {
                 val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
                 firebaseAuth(account.idToken)
-            }
-            catch (e: ApiException)
-            {
+            } catch (e: ApiException) {
+                // Throw a RuntimeException with the caught ApiException as its cause
                 throw RuntimeException(e)
             }
         }
     }
 
-    private fun firebaseAuth(idToken: String?)
-    {
-        // This function takes in a Google ID token as a parameter and uses it to create a Google authentication credential using the GoogleAuthProvider.getCredential() method.
-        // The credential is then used to sign in to Firebase using the auth.signInWithCredential() method.
-        // If the sign-in is successful, the function gets the current user's ID, name, and profile picture URL from Firebase and creates a User object.
-        // It then checks whether the user already exists in the database and starts the appropriate activity based on the result.
-        // If the database read fails, a toast message is displayed.
+    /**
+     * Authenticates the user with Firebase using the provided ID token.
+     *
+     * @param idToken The ID token obtained from Google Sign-In.
+     */
+    private fun firebaseAuth(idToken: String?) {
         val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // code to be executed if the sign-in is successful
+                    // Code to be executed if the sign-in is successful
                     val curUser = auth.currentUser
                     val user: User = User()
-                    if (curUser != null)
-                    {
+                    if (curUser != null) {
                         user.userId = curUser.uid
                         user.name = curUser.displayName.toString()
+
                         val userDatabase = FirebaseDatabase.getInstance().getReference("UserData")
                         userDatabase.child(curUser.uid).get().addOnSuccessListener {
-                            if(it.exists())
-                            {
+                            if (it.exists()) {
                                 // User already exists in the database
                                 val intent = Intent(this@SignInActivity, DashboardActivity::class.java)
                                 startActivity(intent)
-                            }
-                            else
-                            {
+                            } else {
                                 // User doesn't exist in the database, send them to create a profile
                                 val intent = Intent(this@SignInActivity, SignUpActivity::class.java)
                                 startActivity(intent)
@@ -126,9 +135,8 @@ class SignInActivity : AppCompatActivity()
                             Toast.makeText(this, "Failed to read database.", Toast.LENGTH_SHORT).show()
                         }
                     }
-
                 }
             }
-
     }
+
 }
