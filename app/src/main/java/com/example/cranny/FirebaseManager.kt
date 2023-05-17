@@ -477,7 +477,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         val bookData = HashMap<String, Any>()
         bookData["AuthorNames"] = book.authorNames.toString()
         bookData["Description"] = book.description.toString()
-        bookData["EndDate"] = book.endDate
+        bookData["EndDate"] = book.endDate.toString()
         bookData["Genres"] = book.genres.toString()
         bookData["Id"] = book.id
         bookData["JournalEntry"] = book.journalEntry.toString()

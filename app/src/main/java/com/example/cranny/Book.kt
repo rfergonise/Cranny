@@ -27,7 +27,7 @@ data class Book(
     var lastReadTime: Long?,
     var prevReadCount: Int?,
     var startDate: String,
-    var endDate: String,
-    var totalPageCount: Int,
-    var totalPagesRead: Int
+    var endDate: String?,
+    var totalPageCount: Int?,
+    var totalPagesRead: Int,
 )

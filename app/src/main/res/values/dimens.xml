@@ -8,4 +8,5 @@
     <dimen name="bookdisplay_author_2line">31dp</dimen>
     <dimen name="bookfriend_1row">125dp</dimen>
     <dimen name="bookfriend_2row">230dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

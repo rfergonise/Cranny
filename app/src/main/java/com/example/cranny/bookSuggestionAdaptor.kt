@@ -15,23 +15,23 @@ class bookSuggestionAdapter(context: Context, private val suggestions: MutableLi
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_book_suggestion, parent, false)
-
-        val bookSuggestion = suggestions[position]
-
-        val bookCoverImage = view.findViewById<ImageView>(R.id.bookCoverImage)
-        val bookTitle = view.findViewById<TextView>(R.id.bookTitle)
-
-        Glide.with(context)
-            .load(bookSuggestion.thumbnail)
-            .into(bookCoverImage)
-
-        bookTitle.text = bookSuggestion.title
-
-        view.setOnClickListener {
-            selectedBook = bookSuggestion
-            itemClickListener.onItemClick(null, it, position, 0L)
-        }
+       val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_book_suggestion, parent, false)
+//
+//        val bookSuggestion = suggestions[position]
+//
+//        val bookCoverImage = view.findViewById<ImageView>(R.id.bookCoverImage)
+//        val bookTitle = view.findViewById<TextView>(R.id.bookTitle)
+//
+//        Glide.with(context)
+//            .load(bookSuggestion.thumbnail)
+//            .into(bookCoverImage)
+//
+//        bookTitle.text = bookSuggestion.title
+//
+//        view.setOnClickListener {
+//            selectedBook = bookSuggestion
+//            itemClickListener.onItemClick(null, it, position, 0L)
+//        }
 
         return view
     }
