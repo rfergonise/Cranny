@@ -83,7 +83,7 @@ class SocialFriendFragment : Fragment() {
                 if(repoFriendLibraryData.mlFriendLibraryData.size > 0) {
                     tvNoSocialFeed.visibility = View.INVISIBLE
                     val mlNewest = repoFriendLibraryData.mlFriendLibraryData
-                        .filter { friendLibraryData -> friendLibraryData.friendLibrary.isNotEmpty() } // Filter out empty friend libraries
+                        //.filter { friendLibraryData -> friendLibraryData.friendLibrary.isNotEmpty() } // Filter out empty friend libraries
                         .sortedByDescending { friendLibraryData -> friendLibraryData.friendLibrary.maxOfOrNull { it.lLastReadTime } }
                     // set up the list needed for the adapter, but only pass the first 6 books
                     var mlFriendDisplayData = mutableListOf<FriendAdapterData>()
@@ -95,7 +95,7 @@ class SocialFriendFragment : Fragment() {
                                 mlFriendData.friendUsername,
                                 filterBooksByLastReadTime(mlFriendData.friendLibrary, 6),
                                 mlFriendData.isFriendPrivate,
-                                mlFriendData.isFriendPrivate
+                                mlFriendData.isFavorite
                             )
                         )
                     }
@@ -153,7 +153,7 @@ class SocialFriendFragment : Fragment() {
 
             if(!isShowingFavorite)
             {
-                ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
+                ivFavIcon.setImageResource(R.drawable.favorite_filter_icon)
                 val mlFilteredList = mlAvailableUsersToAdd.filter { friend ->
                     friend.isFavorite
                 }.toMutableList()
@@ -169,15 +169,17 @@ class SocialFriendFragment : Fragment() {
                         resources
                     )
                     rvFriendFeed.adapter?.notifyDataSetChanged()
+                    isShowingFavorite = true
                 }
                 else
                 {
                     Toast.makeText(requireContext(), "No favorite friends found", Toast.LENGTH_SHORT).show()
+                    isShowingFavorite = false
                 }
             }
             else
             {
-                ivFavIcon.setImageResource(R.drawable.favorite_filter_icon)
+                ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
                 rvFriendFeed.adapter = FriendFragmentAdapter(
                     requireActivity() as DashboardActivity,
                     this,
@@ -187,6 +189,7 @@ class SocialFriendFragment : Fragment() {
                     resources
                 )
                 rvFriendFeed.adapter?.notifyDataSetChanged()
+                isShowingFavorite = false
             }
 
         }
