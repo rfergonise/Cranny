@@ -132,6 +132,7 @@ class AddBookPage : AppCompatActivity() {
 
     private fun saveNewBook() {
 
+
         if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
             val editText = genresInput.editText
             val genres = editText?.text.toString()
@@ -151,7 +152,7 @@ class AddBookPage : AppCompatActivity() {
             profileRepo.profileData.observe(this@AddBookPage, Observer { userProfile ->
                 val username: String = userProfile.username
                 val user: Friend = Friend(currentUser!!.uid, username, false)
-                val selectedBookSuggestion: BookSuggestion? = bookSuggestionAdapter?.selectedBook
+                        val selectedBookSuggestion: BookSuggestion? = bookSuggestionAdapter?.selectedBook
                 CoroutineScope(Dispatchers.IO).launch {
                     val selectedBook: Book? = selectedBookSuggestion?.let { bookSuggestionToBook(it,user) }
                     withContext(Dispatchers.Main) {
@@ -168,7 +169,7 @@ class AddBookPage : AppCompatActivity() {
                         }
 
                         val inputText = lastPageReadInput.text.toString().trim()
-                        val totalPagesRead = if (inputText.isNotBlank()) {
+                        val totalPagesReadInput = if (inputText.isNotBlank()) {
                             val parsedValue = inputText.toIntOrNull()
                             parsedValue?.let {
                                 setPageRead(it)
@@ -185,7 +186,7 @@ class AddBookPage : AppCompatActivity() {
                             starRating = ratingsInput.rating.toString().toFloat(),
                             publisher = publisherInput.text.toString(),
                             description = summaryInput.text.toString(),
-                            pageCount = totalPagesRead,
+                            pageCount = totalPagesReadInput,
                             thumbnail = " ",
                             journalEntry = reviewInput.text.toString(),
                             userProgress = 0,
@@ -201,7 +202,7 @@ class AddBookPage : AppCompatActivity() {
                             lastReadTime = currentMillis,
                             isFav = false,
                             totalPageCount = totalPageCount,
-                            totalPagesRead = totalPagesRead
+                            totalPagesRead = totalPagesReadInput
 
                             //totalPagesRead = lastPageReadInput.text.toString().toInt()
                         )
@@ -218,14 +219,14 @@ class AddBookPage : AppCompatActivity() {
                                     val status = if (newBook.userFinished) {
                                         "@$username Finished Reading!"
                                     }
-                                    else if(totalPagesRead > 1)
+                                    else if(totalPagesReadInput > 1)
                                     {
                                         //changed lastPageRead to totalPagesRead to try to get accurate page count
-                                        "@$username Read $totalPagesRead pages."
+                                        "@$username Read $totalPagesReadInput pages."
                                     }
                                     else
                                     {
-                                        "@$username Read $totalPagesRead page."
+                                        "@$username Read $totalPagesReadInput page."
                                     }
                                     recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
                                         status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,

@@ -154,7 +154,8 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("purchasedFrom", libraryBookList[position].purchasedFrom)
                         intent.putExtra("userReview", libraryBookList[position].journalEntry)
                         intent.putExtra("summary", libraryBookList[position].description)
-                        intent.putExtra("lastPageRead", libraryBookList[position].totalPagesRead)
+                        //for some reason page count works but not total pages read, will leave as is for now
+                        intent.putExtra("lastPageRead", libraryBookList[position].pageCount)
                         intent.putExtra("id", libraryBookList[position].id)
                         intent.putExtra("isFav", libraryBookList[position].isFav)
                         startActivity(intent)
