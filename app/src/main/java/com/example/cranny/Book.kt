@@ -1,6 +1,7 @@
 package com.example.cranny
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 
@@ -30,4 +31,4 @@ data class Book(
     var endDate: String?,
     var totalPageCount: Int?,
     var totalPagesRead: Int,
-)
+) : Serializable

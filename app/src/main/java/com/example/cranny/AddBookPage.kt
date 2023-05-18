@@ -61,13 +61,6 @@ class AddBookPage : AppCompatActivity() {
     lateinit var lastPageReadTextView: TextView
     lateinit var lastPageReadInput: EditText
 
-    //added for bookscrape
-    private lateinit var mRequestQueue: RequestQueue
-    private lateinit var bookArrayList: ArrayList<Book>
-    private lateinit var progressBar: ProgressBar
-    private lateinit var searchEdt: EditText
-    private lateinit var searchBtn: ImageButton
-    private lateinit var binding: ActivityMainBinding
 
 
     // Used for view binding
@@ -102,8 +95,8 @@ class AddBookPage : AppCompatActivity() {
 
 
         // binding activity to menu
-        activityAddBookPageBinding = ActivityAddBookPageBinding.inflate(layoutInflater)
-        setContentView(activityAddBookPageBinding.root)
+//        activityAddBookPageBinding = ActivityAddBookPageBinding.inflate(layoutInflater)
+//        setContentView(activityAddBookPageBinding.root)
 
         // Go back to Dashboard Activity
         val btAddBookPage: ImageView = findViewById(R.id.ivBackToMain)
@@ -156,8 +149,10 @@ class AddBookPage : AppCompatActivity() {
         }
 
         titleInput.setOnClickListener {
-            val action = Intent(this, SearchFragment::class.java)
-            startActivity(action)
+            titleInput.setOnClickListener {
+                val searchDialogFragment = SearchFragment()
+                searchDialogFragment.show(supportFragmentManager, "SearchFragment")
+            }
         }
 
     }
@@ -300,7 +295,7 @@ class AddBookPage : AppCompatActivity() {
             val formatter = SimpleDateFormat("MM/dd/yyyy")
             return formatter.format(time)
         } else {
-            val formatter = SimpleDateFormat("MM//dd/yyyy")
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
             val dateInput = formatter.parse(startDate)
             return formatter.format(dateInput)
         }

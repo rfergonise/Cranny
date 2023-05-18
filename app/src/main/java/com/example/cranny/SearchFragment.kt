@@ -7,28 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.cranny.model.BookAdapter
 import com.example.cranny.model.BooksViewModel
-import com.google.firebase.database.FirebaseDatabase
-import org.json.JSONException
-import java.util.*
-import androidx.lifecycle.Observer
+import com.example.cranny.model.BooksViewModelFactory
+import com.example.cranny.model.GoogleBooksRepository
+import com.example.cranny.network.googlebooks.RetrofitInstance
 
-class SearchFragment : Fragment() {
+
+class SearchFragment : DialogFragment() {
 
     private lateinit var searchEdt: EditText
     private lateinit var progressBar: ProgressBar
+    private lateinit var searchBtn: Button
+    private lateinit var bookViewModel: BooksViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,20 @@ class SearchFragment : Fragment() {
         // Initialize views
         progressBar = view.findViewById(R.id.idLoadingPB)
         searchEdt = view.findViewById(R.id.idEdtSearchBooks)
+        searchBtn = view.findViewById(R.id.idBtnSearch)
+
+        // Initialize RecyclerView with an empty adapter
+        val mRecyclerView = view.findViewById<RecyclerView>(R.id.idRVBooks)
+        mRecyclerView.adapter = BookAdapter(emptyList(), requireContext())
+
+        //Initiate layout manager for RV
+        mRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        //Initialize ViewModelProvider.Factory
+        val factory = BooksViewModelFactory()
+
+        //Initialize bookViewModel
+        bookViewModel = ViewModelProvider(this, factory)[BooksViewModel::class.java]
 
         // Handle search operation
         searchEdt.setOnEditorActionListener { v, actionId, _ ->
@@ -63,13 +78,25 @@ class SearchFragment : Fragment() {
             }
             false
         }
+
+        //click listener for search button
+        searchBtn.setOnClickListener {
+            val query = searchEdt.text.toString().trim()
+            if(query.isEmpty()){
+                searchEdt.error = "please enter a book title"
+            }
+            else{
+                progressBar.visibility = View.VISIBLE
+                getBooksInfo(query)
+            }
+
+
+        }
+
+
     }
 
     private fun getBooksInfo(query: String) {
-        //search function for api book scrape
-        // Initialize the book view model
-        val bookViewModel = ViewModelProvider(this).get(BooksViewModel::class.java)
-
         // Observe the search results
         bookViewModel.searchResults.observe(viewLifecycleOwner, Observer { books ->
             progressBar.visibility = View.GONE
@@ -80,22 +107,15 @@ class SearchFragment : Fragment() {
                 return@Observer
             }
 
-            // below line is used to pass our
-            // array list in adapter class.
+            // Update adapter with search results
             val adapter = BookAdapter(books, requireContext())
-
-            // below line is used to add linear layout
-            // manager for our recycler view.
-            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             val mRecyclerView = view?.findViewById<RecyclerView>(R.id.idRVBooks)
-
-            // in below line we are setting layout manager and
-            // adapter to our recycler view.
-            mRecyclerView?.layoutManager = linearLayoutManager
+            mRecyclerView?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             mRecyclerView?.adapter = adapter
         })
 
         // Start the search operation
         bookViewModel.searchBooks(query)
     }
+
 }

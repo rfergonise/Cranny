@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="25dp">
 
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="0dp"
@@ -61,7 +63,18 @@
                 app:srcCompat="@drawable/diskettesmall" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/nestedScrollView"
@@ -111,6 +124,7 @@
                         android:fontFamily="@font/raleway"
                         android:textSize="30sp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                     android:id="@+id/tvDateStarted"

@@ -1,20 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/item_number"
+    <LinearLayout
+        android:id="@+id/idLLsearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <!--edit text for getting the search
+            query for book from user-->
+        <EditText
+            android:id="@+id/idEdtSearchBooks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4" />
+
+        <Button
+            android:id="@+id/idBtnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="0dp"
+            android:text="Search" />
+
+
+        <!--image button for our search button -->
+
+    </LinearLayout>
+
+    <!--recycler view for displaying our list of books-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idRVBooks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/idLLsearch" />
+
+    <!--progressbar for displaying our loading indicator-->
+    <ProgressBar
+        android:id="@+id/idLoadingPB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+</RelativeLayout>

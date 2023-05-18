@@ -3,23 +3,42 @@ package com.example.cranny.model
 import com.google.gson.annotations.SerializedName
 
 data class BookSearchResult(
+    @SerializedName("items")
     val items: List<BookItem>
 )
 
 data class BookItem(
-    val volumeInfo: BookVolumeInfo
+    @SerializedName("volumeInfo")
+    val volumeInfo: BookVolumeInfo,
+
+    @SerializedName("id")
+    val id: String,
 )
 
 data class BookVolumeInfo(
+    @SerializedName("title")
     val title: String,
-    val authors: List<String>,
-    val publisher: String,
-    val publishedDate: String,
-    val description: String,
-    val imageLinks: ImageLinks,
-    val categories: String,
+
+    @SerializedName("authors")
+    val authors: List<String>?,
+
+    @SerializedName("publisher")
+    val publisher: String?,
+
+    @SerializedName("publishedDate")
+    val publishedDate: String?,
+
+    @SerializedName("description")
+    val description: String?,
+
+    @SerializedName("imageLinks")
+    val imageLinks: ImageLinks?,
+
+    @SerializedName("categories")
+    val categories: List<String>?,
 )
 
 data class ImageLinks(
-    val thumbnail: String
+    @SerializedName("thumbnail")
+    val thumbnail: String?
 )

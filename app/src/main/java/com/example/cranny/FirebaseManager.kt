@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.cranny.network.googlebooks.RetrofitInstance
-import com.example.cranny.network.googlebooks.apiKey
+import com.example.cranny.network.googlebooks.GoogleBooksApi
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -575,7 +575,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
 
     //suspend function because network requests take so long, we put it in a suspend function and access in a corusinScope
      suspend fun getBookDetails(id: String): Book? {
-        val response = RetrofitInstance.googleBooksApi.getBookDetails(id, apiKey)
+        val response = RetrofitInstance.googleBooksApi.getBookDetails(id)
         if (response.isSuccessful) {
             val bookDetailsResponse = response.body()
             /*return bookDetailsResponse?.let {
@@ -1015,7 +1015,7 @@ class FriendsLibraryRepository(
                 for (friendSnapshot in friendDataRef.children) {
                     val friendId = friendSnapshot.child("id").value as String
                     val friendUsername = friendSnapshot.child("username").value as String
-                    val isFavorite = friendSnapshot.child("isFavorite").value as Boolean ?: false
+                    val isFavorite = friendSnapshot.child("isFavorite").value as? Boolean ?: false
                     val friendPreferenceRef = dataSnapshot.child(friendId).child("Preferences")
                     val isPrivate = friendPreferenceRef.child("account_private").value as Boolean? ?: false
 
