@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvBooksContainer"
+        android:layout_width="310dp"
+        android:layout_height="120dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Book Slot One -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvBook1"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:layout_gravity="left"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/cranny_book_shadow"
+            app:strokeWidth="3dp">
+
+            <ImageView
+                android:id="@+id/ivBook1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/example_bookcover" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Book Slot Two -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvBook2"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/cranny_book_shadow"
+            app:strokeWidth="3dp">
+
+            <ImageView
+                android:id="@+id/ivBook2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/example_bookcover" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Book Slot Three -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvBook3"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:layout_gravity="right"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="0dp"
+            app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/cranny_book_shadow"
+            app:strokeWidth="3dp">
+
+            <ImageView
+                android:id="@+id/ivBook3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/example_bookcover" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvPrivateBooks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/raleway_custom"
+            android:gravity="center"
+            android:text="uh oh"
+            android:textColor="@color/cranny_darkmode_background"
+            android:textSize="16dp"
+            android:visibility="invisible" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

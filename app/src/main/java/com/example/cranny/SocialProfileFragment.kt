@@ -1,6 +1,8 @@
 package com.example.cranny
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +33,7 @@ class SocialProfileFragment : Fragment() {
     lateinit var cvBookButton: MaterialCardView
     lateinit var cvFriendButton: MaterialCardView
     lateinit var tvNoRecent: TextView
+    lateinit var rvFeed: RecyclerView
 
     // Used to store what will displayed in the user feed
     private val userSocialFeed = ArrayList<SocialFeed>()
@@ -55,6 +59,7 @@ class SocialProfileFragment : Fragment() {
         cvBookButton = fragmentView.findViewById(R.id.cvBookCount)
         cvFriendButton = fragmentView .findViewById(R.id.cvFriendCount)
         tvNoRecent = fragmentView .findViewById(R.id.tvNoRecent)
+        rvFeed = fragmentView.findViewById(R.id.rvSocial)
 
         val friendButton = fragmentView.findViewById<MaterialCardView>(R.id.cvFriendCount)
         friendButton.setOnClickListener{
@@ -63,7 +68,8 @@ class SocialProfileFragment : Fragment() {
         }
 
         // load user data from database into profile text views / image view
-        setUpSocialProfile()
+        //setUpSocialProfile()
+        SetUpProfile()
 
 
         // Book On Click Listener
@@ -74,254 +80,174 @@ class SocialProfileFragment : Fragment() {
 
         return fragmentView
     }
-    /**
-     * Sets up the social profile by fetching user data from the database and updating the UI components.
-     */
-    private fun setUpSocialProfile() {
-        // Get the current user ID
+
+    fun SetUpProfile()
+    {
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-        // Get the instance of the Firebase database
         val database = FirebaseDatabase.getInstance()
+        val context = requireContext()
+        val setupRepo = SetupProfileRepository(database, userId!!, true, context)
+        setupRepo.isProfileReady.observe(requireActivity()) { isProfileReady ->
+            if(isProfileReady)
+            {
+                username = setupRepo.profile.username
+                tvUsername.text = "@${username}"
+                tvBooksCount.text = setupRepo.profile.countBook.toString()
+                tvFriendsCount.text = setupRepo.profile.countFriend.toString()
+                tvDisplayName.text = setupRepo.profile.displayname
+                tvBio.text = setupRepo.profile.bio
 
-        // Create a profile repository instance
-        val profileRepo = ProfileRepository(database, userId!!)
+                // Load the profile picture from the database into the image view
+                val profilePictureRepository = ProfilePictureRepository(database, userId)
+                profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
 
-        // Observe the profile data from the repository
-        profileRepo.profileData.observe(requireActivity()) { userProfile ->
-            // Extract the user information from the profile data
-            username = userProfile.username
-            val name = userProfile.name
-            val friendCount = userProfile.friendCount
-            val bookCount = userProfile.bookCount
-            val bio = userProfile.bio
-            val id = userProfile.userId
+                val countOfThree = setupRepo.profile.books.size / 3
+                val totalBooksMinusTheLoners = countOfThree * 3
+                val countOfLoners = setupRepo.profile.books.size % 3
+                var displayBooks = mutableListOf<ThreeDisplayBooks>()
+                if(countOfThree > 0)
+                {
+                    var j = 0
+                    for (i in 0 until countOfThree)
+                    {
+                        val group = ThreeDisplayBooks(
+                            setupRepo.profile.books[0 + j],
+                            setupRepo.profile.books[1 + j],
+                            setupRepo.profile.books[2 + j],
+                        3)
+                        displayBooks.add(group)
+                        j += 3
+                    }
+                }
 
-            // Update the UI with the retrieved user information
-            tvUsername.text = "@" + username
-            tvBooksCount.text = bookCount.toString()
-            tvFriendsCount.text = friendCount.toString()
-            tvDisplayName.text = name.toString()
-            tvBio.text = bio.toString()
-
-            // Load the profile picture from the database into the image view
-            val profilePictureRepository = ProfilePictureRepository(database, id)
-            profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
-
-            // Set up the favorite friend horizontal layout
-            setUpFavoriteFriendHorizontalLayout(username, id)
-
-            // Set up the user recents
-            setUpUserRecents()
-
-            // Stop listening to profile updates to prevent memory leaks
-            profileRepo.stopProfileListener()
-        }
-    }
-    /**
-     * Sets up the horizontal layout to display favorite friends.
-     *
-     * @param username The username of the current user.
-     * @param id The ID of the current user.
-     */
-    private fun setUpFavoriteFriendHorizontalLayout(username: String, id: String) {
-        // Get the horizontal layout from the XML layout file
-        val horizontalLayout = requireView().findViewById<LinearLayout>(R.id.horizontal_layout)
-
-        // Initialize friend count and get the Firebase database instance
-        var friendCount = 0
-        val database = FirebaseDatabase.getInstance()
-
-        // Create a friend repository instance
-        val friendRepo = FriendRepository(database, username, id, this)
-
-        // Fetch the friends from the repository
-        friendRepo.fetchFriends()
-
-        // Observe the friends ready status
-        friendRepo.isFriendsReady.observe(requireActivity(), Observer { isFriendsReady ->
-            if (isFriendsReady) {
-                // Get the total friend count
-                friendCount = friendRepo.FriendIds.size
-
-                if (friendCount > 0) {
-                    var favoriteCount: Int = 0
-
-                    val context = requireContext()
-                    // Iterate through the friend list
-                    for (i in 0 until friendCount) {
-                        if (friendRepo.FriendIds[i].isFavorite) {
-                            // Create a MaterialCardView for the friend
-                            val cardView = MaterialCardView(context)
-                            val params = LinearLayout.LayoutParams(200, 200)
-                            params.setMargins(16, 8, 16, 8)
-                            cardView.layoutParams = params
-                            cardView.radius = 130F
-                            cardView.strokeWidth = 10
-                            cardView.strokeColor = ContextCompat.getColor(context, R.color.cranny_blue_light)
-                            cardView.cardElevation = 0F
-
-                            // Create an ImageView for the friend's profile picture
-                            val imageView = ImageView(context)
-                            imageView.layoutParams = ViewGroup.LayoutParams(-1, -1)
-                            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-
-                            // todo Set an onClick listener for the friend's profile picture
-
-                            // Load the friend's profile picture from the database into the ImageView
-                            val profilePictureRepository = ProfilePictureRepository(database, friendRepo.FriendIds[i].id)
-                            profilePictureRepository.loadProfilePictureIntoImageView(imageView)
-
-                            // Add the ImageView to the MaterialCardView
-                            cardView.addView(imageView)
-
-                            // Add the MaterialCardView to the horizontal layout
-                            horizontalLayout.addView(cardView)
-
-                            // Increment the favorite count
-                            favoriteCount++
+                if(countOfLoners > 0)
+                {
+                    lateinit var groupLoner: ThreeDisplayBooks
+                    var abort = false
+                    when(countOfLoners)
+                    {
+                        1->
+                        {
+                            groupLoner = ThreeDisplayBooks(
+                                setupRepo.profile.books[totalBooksMinusTheLoners],
+                                setupRepo.profile.books[totalBooksMinusTheLoners], // isnt used
+                                setupRepo.profile.books[totalBooksMinusTheLoners], // isnt used
+                                1)
                         }
+                        2->
+                        {
+                            groupLoner = ThreeDisplayBooks(
+                                setupRepo.profile.books[totalBooksMinusTheLoners],
+                                setupRepo.profile.books[totalBooksMinusTheLoners + 1],
+                                setupRepo.profile.books[totalBooksMinusTheLoners], // isnt used
+                                2)
+                        }
+                        else-> abort = true
                     }
-
-                    if (favoriteCount == 0) {
-                        // Show the "No Favorites" text view if no favorites are available
-                        val showText: TextView = fragmentView.findViewById(R.id.tvNoFavorites)
-                        showText.visibility = View.VISIBLE
-                    }
-                } else {
-                    // Show the "No Favorites" text view if no friends are available
-                    val showText: TextView = fragmentView.findViewById(R.id.tvNoFavorites)
-                    showText.visibility = View.VISIBLE
-                }
-            }
-        })
-
-        // Stop listening to friend updates to prevent memory leaks
-        friendRepo.stopFriendListener()
-    }
-    /**
-     * Sets up the user's recent book activity.
-     */
-    private fun setUpUserRecents() {
-        // Get the Firebase database instance
-        val database = FirebaseDatabase.getInstance()
-
-        // Create a book repository instance
-        val bookRepository = BookRepository(database, Friend(userId, username, false))
-
-        // Fetch the book data from the repository
-        bookRepository.fetchBookData()
-
-        // Observe the book data ready status
-        bookRepository.isBookDataReady.observe(requireActivity(), Observer { isBookDataReady ->
-            if (isBookDataReady) {
-                // Clear the list before adding items
-                userSocialFeed.clear()
-
-                // Iterate through each book in the book repository
-                for (book in bookRepository.Library) {
-                    val bookId = book.id
-                    val bookAuthors = book.authorNames
-                    val bookTitle = book.title
-
-                    // Format the book title to fit in the RecyclerView
-                    val setTitle: String = formatBookTitle(bookTitle, 14)
-
-                    val isBookComplete = book.userFinished
-
-                    // Create the book status message
-                    var setStatus: String = "@" + username
-                    if (book.userFinished) {
-                        setStatus += "\nFinished reading!"
-                    } else {
-                        setStatus += "\nRead "
-                        setStatus += book.prevReadCount.toString()
-                        if (book.prevReadCount != 1) setStatus += " pages."
-                        else setStatus += " page."
-                    }
-                    val status = setStatus
-
-                    val bookCoverURL = book.thumbnail
-                    val dateRead = book.lastReadDate
-                    val timeRead = book.lastReadTime
-
-                    // Create a social feed object
-                    val socialFeed = SocialFeed(
-                        bookId,
-                        setTitle,
-                        bookAuthors!!,
-                        isBookComplete,
-                        status,
-                        bookCoverURL!!,
-                        dateRead!!,
-                        timeRead!!,
-                        username,
-                        book.mainCharacters!!,
-                        book.journalEntry!!,
-                        book.purchasedFrom!!,
-                        book.genres!!,
-                        book.tags!!,
-                        book.starRating!!,
-                        book.totalPageCount!!,
-                        book.totalPagesRead!!
-                    )
-
-                    // Check if the social feed is already in the list before adding it
-                    if (!userSocialFeed.contains(socialFeed)) {
-                        userSocialFeed.add(socialFeed)
-                    }
+                    if(!abort) displayBooks.add(groupLoner)
                 }
 
-                val rvSocial: RecyclerView = fragmentView.findViewById(R.id.rvSocial)
-
-                if (userSocialFeed.isNotEmpty()) {
-                    // Show the RecyclerView if the user's social feed is not empty
-                    tvNoRecent.visibility = View.INVISIBLE
-                    rvSocial.visibility = View.VISIBLE
-
-                    // Sort the social feeds by descending last read time
-                    val sortedFeeds: MutableList<SocialFeed> =
-                        userSocialFeed.sortedByDescending { it.lastReadTime }.toMutableList()
-
-                    // Stop listening to book updates to prevent memory leaks
-                    bookRepository.stopBookListener()
-
-                    // Set up the adapter for the RecyclerView
-                    val context = requireContext()
-                    //val adapter = SocialFeedRecyclerViewAdapter(requireActivity() as AppCompatActivity, context, sortedFeeds)
-                    rvSocial.layoutManager = LinearLayoutManager(context)
-                    //.adapter = adapter
-                    //adapter.notifyDataSetChanged() // Notify the adapter that the data set has changed
-                } else {
-                    // Show the "No Recent Activity" text view if the user's social feed is empty
+                if(countOfThree == 0 && countOfLoners == 0)
+                {
+                    rvFeed.visibility = View.INVISIBLE
                     tvNoRecent.visibility = View.VISIBLE
-                    rvSocial.visibility = View.INVISIBLE
+                }
+                else
+                {
+                    rvFeed.visibility = View.VISIBLE
+                    tvNoRecent.visibility = View.INVISIBLE
+                    var data = ProfileAdapterData(userId, username, displayBooks, setupRepo.profile.iPriv, true)
+                    // set up recycle view
+                    rvFeed.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    rvFeed.setHasFixedSize(true)
+                    rvFeed.adapter = ProfileFragmentAdapter(
+                        requireActivity() as DashboardActivity,
+                        context,
+                        data,
+                        database,
+                        resources
+                    )
                 }
             }
-        })
-    }
-    /**
-     * Formats the book title to fit within a specified length and adds a line break if necessary.
-     *
-     * @param title The book title to format.
-     * @param formatLength The desired length to format the title.
-     * @return The formatted book title.
-     */
-    private fun formatBookTitle(title: String, formatLength: Int): String {
-        return if (title.length > formatLength) {
-            // Find the last space before or at the specified length
-            var replaceThisSpace: Int = title.substring(0, formatLength).lastIndexOf(' ')
-
-            if (replaceThisSpace <= 0) {
-                // No space found before the specified length, replace at the specified length - 1
-                replaceThisSpace = formatLength - 1
-            }
-
-            // Add a line break at the space position
-            title.substring(0, replaceThisSpace) + "\n" + title.substring(replaceThisSpace + 1)
-        } else {
-            title // Return the original title if it doesn't need formatting
         }
+    }
+
+}
+
+class ProfileFragmentAdapter(private val activity: DashboardActivity, val context: Context, private val data: ProfileAdapterData,
+                            private var database: FirebaseDatabase, private var resource: Resources
+): RecyclerView.Adapter<ProfileFragmentAdapter.MyViewHolder>()
+{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        // Inflate the layout for each item
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.adapter_profile, parent, false)
+
+        // Create and return a new ViewHolder with the inflated layout
+        return MyViewHolder(itemView)
+    }
+    override fun getItemCount(): Int {
+        return data.bookGrouping.size
+    }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        // todo load book covers
+        SetUpBooks(holder, data.bookGrouping[position])
+    }
+
+    private fun SetUpBooks(holder: MyViewHolder, books: ThreeDisplayBooks)
+    {
+        holder.mcvBookButton1.visibility = View.INVISIBLE
+        holder.mcvBookButton2.visibility = View.INVISIBLE
+        holder.mcvBookButton3.visibility = View.INVISIBLE
+        if(!data.isPriv || data.isOwner)
+        {
+            // they got a public profile or it's the owner's profile
+            when (books.count) {
+                1 -> {
+                    // show book container
+                    holder.mcvBookButton1.visibility = View.VISIBLE
+                    StartBookOnClick(books.book1, holder.mcvBookButton1)
+                }
+                2 -> {
+                    // show book containers
+                    holder.mcvBookButton1.visibility = View.VISIBLE
+                    holder.mcvBookButton2.visibility = View.VISIBLE
+                    StartBookOnClick(books.book1, holder.mcvBookButton1)
+                    StartBookOnClick(books.book2, holder.mcvBookButton2)
+                }
+                3 -> {
+                    // show book containers
+                    holder.mcvBookButton1.visibility = View.VISIBLE
+                    holder.mcvBookButton2.visibility = View.VISIBLE
+                    holder.mcvBookButton3.visibility = View.VISIBLE
+                    StartBookOnClick(books.book1, holder.mcvBookButton1)
+                    StartBookOnClick(books.book2, holder.mcvBookButton2)
+                    StartBookOnClick(books.book3, holder.mcvBookButton3)
+                }
+                else -> {
+                    // you should not be here, how did you get here?? \_(x_x)_/
+                    // you'll know you're here if nothing shows up in the book container
+                }
+            }
+        }
+
+    }
+    private fun StartBookOnClick(book: DisplayFeedBookInfo, button: MaterialCardView)
+    {
+        button.setOnClickListener {
+            val showBookPopUp = ImprovedDisplayFeedBookInfoFragment.newInstance(book)
+            showBookPopUp.show(activity.supportFragmentManager, "showPopUp")
+        }
+    }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // Initialize the views in the item view
+        val ivBook1 = itemView.findViewById<ImageView>(R.id.ivBook1)
+        val ivBook2 = itemView.findViewById<ImageView>(R.id.ivBook2)
+        val ivBook3 = itemView.findViewById<ImageView>(R.id.ivBook3)
+
+        val mcvBookButton1 = itemView.findViewById<MaterialCardView>(R.id.mcvBook1)
+        val mcvBookButton2 = itemView.findViewById<MaterialCardView>(R.id.mcvBook2)
+        val mcvBookButton3 = itemView.findViewById<MaterialCardView>(R.id.mcvBook3)
+
     }
 
 }

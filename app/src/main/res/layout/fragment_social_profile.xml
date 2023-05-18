@@ -264,95 +264,37 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Favorite Friends -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvBorder2"
-            app:cardElevation="0dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/cranny_purple_dark"
-            app:cardBackgroundColor="@color/cranny_darkmode_foreground">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="0dp"
-                app:strokeWidth="0dp">
-
-                <TextView
-                    android:id="@+id/tvNoFavorites"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/raleway_custom"
-                    android:text="See your favorite friends here"
-                    android:textColor="@color/cranny_blue_light"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/horizontalScrollView" />
-
-                <HorizontalScrollView
-                    android:id="@+id/horizontalScrollView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:id="@+id/horizontal_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-
-                    </LinearLayout>
-
-                </HorizontalScrollView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
         <!-- Recent Read Feed -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvFeed"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvFeed"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvBorder2"
+        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeWidth="5dp">
+
+        <TextView
+            android:id="@+id/tvNoRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/raleway_custom"
+            android:text="See your shared books here"
+            android:textColor="@color/cranny_blue_light" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSocial"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvFavorites"
-            app:strokeColor="@color/cranny_purple_dark"
-            app:strokeWidth="5dp"
-            app:cardBackgroundColor="@color/cranny_darkmode_foreground">
+            android:layout_height="match_parent" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvNoRecent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See your shared books here"
-                android:textColor="@color/cranny_blue_light"
-                android:fontFamily="@font/raleway_custom"
-                android:layout_gravity="center"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSocial"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.card.MaterialCardView>
-
+    <!-- Swipe Indicators -->
     <ImageView
         android:id="@+id/ivSwipeLeft"
         android:layout_width="wrap_content"
@@ -363,7 +305,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </ImageView>
-
     <ImageView
         android:id="@+id/ivSwipeRight"
         android:layout_width="wrap_content"

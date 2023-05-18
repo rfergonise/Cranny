@@ -1091,6 +1091,92 @@ class FriendsLibraryRepository(
     }
 }
 
+class SetupProfileRepository(
+    private val database: FirebaseDatabase,
+    private val profileUserId: String,
+    private val isOwner: Boolean,
+    private val context: Context
+) {
+    public lateinit var profile: ProfileData
+    private val _isProfileReady = MutableLiveData<Boolean>()
+    val isProfileReady: LiveData<Boolean>
+        get() = _isProfileReady
+    private var listener: ValueEventListener? = null
+
+    init {
+        fetchFriendLibraryData()
+    }
+
+    fun fetchFriendLibraryData() {
+        val userDataRef = database.getReference("UserData")
+        _isProfileReady.value = false // Inform the caller that the FriendLibraryData list is not ready
+
+        userDataRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val userSnapshot = dataSnapshot.child(profileUserId) // Fetch the user's snapshot using the provided userIdThatHasFriends
+                val profileDataRef = userSnapshot.child("Profile")
+                val username = profileDataRef.child("Username").value as String
+                val displayName = profileDataRef.child("Name").value as String
+                val bio = profileDataRef.child("Bio").value as String
+                val lCountFriends = profileDataRef.child("FriendCount").value as Long
+                val countFriends = lCountFriends.toInt()
+                val lCountBooks = profileDataRef.child("BookCount").value as Long
+                val countBooks = lCountBooks.toInt()
+
+                val prefDataRef = userSnapshot.child("Preferences")
+                val isPriv = prefDataRef.child("account_private").value as Boolean
+
+                val bookDataRef = userSnapshot.child("Books")
+                var books = mutableListOf<DisplayFeedBookInfo>()
+                for(child in bookDataRef.children)
+                {
+                    val title = child.child("Title").value as String
+                    val author = child.child("AuthorNames").value as String
+                    val coverURL = child.child("Thumbnail").value as String
+                    val lReadPages = child.child("TotalPageRead").value as Long
+                    val readPages = lReadPages.toInt()
+                    val lTotalPages = child.child("TotalPageCount").value as Long
+                    val totalPages = lTotalPages.toInt()
+                    val nTotalReadChapters = 1 // todo remove hard coded values for chapter
+                    val nCountChapter = 3
+                    val mainCharacters = child.child("MainCharacters").value as String
+                    val genres = child.child("Genres").value as String
+                    val tags = child.child("Tags").value as String
+                    val summary = child.child("Description").value as String
+                    val purchasedFrom = child.child("PurchaseFrom").value as String
+                    val dRating = child.child("StarRating").value as Double
+                    val rating = dRating.toFloat()
+                    val isFinished = child.child("UserFinished").value as Boolean
+                    val lastReadTime = child.child("LastReadTime").value as Long
+                    val book = DisplayFeedBookInfo(
+                        username,
+                        title,
+                        author,
+                        coverURL,
+                        readPages,
+                        totalPages,
+                        nTotalReadChapters,
+                        nCountChapter,
+                        mainCharacters,
+                        genres,
+                        tags,
+                        rating,
+                        purchasedFrom,
+                        lastReadTime,
+                        summary
+                    )
+                    books.add(book)
+                }
+                profile = ProfileData(profileUserId, username, displayName, bio, countFriends, countBooks, isPriv, isOwner, books)
+                _isProfileReady.value = true
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle the error
+            }
+        })
+    }
+}
+
 
 
 
