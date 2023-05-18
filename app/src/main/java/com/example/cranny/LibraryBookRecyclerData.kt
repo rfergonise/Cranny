@@ -1,8 +1,5 @@
 package com.example.cranny
 
-import android.support.annotation.DrawableRes
-import androidx.room.PrimaryKey
-
 data class LibraryBookRecyclerData(
     val bookID: String,
     var bookTitle: String,
@@ -25,6 +22,6 @@ data class LibraryBookRecyclerData(
     var bookPrevReadCount: Int?,
     var bookStartDate: String,
     var bookEndDate: String?,
-    var totalPagesRead: Int,
+    var bookPagesRead: Int,
     var username: String
 )

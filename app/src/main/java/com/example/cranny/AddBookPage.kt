@@ -6,22 +6,13 @@ import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 
-import com.example.cranny.databinding.ActivityAddBookPageBinding
-import com.example.cranny.databinding.ActivityLibraryBinding
-
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
-import kotlin.random.Random
-import com.example.cranny.bookSuggestionAdapter
-import com.example.cranny.BookRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,9 +33,9 @@ class AddBookPage : AppCompatActivity() {
     lateinit var genresInput : TextInputLayout
     lateinit var tagsInput : TextInputLayout
     lateinit var ratingsInput : RatingBar
+    lateinit var menuBTN : ImageButton
     lateinit var cancelBottomBTN : Button
     lateinit var saveBottomBTN : Button
-    lateinit var cancelTopBTN : ImageButton
     lateinit var saveTopBTN : ImageButton
     lateinit var finishedCB : CheckBox
     lateinit var dateFinishedTextView : TextView
@@ -53,7 +44,7 @@ class AddBookPage : AppCompatActivity() {
     lateinit var lastPageReadInput : EditText
 
     // Used for view binding
-    lateinit var activityAddBookPageBinding: ActivityAddBookPageBinding
+    //lateinit var activityAddBookPageBinding: ActivityAddBookPageBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,34 +52,35 @@ class AddBookPage : AppCompatActivity() {
         setContentView(R.layout.activity_add_book_page)
 
 
-         titleInput = findViewById<EditText>(R.id.etTitleInput)
-         dataStartedInput = findViewById<TextView>(R.id.tvDateStarted)
-         authorInput = findViewById<EditText>(R.id.etAuthorInput)
-         summaryInput = findViewById<EditText>(R.id.etSummaryInput)
-         purchasedFromInput = findViewById<EditText>(R.id.etPurchasedFrom)
-         reviewInput = findViewById<EditText>(R.id.etReview)
-         publisherInput = findViewById<EditText>(R.id.etPublisherInput)
-         publicationDateInput = findViewById<EditText>(R.id.etnPublicationDateInput)
-         mainCharactersInput = findViewById<EditText>(R.id.etMainCharactersInput)
-         genresInput = findViewById<TextInputLayout>(R.id.tiGenres)
-         tagsInput = findViewById<TextInputLayout>(R.id.tiTags)
-         ratingsInput = findViewById<RatingBar>(R.id.ratingBar)
-         cancelBottomBTN = findViewById<Button>(R.id.btnCancel)
-         saveBottomBTN = findViewById<Button>(R.id.btnSave)
-         saveTopBTN = findViewById<ImageButton>(R.id.ibSaveButton)
-         finishedCB = findViewById<CheckBox>(R.id.cbFinished)
-         dateFinishedTextView = findViewById<TextView>(R.id.tvDateFinished)
-         dateFinishedInput = findViewById<EditText>(R.id.etDateFinished)
-         lastPageReadTextView = findViewById<TextView>(R.id.tvPageRead)
-         lastPageReadInput = findViewById<EditText>(R.id.tnPageNumber)
+         titleInput = findViewById(R.id.etTitleInput)
+         dataStartedInput = findViewById(R.id.tdStarted)
+         authorInput = findViewById(R.id.etAuthorInput)
+         summaryInput = findViewById(R.id.etSummaryInput)
+         purchasedFromInput = findViewById(R.id.etPurchasedFrom)
+         reviewInput = findViewById(R.id.etReview)
+         publisherInput = findViewById(R.id.etPublisherInput)
+         publicationDateInput = findViewById(R.id.etnPublicationDateInput)
+         mainCharactersInput = findViewById(R.id.etMainCharactersInput)
+         genresInput = findViewById(R.id.tiGenres)
+         tagsInput = findViewById(R.id.tiTags)
+         ratingsInput = findViewById(R.id.ratingBar)
+         menuBTN = findViewById(R.id.ibMenuButton)
+         cancelBottomBTN = findViewById(R.id.btnCancel)
+         saveBottomBTN = findViewById(R.id.btnSave)
+         saveTopBTN = findViewById(R.id.ibSaveButton)
+         finishedCB = findViewById(R.id.cbFinished)
+         dateFinishedTextView = findViewById(R.id.tvDateFinished)
+         dateFinishedInput = findViewById(R.id.etDateFinished)
+         lastPageReadTextView = findViewById(R.id.tvPageRead)
+         lastPageReadInput = findViewById(R.id.tnPageNumber)
 
 
         // binding activity to menu
-        activityAddBookPageBinding = ActivityAddBookPageBinding.inflate(layoutInflater)
-        setContentView(activityAddBookPageBinding.root)
+        //activityAddBookPageBinding = ActivityAddBookPageBinding.inflate(layoutInflater)
+        //setContentView(activityAddBookPageBinding.root)
 
         // Go back to Dashboard Activity
-        val btAddBookPage : ImageView = findViewById(R.id.ivBackToMain)
+        val btAddBookPage : ImageView = menuBTN
         btAddBookPage.setOnClickListener {
             val i = Intent(this, DashboardActivity::class.java)
             startActivity(i)
@@ -107,8 +99,8 @@ class AddBookPage : AppCompatActivity() {
             } else {
                 dateFinishedTextView.visibility = View.GONE //changed from view.invisible to view.gone which makes any unused areas disappear altogether rather than go invisible, which is better performance
                 dateFinishedInput.visibility = View.GONE
-                lastPageReadTextView.visibility = View.GONE
-                lastPageReadInput.visibility = View.GONE
+                lastPageReadTextView.visibility = View.VISIBLE
+                lastPageReadInput.visibility = View.VISIBLE
             }
         }
 
@@ -116,6 +108,7 @@ class AddBookPage : AppCompatActivity() {
         val bookSuggestionAdapter = bookSuggestionAdapter(this, mutableListOf(), AdapterView.OnItemClickListener { parent, view, position, id ->
             //boodSuggestionAdapter Body
         })
+
         saveBottomBTN.setOnClickListener {
             saveNewBook()
         }
@@ -124,10 +117,10 @@ class AddBookPage : AppCompatActivity() {
             saveNewBook()
         }
 
-        saveTopBTN.setOnClickListener {
-            saveNewBook()
-        }
-
+        //menuBTN.setOnClickListener {
+           // val intent = Intent(this, LibraryActivity::class.java)
+           // startActivity(intent)
+       // }
 
         cancelBottomBTN.setOnClickListener {
             val intent = Intent(this, LibraryActivity::class.java)
@@ -147,13 +140,6 @@ class AddBookPage : AppCompatActivity() {
             val tags = editText2?.text.toString()
 
 
-
-            val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
-                lastPageReadInput.text.toString().toInt()
-            } else {
-                0 // or any other default value you want to use
-            }
-
             val bookSuggestionAdapter = bookSuggestionAdapter(this, mutableListOf(), AdapterView.OnItemClickListener { parent, view, position, id ->
                 //boodSuggestionAdapter Body
             })
@@ -171,21 +157,35 @@ class AddBookPage : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
 
                         val totalPageCount: Int = 400 // todo change to total page count from api
-                        val lastPageRead = if (lastPageReadInput.text.isNotEmpty()) {
-                            lastPageReadInput.text.toString().toInt()
+
+                        //this didn't seem to be working
+                        var lastPageRead: Int
+                        try {
+                            lastPageRead = setPageRead(lastPageReadInput.toString().toInt())
+                        } catch (e: NumberFormatException) {
+                            // Handle the exception here (e.g., show an error message, provide a default value)
+                            lastPageRead = 0 // Default value if conversion fails
+                        }
+
+                        val inputText = lastPageReadInput.text.toString().trim()
+                        val totalPagesRead = if (inputText.isNotBlank()) {
+                            val parsedValue = inputText.toIntOrNull()
+                            parsedValue?.let {
+                                setPageRead(it)
+                            } ?: 0
                         } else {
-                            0 // or any other default value you want to use
+                            0
                         }
 
                         val newBook = Book(
                             id = UUID.randomUUID().toString(),
                             title = titleInput.text.toString(),
                             authorNames = authorInput.text.toString(),
-                            publicationDate = publicationDateInput.text.toString(),
+                            publicationDate = setPublicationDate(publicationDateInput.text.toString()),
                             starRating = ratingsInput.rating.toString().toFloat(),
                             publisher = publisherInput.text.toString(),
                             description = summaryInput.text.toString(),
-                            pageCount = setPageRead(lastPageReadInput.text.toString()),
+                            pageCount = totalPagesRead,
                             thumbnail = " ",
                             journalEntry = reviewInput.text.toString(),
                             userProgress = 0,
@@ -201,7 +201,7 @@ class AddBookPage : AppCompatActivity() {
                             lastReadTime = currentMillis,
                             isFav = false,
                             totalPageCount = totalPageCount,
-                            totalPagesRead = setPageRead(lastPageRead.toString())
+                            totalPagesRead = totalPagesRead
 
                             //totalPagesRead = lastPageReadInput.text.toString().toInt()
                         )
@@ -218,13 +218,14 @@ class AddBookPage : AppCompatActivity() {
                                     val status = if (newBook.userFinished) {
                                         "@$username Finished Reading!"
                                     }
-                                    else if(lastPageRead > 1)
+                                    else if(totalPagesRead > 1)
                                     {
-                                        "@$username Read $lastPageRead pages."
+                                        //changed lastPageRead to totalPagesRead to try to get accurate page count
+                                        "@$username Read $totalPagesRead pages."
                                     }
                                     else
                                     {
-                                        "@$username Read $lastPageRead page."
+                                        "@$username Read $totalPagesRead page."
                                     }
                                     recentRepository.addRecent(SocialFeed(newBook.id, newBook.title, newBook.authorNames!!, newBook.userFinished,
                                         status, newBook.thumbnail!!, newBook.lastReadDate!!, newBook.lastReadTime!!, username, newBook.mainCharacters!!,
@@ -261,30 +262,46 @@ class AddBookPage : AppCompatActivity() {
         }
     }
 
+    // If user doesn't input a date, it will autofill with the current date
     private fun setFinishedDate(finishedDate: String): String {
         val finishedCB = findViewById<CheckBox>(R.id.cbFinished)
         val userFinished = finishedCB.isChecked
 
-        if (userFinished){
+        if (userFinished) {
             if (finishedDate.isNullOrEmpty()) {
-                val time = 0
+                val time = Calendar.getInstance().time
                 val formatter = SimpleDateFormat("MM/dd/yyyy")
                 return formatter.format(time)
             } else {
-                val formatter = SimpleDateFormat("MM/dd/yyyy")
-                val dateInput = formatter.parse(finishedDate)
-                return formatter.format(dateInput)
+                val formatter = SimpleDateFormat("MMddyyyy")
+                val dateInput = formatter.parse(dateFinishedInput.text.toString())
+                val formattedDate = SimpleDateFormat("MM/dd/yyyy").format(dateInput)
+                return formattedDate
             }
-        } else
+        }
+
+        // Return an empty string if userFinished is false
+        return ""
+    }
+
+    // Format publication date or return blank
+    private fun setPublicationDate(publicationDate: String): String {
+        if (publicationDate.isNotEmpty()) {
+            val formatter = SimpleDateFormat("MMddyyyy")
+            val dateInput = formatter.parse(publicationDateInput.text.toString())
+            val formattedDate = SimpleDateFormat("MM/dd/yyyy").format(dateInput)
+            return formattedDate
+        } else {
             return ""
+        }
     }
 
     // If user doesn't input last page read, it will default to 0
-    private fun setPageRead(pageRead: String): Int {
-        return if (pageRead.isNullOrEmpty()) {
-            0
+    private fun setPageRead(pageRead: Int): Int {
+        if (pageRead > 0) {
+            return pageRead
         } else {
-            pageRead.toInt()
+            return 0
         }
     }
 

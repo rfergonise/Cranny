@@ -1015,7 +1015,7 @@ class FriendsLibraryRepository(
                 for (friendSnapshot in friendDataRef.children) {
                     val friendId = friendSnapshot.child("id").value as String
                     val friendUsername = friendSnapshot.child("username").value as String
-                    val isFavorite = friendSnapshot.child("isFavorite").value as Boolean ?: false
+                    val isFavorite = friendSnapshot.child("isFavorite").value as? Boolean ?: false
                     val friendPreferenceRef = dataSnapshot.child(friendId).child("Preferences")
                     val isPrivate = friendPreferenceRef.child("account_private").value as Boolean? ?: false
 
