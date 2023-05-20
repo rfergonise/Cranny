@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 
 import androidx.lifecycle.Observer
+import com.example.cranny.databinding.ActivityAddBookPageBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -83,10 +84,6 @@ class AddBookPage : AppCompatActivity() {
             startActivity(i)
         }
 
-        // Random number generator for book IDs
-        val randNum: String = UUID.randomUUID()
-            .toString() //creates a new universal unique identifier for the books ID. this way there is no chance of 2 books getting the same ID
-
         // Hide Data Finished or Last Page Read based on finished checkbox
         finishedCB.setOnCheckedChangeListener { buttonView, isChecked ->
             if (finishedCB.isChecked) {
@@ -141,16 +138,17 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
-        //menuBTN.setOnClickListener {
-        // val intent = Intent(this, LibraryActivity::class.java)
-        // startActivity(intent)
-        // }
+        menuBTN.setOnClickListener {
+         val intent = Intent(this, LibraryActivity::class.java)
+         startActivity(intent)
+         }
 
-        cancelBottomBTN.setOnClickListener {
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
-
-        }
+        //replaced with menu button
+//        cancelBottomBTN.setOnClickListener {
+//            val intent = Intent(this, LibraryActivity::class.java)
+//            startActivity(intent)
+//
+//        }
 
     }
 
@@ -188,13 +186,13 @@ class AddBookPage : AppCompatActivity() {
                         val totalPageCount: Int = 400 // todo change to total page count from api
 
                         //this didn't seem to be working
-                        var lastPageRead: Int
-                        try {
-                            lastPageRead = setPageRead(lastPageReadInput.toString().toInt())
-                        } catch (e: NumberFormatException) {
-                            // Handle the exception here (e.g., show an error message, provide a default value)
-                            lastPageRead = 0 // Default value if conversion fails
-                        }
+//                        var lastPageRead: Int
+//                        try {
+//                            lastPageRead = setPageRead(lastPageReadInput.toString().toInt())
+//                        } catch (e: NumberFormatException) {
+//                            // Handle the exception here (e.g., show an error message, provide a default value)
+//                            lastPageRead = 0 // Default value if conversion fails
+//                        }
 
                         val inputText = lastPageReadInput.text.toString().trim()
                         val totalPagesReadInput = if (inputText.isNotBlank()) {
@@ -518,7 +516,7 @@ class AddBookPage : AppCompatActivity() {
 
                             if (titleCheck == books.title && authorCheck == books.authorNames) {
                                 bookExists = true
-                                break  // Exit the loop if a match is found
+                                break
                             }
                         }
                     }
@@ -526,10 +524,8 @@ class AddBookPage : AppCompatActivity() {
 
                 bookRepository.stopBookListener()
 
-                // Perform actions after the loop if necessary
                 if (bookExists) {
                     // Book already exists in the library
-                    // Perform additional actions if needed
                     Toast.makeText(
                         applicationContext,
                         "Book already in library",
@@ -537,7 +533,6 @@ class AddBookPage : AppCompatActivity() {
                     ).show()
                 } else {
                     // Book doesn't exist in the library
-                    // Perform additional actions if needed
                     saveNewBook()
                 }
 
