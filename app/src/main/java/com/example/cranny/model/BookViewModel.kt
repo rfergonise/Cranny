@@ -40,7 +40,7 @@ class BooksViewModel(private val bookRepository: BookRepository) : ViewModel() {
                     Book(
                         id = volume.id,
                         title = volumeInfo.title,
-                        authorNames = volumeInfo.authors?.joinToString(", "),
+                        authorNames = volumeInfo.authors!!.joinToString(", "),
                         publicationDate = "",
                         starRating = 0f,
                         publisher = volumeInfo.publisher,

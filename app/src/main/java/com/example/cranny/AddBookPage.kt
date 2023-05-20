@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.compose.ui.text.toLowerCase
+import androidx.compose.ui.text.toUpperCase
 
 import androidx.lifecycle.Observer
 import com.example.cranny.databinding.ActivityAddBookPageBinding
@@ -206,11 +208,11 @@ class AddBookPage : AppCompatActivity() {
 
                         val newBook = Book(
                             id = UUID.randomUUID().toString(),
-                            title = titleInput.text.toString(),
-                            authorNames = authorInput.text.toString(),
+                            title = capitalizeEachWord(titleInput.text.toString()),
+                            authorNames = capitalizeEachWord(authorInput.text.toString()),
                             publicationDate = setPublicationDate(publicationDateInput.text.toString()),
                             starRating = ratingsInput.rating.toString().toFloat(),
-                            publisher = publisherInput.text.toString(),
+                            publisher = capitalizeEachWord(publisherInput.text.toString()),
                             description = summaryInput.text.toString(),
                             pageCount = totalPagesReadInput,
                             thumbnail = " ",
@@ -220,7 +222,7 @@ class AddBookPage : AppCompatActivity() {
                             startDate = setStartDate(dataStartedInput.text.toString()),
                             endDate = setFinishedDate(dateFinishedInput.text.toString()),
                             prevReadCount = 0,
-                            purchasedFrom = purchasedFromInput.text.toString(),
+                            purchasedFrom = capitalizeEachWord(purchasedFromInput.text.toString()),
                             mainCharacters = mainCharactersInput.text.toString(),
                             genres = genres,
                             tags = tags,
@@ -303,6 +305,17 @@ class AddBookPage : AppCompatActivity() {
             Toast.makeText(applicationContext, "Fill out required text fields", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    //Goes through string and capitalizes the first letter of each word
+    fun capitalizeEachWord(input: String): String {
+        val words = input.split(" ")
+        val capitalizedWords = words.map { it.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        } }
+        return capitalizedWords.joinToString(" ")
     }
 
     // If user doesn't input a date, it will autofill with the current date
@@ -514,7 +527,7 @@ class AddBookPage : AppCompatActivity() {
                                 )
                             )
 
-                            if (titleCheck == books.title && authorCheck == books.authorNames) {
+                            if (titleCheck.lowercase() == books.title.lowercase() && authorCheck.lowercase() == books.authorNames.lowercase()) {
                                 bookExists = true
                                 break
                             }

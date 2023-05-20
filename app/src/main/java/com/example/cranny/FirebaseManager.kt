@@ -609,7 +609,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
             return Book(
                 id = UUID.randomUUID().toString(),
                 title = bookDetailsResponse?.volumeInfo?.title!!,
-                authorNames = bookDetailsResponse?.volumeInfo?.authors?.toString(),
+                authorNames = bookDetailsResponse?.volumeInfo?.authors.toString(),
                 publicationDate = bookDetailsResponse?.volumeInfo?.publishedDate,
                 starRating = 0f,
                 publisher = bookDetailsResponse?.volumeInfo?.publisher,

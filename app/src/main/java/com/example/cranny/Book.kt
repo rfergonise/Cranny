@@ -8,7 +8,7 @@ import java.util.*
 data class Book(
     @PrimaryKey val id: String,
     var title: String,
-    var authorNames: String?,
+    var authorNames: String,
     var publicationDate: String?,
     var starRating: Float?,
     var publisher: String?,
