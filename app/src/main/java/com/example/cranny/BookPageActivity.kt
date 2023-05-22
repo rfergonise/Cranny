@@ -127,7 +127,8 @@ class BookPageActivity : AppCompatActivity() {
             startDate.toString(),
             "",
             0,
-            0
+            0,
+            isbn = "isbn"
         )
 
         ibFavorite.setOnClickListener {

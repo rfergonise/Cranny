@@ -20,8 +20,8 @@
             <!--Image view for displaying our book image-->
             <ImageView
                 android:id="@+id/idIVbook"
-                android:layout_width="130dp"
-                android:layout_height="160dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="18dp" />
 
             <LinearLayout
@@ -116,6 +116,13 @@
                 android:layout_weight="1"
                 android:text="Add"
                 android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/idBtnBack"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Back" />
 
         </LinearLayout>
     </LinearLayout>

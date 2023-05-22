@@ -261,7 +261,7 @@ class SocialProfileFragment : Fragment() {
                         book.purchasedFrom!!,
                         book.genres!!,
                         book.tags!!,
-                        book.starRating!!,
+                        book.starRating ?: 0f,
                         book.totalPageCount!!,
                         book.totalPagesRead!!
                     )

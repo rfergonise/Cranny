@@ -36,9 +36,23 @@ data class BookVolumeInfo(
 
     @SerializedName("categories")
     val categories: List<String>?,
+
+    @SerializedName("industryIdentifiers")
+    val industryIdentifiers: List<IndustryIdentifier>?,
+
+    @SerializedName("pageCount")
+    val pageCount: Int?
 )
 
 data class ImageLinks(
     @SerializedName("thumbnail")
     val thumbnail: String?
+)
+
+data class IndustryIdentifier(
+    @SerializedName("type")
+    val type: String,
+
+    @SerializedName("identifier")
+    val identifier: String
 )

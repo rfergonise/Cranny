@@ -147,7 +147,7 @@ class AddBookPage : AppCompatActivity() {
             startActivity(intent)
 
         }
-
+//Start of the search Fragment
         titleInput.setOnClickListener {
             titleInput.setOnClickListener {
                 val searchDialogFragment = SearchFragment()
@@ -212,7 +212,8 @@ class AddBookPage : AppCompatActivity() {
                             lastReadTime = currentMillis,
                             isFav = false,
                             totalPageCount = totalPageCount,
-                            totalPagesRead = lastPageReadInput.text.toString().toInt()
+                            totalPagesRead = lastPageReadInput.text.toString().toInt(),
+                            isbn = ""
                         )
                         val bookRepository =
                             BookRepository(database, Friend(currentUser!!.uid, username, false))

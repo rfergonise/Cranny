@@ -454,10 +454,12 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
                     val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int ?: 0
                     val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int ?: 0
+                    val ISBN = bookSnapshot.child("ISBN").value as? String ?: ""
+
 
                     var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingFloat, Publisher, Description, pageCountInt, Thumbnail,
                     JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
-                    PrevReadCountInt, StartDate, EndDate, TotalPageCount!!, TotalPageRead!!)
+                    PrevReadCountInt, StartDate, EndDate, TotalPageCount!!, TotalPageRead!!, ISBN)
                     Library.add(book)
                 }
                 _isBookDataReady.postValue(true) // inform the caller we have filled the list with each book
@@ -497,6 +499,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookData["UserFinished"] = book.userFinished
         bookData["UserProgress"] = book.userProgress!!.toInt()
         bookData["IsFavorite"] = book.isFav!!
+        bookData["ISBN"] = book.isbn.toString()
+
         //val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int
         //val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int
 
@@ -531,6 +535,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
         bookDataRef.child(book.id).child("TotalPageCount").setValue(book.totalPageCount)
         bookDataRef.child(book.id).child("TotalPageRead").setValue(book.totalPagesRead)
+        bookDataRef.child(book.id).child("ISBN").setValue(book.isbn)
 
         // update user's book count
         val userProfileRepo = ProfileRepository(database, user.id)
@@ -606,6 +611,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     totalPagesRead = 0
                 )
             }*/
+            val isbn = bookDetailsResponse?.volumeInfo?.industryIdentifiers?.find { it.type == "ISBN_13" }?.identifier
             return Book(
                 id = UUID.randomUUID().toString(),
                 title = bookDetailsResponse?.volumeInfo?.title!!,
@@ -630,7 +636,8 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                 lastReadTime = 0,
                 isFav = false,
                 totalPageCount = 0,
-                totalPagesRead = 0
+                totalPagesRead = 0,
+                        isbn = isbn,
             )
         }
         return null

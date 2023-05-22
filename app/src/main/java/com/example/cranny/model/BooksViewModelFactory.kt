@@ -2,8 +2,8 @@ package com.example.cranny.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.cranny.model.GoogleBooksRepository
 import com.example.cranny.network.googlebooks.RetrofitInstance
-import com.example.cranny.BookRepository
 
 class BooksViewModelFactory : ViewModelProvider.Factory {
 
