@@ -52,8 +52,12 @@ class SocialFriendFragment : Fragment() {
         mcvFavFilterButton = fragmentView.findViewById(R.id.mcvFavoriteFilterButton)
         ivFavIcon = fragmentView.findViewById(R.id.ivFavFilterButton)
 
-
-        getFriendsLibraryData()
+        val database = FirebaseDatabase.getInstance()
+        val profileRepo = ProfileRepository(database, FirebaseAuth.getInstance().uid!!)
+        profileRepo.profileData.observe(viewLifecycleOwner, Observer { userProfile ->
+            getFriendsLibraryData(Friend(userProfile.userId, userProfile.username, false))
+        })
+        profileRepo.stopProfileListener()
 
         return fragmentView
     }
@@ -69,9 +73,9 @@ class SocialFriendFragment : Fragment() {
         return filteredList
     }
 
-    private fun getFriendsLibraryData() {
+    private fun getFriendsLibraryData(user: Friend) {
         val database = FirebaseDatabase.getInstance()
-        val userId = FirebaseAuth.getInstance().uid!! // Get the current user's ID
+        val userId = user.id // Get the current user's ID
         val repoFriendLibraryData = FriendsLibraryRepository(database, userId, requireContext())
 
         // Observe the profile data changes
@@ -112,11 +116,12 @@ class SocialFriendFragment : Fragment() {
                         requireContext(),
                         mlFriendDisplayData,
                         database,
-                        resources
+                        resources,
+                        user
                     )
-                    allowSearch(mlFriendDisplayData, database)
-                    allowClear(mlFriendDisplayData, database)
-                    allowFavoriteFilter(mlFriendDisplayData, database)
+                    allowSearch(mlFriendDisplayData, database, user)
+                    allowClear(mlFriendDisplayData, database, user)
+                    allowFavoriteFilter(mlFriendDisplayData, database, user)
                 }
                 else tvNoSocialFeed.visibility = View.VISIBLE
 
@@ -124,7 +129,7 @@ class SocialFriendFragment : Fragment() {
         })
     }
 
-    private fun allowSearch(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+    private fun allowSearch(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase, user: Friend) {
         mcvSearchButton.setOnClickListener {
             val strUserTheySearchedFor = etSearchBar.text.toString()
             if (etSearchBar.text.isNotBlank()) {
@@ -138,7 +143,8 @@ class SocialFriendFragment : Fragment() {
                     requireContext(),
                     mlFilteredList,
                     database,
-                    resources
+                    resources,
+                    user
                 )
 
                 rvFriendFeed.adapter?.notifyDataSetChanged()
@@ -148,7 +154,7 @@ class SocialFriendFragment : Fragment() {
         }
     }
 
-    private fun allowFavoriteFilter(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+    private fun allowFavoriteFilter(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase, user: Friend) {
         mcvFavFilterButton.setOnClickListener {
 
             if(!isShowingFavorite)
@@ -166,7 +172,8 @@ class SocialFriendFragment : Fragment() {
                         requireContext(),
                         mlFilteredList,
                         database,
-                        resources
+                        resources,
+                        user
                     )
                     rvFriendFeed.adapter?.notifyDataSetChanged()
                     isShowingFavorite = true
@@ -186,7 +193,8 @@ class SocialFriendFragment : Fragment() {
                     requireContext(),
                     mlAvailableUsersToAdd,
                     database,
-                    resources
+                    resources,
+                    user
                 )
                 rvFriendFeed.adapter?.notifyDataSetChanged()
                 isShowingFavorite = false
@@ -195,7 +203,7 @@ class SocialFriendFragment : Fragment() {
         }
     }
 
-    private fun allowClear(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase) {
+    private fun allowClear(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase, user: Friend) {
         mcvClearButton.setOnClickListener {
 
             etSearchBar.text.clear()
@@ -205,15 +213,16 @@ class SocialFriendFragment : Fragment() {
                 requireContext(),
                 mlAvailableUsersToAdd,
                 database,
-                resources
+                resources,
+                user
             )
         }
     }
 }
 
 class FriendFragmentAdapter(private val activity: DashboardActivity,private val owner: LifecycleOwner, val context: Context, private val mlFriends: MutableList<FriendAdapterData>,
-                              private var database: FirebaseDatabase, private var resource: Resources
-): RecyclerView.Adapter<FriendFragmentAdapter.MyViewHolder>()
+                              private var database: FirebaseDatabase, private var resource: Resources, private val user: Friend
+): RecyclerView.Adapter<FriendFragmentAdapter.MyViewHolder>(), SocialFriendProfileFragment.DialogListener
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         // Inflate the layout for each item
@@ -225,14 +234,19 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
     override fun getItemCount(): Int {
         return mlFriends.size
     }
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val usernameText = "@${mlFriends[position].username}"
         holder.tvUsername.text = usernameText // load username
         val profilePictureRepository = ProfilePictureRepository(database, mlFriends[position].id)
         profilePictureRepository.loadProfilePictureIntoImageView(holder.ivProfilePicture) // load profile picture
 
-        // todo load book covers
-        // todo start friend profile click listener
+        holder.mcvFriendProfileButton.setOnClickListener {
+            val showFriendProfile = SocialFriendProfileFragment.newInstance(mlFriends[position], user)
+            showFriendProfile.setDialogListener(this) // Set the listener to the calling activity or fragment
+            showFriendProfile.show(activity.supportFragmentManager, "showPopUp")
+
+        }
 
         SetUpBooks(usernameText,mlFriends[position].isPrivateProfile ,mlFriends[position].mlBooksToDisplay, holder)
         if (position == mlFriends.size - 1)
@@ -244,6 +258,21 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
             val bottomMarginPx = (bottomMarginDp * density).toInt()
             layoutParams.bottomMargin = bottomMarginPx
             holder.mcvFriendBox.layoutParams = layoutParams
+        }
+    }
+    override fun onDialogClosed(result: Friend) {
+        if (result.isFavorite == true) {
+            // we removed the friend
+            // remove the friend from mlFriends and update the recycler view
+            val iterator = mlFriends.iterator()
+            while (iterator.hasNext()) {
+                val friend = iterator.next()
+                if (friend.id == result.id) {
+                    iterator.remove()
+                    notifyDataSetChanged() // Notify the adapter that the list has changed
+                    break
+                }
+            }
         }
     }
 

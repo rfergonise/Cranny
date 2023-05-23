@@ -13,10 +13,7 @@ import com.example.cranny.network.googlebooks.apiKey
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import java.util.*
@@ -331,30 +328,51 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
     fun removeFriend(friend: Friend) {
 
         // remove the friend from the user's friend list
-        val userDataRef = database.getReference("UserData").child(id).child("Friends").child(friend.id)
-        userDataRef.removeValue()
+        val userFriendDataRef = database.getReference("UserData").child(id).child("Friends").child(friend.id)
+        userFriendDataRef.removeValue()
 
-        // update the user's friend count
-        val userProfileRepo = ProfileRepository(database, id)
-        userProfileRepo.profileData.observe(owner) { userProfile ->
-            var friendCount = userProfile.friendCount
-            friendCount--
-            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, friendCount, userProfile.bookCount)
-            userProfileRepo.stopProfileListener()
-        }
-
+        val userDataRef = database.getReference("UserData").child(id).child("Profile").child("FriendCount")
+        userDataRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val currentValue = currentData.getValue(Int::class.java) ?: 0
+                currentData.value = currentValue - 1
+                return Transaction.success(currentData)
+            }
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                if (error != null) {
+                    // Handle the error
+                } else {
+                    // The value has been increased by 1
+                }
+            }
+        })
         // remove the user from the friend's friend list
         val friendDataRef = database.getReference("UserData").child(friend.id).child("Friends").child(id)
         friendDataRef.removeValue()
 
-        // update the friend's friend count
-        val friendProfileRepo = ProfileRepository(database, friend.id)
-        friendProfileRepo.profileData.observe(owner) { friendProfile ->
-            var friendCount = friendProfile.friendCount
-            friendCount--
-            friendProfileRepo.updateProfileData(friendProfile.username, friendProfile.name, friendProfile.userId, friendProfile.bio, friendCount, friendProfile.bookCount)
-            friendProfileRepo.stopProfileListener()
-        }
+        val friendFriendDataRef = database.getReference("UserData").child(friend.id).child("Profile").child("FriendCount")
+        friendFriendDataRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val currentValue = currentData.getValue(Int::class.java) ?: 0
+                currentData.value = currentValue - 1
+                return Transaction.success(currentData)
+            }
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                if (error != null) {
+                    // Handle the error
+                } else {
+                    // The value has been increased by 1
+                }
+            }
+        })
 
     }
 
@@ -1124,7 +1142,7 @@ class SetupProfileRepository(
                 val countBooks = lCountBooks.toInt()
 
                 val prefDataRef = userSnapshot.child("Preferences")
-                val isPriv = prefDataRef.child("account_private").value as Boolean
+                val isPriv = (prefDataRef.child("account_private").value as? Boolean) ?: false
 
                 val bookDataRef = userSnapshot.child("Books")
                 var books = mutableListOf<DisplayFeedBookInfo>()
@@ -1144,8 +1162,12 @@ class SetupProfileRepository(
                     val tags = child.child("Tags").value as String
                     val summary = child.child("Description").value as String
                     val purchasedFrom = child.child("PurchaseFrom").value as String
-                    val dRating = child.child("StarRating").value as Double
-                    val rating = dRating.toFloat()
+                    val ratingValue = child.child("StarRating").value
+                    val rating = when (ratingValue) {
+                        is Float -> ratingValue
+                        is Double -> ratingValue.toFloat()
+                        else -> 0f // Set a default value here, or choose a suitable fallback value
+                    }
                     val isFinished = child.child("UserFinished").value as Boolean
                     val lastReadTime = child.child("LastReadTime").value as Long
                     val book = DisplayFeedBookInfo(

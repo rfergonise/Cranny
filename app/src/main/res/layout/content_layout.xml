@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_weight="1"
-        android:background="@color/cranny_darkmode_background"
+        android:background="@color/cSocial_background"
         android:contentDescription="ViewPager content description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

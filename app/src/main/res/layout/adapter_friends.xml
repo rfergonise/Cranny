@@ -10,9 +10,9 @@
         android:id="@+id/mcvFriendBox"
         android:layout_width="334dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+        app:cardBackgroundColor="@color/cFriend_adapter_background"
         app:strokeWidth="1dp"
-        app:strokeColor="@color/white"
+        app:strokeColor="@color/cFriend_adapter_stroke"
         app:cardElevation="0dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -25,7 +25,7 @@
             android:id="@+id/mcvFriendProfileButton"
             android:layout_width="310dp"
             android:layout_height="90dp"
-            app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+            app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
             android:layout_marginTop="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -36,12 +36,12 @@
                 android:id="@+id/cvPFPBorder"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+                app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
                 app:cardCornerRadius="65dp"
                 android:layout_marginStart="7.55dp"
                 android:layout_marginTop="7.5dp"
                 android:layout_marginBottom="7.5dp"
-                app:strokeColor="@color/cranny_purple_blue"
+                app:strokeColor="@color/cFriend_adapter_pfp_stroke"
                 app:strokeWidth="5dp">
 
                 <ImageView
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginStart="100dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+                app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
                 app:cardElevation="0dp">
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/raleway_custom"
                     android:text="\@123456789123456"
-                    android:textColor="@color/white"
+                    android:textColor="@color/cFriend_adapter_username_text"
                     android:textSize="20dp" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -81,7 +81,7 @@
             android:id="@+id/mcvBooksContainer"
             android:layout_width="310dp"
             android:layout_height="230dp"
-            app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+            app:cardBackgroundColor="@color/cFriend_adapter_books_background"
             android:layout_marginTop="112dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -94,13 +94,13 @@
                 android:layout_height="100dp"
                 app:cardCornerRadius="10dp"
                 android:layout_gravity="left"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="22dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook1"
@@ -118,13 +118,13 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="0dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="55dp"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook2"
@@ -141,14 +141,14 @@
                 android:layout_width="75dp"
                 android:layout_height="100dp"
                 app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="0dp"
                 android:layout_gravity="right"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook3"
@@ -166,13 +166,13 @@
                 android:layout_height="100dp"
                 app:cardCornerRadius="10dp"
                 android:layout_gravity="left"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="120dp"
                 android:layout_marginStart="22dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook4"
@@ -190,13 +190,13 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="55dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook5"
@@ -213,14 +213,14 @@
                 android:layout_width="75dp"
                 android:layout_height="100dp"
                 app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_foreground"
+                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
                 android:layout_marginTop="120dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="0dp"
                 android:layout_gravity="right"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_book_shadow">
+                app:strokeColor="@color/cFriend_adapter_books_stroke">
 
                 <ImageView
                     android:id="@+id/ivBook6"
@@ -239,7 +239,7 @@
                 android:fontFamily="@font/raleway_custom"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/cranny_darkmode_background"
+                android:textColor="@color/cFriend_adapter_inform_text"
                 android:visibility="invisible"/>
 
 
