@@ -13,10 +13,7 @@ import com.example.cranny.network.googlebooks.apiKey
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import java.util.*
@@ -331,30 +328,51 @@ class FriendRepository(private val database: FirebaseDatabase, private val usern
     fun removeFriend(friend: Friend) {
 
         // remove the friend from the user's friend list
-        val userDataRef = database.getReference("UserData").child(id).child("Friends").child(friend.id)
-        userDataRef.removeValue()
+        val userFriendDataRef = database.getReference("UserData").child(id).child("Friends").child(friend.id)
+        userFriendDataRef.removeValue()
 
-        // update the user's friend count
-        val userProfileRepo = ProfileRepository(database, id)
-        userProfileRepo.profileData.observe(owner) { userProfile ->
-            var friendCount = userProfile.friendCount
-            friendCount--
-            userProfileRepo.updateProfileData(userProfile.username, userProfile.name, userProfile.userId, userProfile.bio, friendCount, userProfile.bookCount)
-            userProfileRepo.stopProfileListener()
-        }
-
+        val userDataRef = database.getReference("UserData").child(id).child("Profile").child("FriendCount")
+        userDataRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val currentValue = currentData.getValue(Int::class.java) ?: 0
+                currentData.value = currentValue - 1
+                return Transaction.success(currentData)
+            }
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                if (error != null) {
+                    // Handle the error
+                } else {
+                    // The value has been increased by 1
+                }
+            }
+        })
         // remove the user from the friend's friend list
         val friendDataRef = database.getReference("UserData").child(friend.id).child("Friends").child(id)
         friendDataRef.removeValue()
 
-        // update the friend's friend count
-        val friendProfileRepo = ProfileRepository(database, friend.id)
-        friendProfileRepo.profileData.observe(owner) { friendProfile ->
-            var friendCount = friendProfile.friendCount
-            friendCount--
-            friendProfileRepo.updateProfileData(friendProfile.username, friendProfile.name, friendProfile.userId, friendProfile.bio, friendCount, friendProfile.bookCount)
-            friendProfileRepo.stopProfileListener()
-        }
+        val friendFriendDataRef = database.getReference("UserData").child(friend.id).child("Profile").child("FriendCount")
+        friendFriendDataRef.runTransaction(object : Transaction.Handler {
+            override fun doTransaction(currentData: MutableData): Transaction.Result {
+                val currentValue = currentData.getValue(Int::class.java) ?: 0
+                currentData.value = currentValue - 1
+                return Transaction.success(currentData)
+            }
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                currentData: DataSnapshot?
+            ) {
+                if (error != null) {
+                    // Handle the error
+                } else {
+                    // The value has been increased by 1
+                }
+            }
+        })
 
     }
 
@@ -1084,6 +1102,96 @@ class FriendsLibraryRepository(
                 }
             }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle the error
+            }
+        })
+    }
+}
+
+class SetupProfileRepository(
+    private val database: FirebaseDatabase,
+    private val profileUserId: String,
+    private val isOwner: Boolean,
+    private val context: Context
+) {
+    public lateinit var profile: ProfileData
+    private val _isProfileReady = MutableLiveData<Boolean>()
+    val isProfileReady: LiveData<Boolean>
+        get() = _isProfileReady
+    private var listener: ValueEventListener? = null
+
+    init {
+        fetchFriendLibraryData()
+    }
+
+    fun fetchFriendLibraryData() {
+        val userDataRef = database.getReference("UserData")
+        _isProfileReady.value = false // Inform the caller that the FriendLibraryData list is not ready
+
+        userDataRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val userSnapshot = dataSnapshot.child(profileUserId) // Fetch the user's snapshot using the provided userIdThatHasFriends
+                val profileDataRef = userSnapshot.child("Profile")
+                val username = profileDataRef.child("Username").value as String
+                val displayName = profileDataRef.child("Name").value as String
+                val bio = profileDataRef.child("Bio").value as String
+                val lCountFriends = profileDataRef.child("FriendCount").value as Long
+                val countFriends = lCountFriends.toInt()
+                val lCountBooks = profileDataRef.child("BookCount").value as Long
+                val countBooks = lCountBooks.toInt()
+
+                val prefDataRef = userSnapshot.child("Preferences")
+                val isPriv = (prefDataRef.child("account_private").value as? Boolean) ?: false
+
+                val bookDataRef = userSnapshot.child("Books")
+                var books = mutableListOf<DisplayFeedBookInfo>()
+                for(child in bookDataRef.children)
+                {
+                    val title = child.child("Title").value as String
+                    val author = child.child("AuthorNames").value as String
+                    val coverURL = child.child("Thumbnail").value as String
+                    val lReadPages = child.child("TotalPageRead").value as Long
+                    val readPages = lReadPages.toInt()
+                    val lTotalPages = child.child("TotalPageCount").value as Long
+                    val totalPages = lTotalPages.toInt()
+                    val nTotalReadChapters = 1 // todo remove hard coded values for chapter
+                    val nCountChapter = 3
+                    val mainCharacters = child.child("MainCharacters").value as String
+                    val genres = child.child("Genres").value as String
+                    val tags = child.child("Tags").value as String
+                    val summary = child.child("Description").value as String
+                    val purchasedFrom = child.child("PurchaseFrom").value as String
+                    val ratingValue = child.child("StarRating").value
+                    val rating = when (ratingValue) {
+                        is Float -> ratingValue
+                        is Double -> ratingValue.toFloat()
+                        else -> 0f // Set a default value here, or choose a suitable fallback value
+                    }
+                    val isFinished = child.child("UserFinished").value as Boolean
+                    val lastReadTime = child.child("LastReadTime").value as Long
+                    val book = DisplayFeedBookInfo(
+                        username,
+                        title,
+                        author,
+                        coverURL,
+                        readPages,
+                        totalPages,
+                        nTotalReadChapters,
+                        nCountChapter,
+                        mainCharacters,
+                        genres,
+                        tags,
+                        rating,
+                        purchasedFrom,
+                        lastReadTime,
+                        summary
+                    )
+                    books.add(book)
+                }
+                profile = ProfileData(profileUserId, username, displayName, bio, countFriends, countBooks, isPriv, isOwner, books)
+                _isProfileReady.value = true
+            }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Handle the error
             }
