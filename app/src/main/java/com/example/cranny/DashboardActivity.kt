@@ -46,7 +46,7 @@ class DashboardActivity : DrawerBaseActivity() {
         setContentView(activityDashboardBinding.root)
 
         // title attached to toolbar
-        allocateActivityTitle("Dashboard")
+        allocateActivityTitle(" ")
 
         viewPager = findViewById<ViewPager>(R.id.viewPager)
 

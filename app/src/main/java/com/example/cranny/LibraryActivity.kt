@@ -26,11 +26,19 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
         getLibraryRecyclerData()
 
         // Go back to Main Activity until menu is created
-        val menuBTN = findViewById<Button>(R.id.btLibraryActivity)
+        //This doesn't work
+//        val menuBTN = findViewById<Button>(R.id.btLibraryActivityold)
+//        menuBTN.setOnClickListener {
+//            val intent = Intent(this, DashboardActivity::class.java)
+//            startActivity(intent)
+//        }
+
+        val menuBTN = findViewById<Button>(R.id.btLibraryActivityold)
         menuBTN.setOnClickListener {
-            val intent = Intent(this, DashboardActivity::class.java)
+            val intent = Intent(this, SocialFeed::class.java)
             startActivity(intent)
         }
+
 
         // Floating add book button, goes to Add Book Page
         val addBookBTN = findViewById<FloatingActionButton>(R.id.fbAddBook)

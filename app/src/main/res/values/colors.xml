@@ -27,5 +27,11 @@
     <!-- test colors -->
     <color name="cranny_seashell">#ffeee5</color>
     <color name="cranny_english_violet">#493657</color>
+    <color name="cranny_mid_green">#5a6e5a</color>
+    <color name="cranny_gold">#a4900c</color>
+    <color name="cranny_bone">#E4D8C5</color>
+    <color name="cranny_brown">#78603F</color>
+    <color name="cranny_dark_green">#1D2E24</color>
+    <color name="cranny_mid_brown">#7C7447</color>
 
 </resources>

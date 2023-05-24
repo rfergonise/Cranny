@@ -20,7 +20,6 @@
             android:id="@+id/collapsingToolbarLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
@@ -39,18 +38,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/ibMenuButton"
+                android:id="@+id/ibLibraryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/menu"
+                android:padding="2dp"
                 android:scaleX="2"
                 android:scaleY="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_home_24" />
+                app:srcCompat="@drawable/baseline_library_books_24"
+                app:tint="@color/cranny_gold" />
 
             <ImageButton
                 android:id="@+id/ibSaveButton"
@@ -59,10 +60,15 @@
                 android:layout_marginEnd="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/save"
+                android:shadowColor="#000000"
+                android:shadowDx="0.5"
+                android:shadowDy="0.5"
+                android:shadowRadius="10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/diskettesmall" />
+                app:srcCompat="@drawable/diskettesmall"
+                app:tint="@color/cranny_gold" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -80,6 +86,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cranny_bone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -450,6 +457,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="@string/rating"
+                    android:progressTint="@color/cranny_english_violet"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiTags" />
 
@@ -477,20 +485,23 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/raleway_custom"
                     android:text="@string/save"
-                    android:textSize="15sp"
+                    android:textColor="@color/cranny_gold"
+                    android:textColorHighlight="#00FFFFFF"
+                    android:textSize="20sp"
                     app:cornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
                 <Button
                     android:id="@+id/btnCancel"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="57dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/raleway_custom"
                     android:text="@string/cancel"
-                    android:textSize="15sp"
+                    android:textColor="@color/cranny_gold"
+                    android:textSize="20sp"
                     app:cornerRadius="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
@@ -504,6 +515,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="24dp"
                     android:background="#00FFFFFF"
+                    android:contentDescription="@string/search"
                     app:layout_constraintBottom_toTopOf="@+id/tdStarted"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tiTitleInput"

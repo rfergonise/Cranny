@@ -7,11 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.compose.ui.text.toLowerCase
-import androidx.compose.ui.text.toUpperCase
 
 import androidx.lifecycle.Observer
-import com.example.cranny.databinding.ActivityAddBookPageBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -64,7 +61,7 @@ class AddBookPage : AppCompatActivity() {
         genresInput = findViewById(R.id.tiGenres)
         tagsInput = findViewById(R.id.tiTags)
         ratingsInput = findViewById(R.id.ratingBar)
-        menuBTN = findViewById(R.id.ibMenuButton)
+        menuBTN = findViewById(R.id.ibLibraryButton)
         cancelBottomBTN = findViewById(R.id.btnCancel)
         saveBottomBTN = findViewById(R.id.btnSave)
         saveTopBTN = findViewById(R.id.ibSaveButton)
@@ -145,12 +142,11 @@ class AddBookPage : AppCompatActivity() {
          startActivity(intent)
          }
 
-        //replaced with menu button
-//        cancelBottomBTN.setOnClickListener {
-//            val intent = Intent(this, LibraryActivity::class.java)
-//            startActivity(intent)
-//
-//        }
+        cancelBottomBTN.setOnClickListener {
+            val intent = Intent(this, LibraryActivity::class.java)
+            startActivity(intent)
+
+        }
 
     }
 

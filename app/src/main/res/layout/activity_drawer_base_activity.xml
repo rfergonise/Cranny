@@ -4,27 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DrawerBaseActivity"
+    android:background="@color/cranny_bone"
 
-    tools:openDrawer="start"
     android:fitsSystemWindows="true"
-    >
+    tools:context=".DrawerBaseActivity"
+    tools:openDrawer="start">
 
-    <include layout="@layout/content_layout"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
-    
+    <include
+        layout="@layout/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_gravity="start"
-        android:id="@+id/nav_view"
+        android:background="@color/cranny_bone"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/main_drawer_header"
         app:menu="@menu/main_drawer_menu" />
-
-
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
