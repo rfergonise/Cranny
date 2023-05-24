@@ -24,4 +24,8 @@
     <color name="cranny_progress_finished">#0DA633</color>
     <color name="cranny_book_shadow">#8280c6</color>
 
+    <!-- test colors -->
+    <color name="cranny_seashell">#ffeee5</color>
+    <color name="cranny_english_violet">#493657</color>
+
 </resources>
