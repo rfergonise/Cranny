@@ -7,10 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +23,7 @@ class SearchFragment : DialogFragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var searchBtn: Button
     private lateinit var bookViewModel: BooksViewModel
+    private lateinit var backButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +38,8 @@ class SearchFragment : DialogFragment() {
         progressBar = view.findViewById(R.id.idLoadingPB)
         searchEdt = view.findViewById(R.id.idEdtSearchBooks)
         searchBtn = view.findViewById(R.id.idBtnSearch)
+        backButton = view.findViewById(R.id.idBtnBack)
+
 
         val mRecyclerView = view.findViewById<RecyclerView>(R.id.idRVBooks)
         mRecyclerView.adapter = BookAdapter(emptyList(), requireContext())
@@ -74,6 +74,10 @@ class SearchFragment : DialogFragment() {
                 progressBar.visibility = View.VISIBLE
                 getBooksInfo(query)
             }
+        }
+
+        backButton.setOnClickListener {
+            requireActivity().finish()
         }
     }
 

@@ -1158,9 +1158,9 @@ class SetupProfileRepository(
                     val title = child.child("Title").value as String
                     val author = child.child("AuthorNames").value as String
                     val coverURL = child.child("Thumbnail").value as String
-                    val lReadPages = child.child("TotalPageRead").value as Long
+                    val lReadPages = child.child("TotalPageRead").value as? Long ?: 0L
                     val readPages = lReadPages.toInt()
-                    val lTotalPages = child.child("TotalPageCount").value as Long
+                    val lTotalPages = child.child("TotalPageCount").value as? Long ?: 0L
                     val totalPages = lTotalPages.toInt()
                     val nTotalReadChapters = 1 // todo remove hard coded values for chapter
                     val nCountChapter = 3
@@ -1205,7 +1205,6 @@ class SetupProfileRepository(
         })
     }
 }
-
 
 
 

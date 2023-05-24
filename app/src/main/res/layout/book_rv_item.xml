@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/idIVbook"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
+            android:layout_width="128dp"
+            android:layout_height="200dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"

@@ -55,6 +55,8 @@ class BookDetails : AppCompatActivity() {
             descriptionTV.text = book.description
             pageCountTV.text = book.pageCount.toString()
             publishDateTV.text = book.publicationDate
+
+
             Picasso.get().load(book.thumbnail).into(bookIV)
 
         }
@@ -71,8 +73,21 @@ class BookDetails : AppCompatActivity() {
             addBtn.setOnClickListener { view: View ->
                 val book = intent.getSerializableExtra("book") as Book?
                 if (book != null) {
+                    book.totalPagesRead = 0
+                    book.starRating = 0f
+                    book.journalEntry = ""
+                    book.userFinished = false
+                    book.userProgress = 0
+                    book.isFav = false
+                    book.tags = ""
+                    book.lastReadTime = 0
+                    book.lastReadDate = 0
+                    book.startDate = ""
+                    book.purchasedFrom = ""
+                    book.totalPageCount = 0
 
-                    //creates a book and places it in the users library
+
+                    //Saves the created book and places it in the users library
                     val username: String? = profileRepo.profileData.value?.username
                     val user: Friend = Friend(userId, username as String, false)
                     val bookRepository = BookRepository(database, user)

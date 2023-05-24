@@ -63,7 +63,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.starRating,
                                     books.publisher,
                                     books.description,
-                                    books.prevReadCount,
+                                    books.pageCount,
                                     books.thumbnail,
                                     books.journalEntry,
                                     books.userFinished,
@@ -78,7 +78,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.startDate,
                                     books.endDate,
                                     books.totalPagesRead,
-                                    username
+                                    username,
                                 )
                             )}
                             libraryRecycler.adapter =
