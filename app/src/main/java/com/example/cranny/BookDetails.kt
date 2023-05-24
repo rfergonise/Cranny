@@ -56,6 +56,7 @@ class BookDetails : AppCompatActivity() {
             pageCountTV.text = book.pageCount.toString()
             publishDateTV.text = book.publicationDate
             Picasso.get().load(book.thumbnail).into(bookIV)
+
         }
 
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -94,4 +95,5 @@ class BookDetails : AppCompatActivity() {
             finish()
         }
     }
+
 }

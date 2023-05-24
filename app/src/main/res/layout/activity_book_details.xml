@@ -20,8 +20,8 @@
             <!--Image view for displaying our book image-->
             <ImageView
                 android:id="@+id/idIVbook"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="128dp"
+                android:layout_height="200dp"
                 android:layout_margin="18dp" />
 
             <LinearLayout
