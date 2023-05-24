@@ -40,11 +40,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/ivBackToMain"
-                android:layout_width="52dp"
-                android:layout_height="43dp"
-                android:layout_marginEnd="39dp"
+            <ImageButton
+                android:id="@+id/ibMenuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/menu"
+                android:scaleX="2"
+                android:scaleY="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -101,23 +105,21 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tiTitleInput"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="395dp"
+                    android:layout_width="330dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:elevation="10dp"
                     android:hint="@string/BookTitle"
                     app:errorEnabled="false"
                     app:helperText="Required"
                     app:helperTextTextColor="#830101"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTitleInput"
-                        android:layout_width="395dp"
+                        android:layout_width="330dp"
                         android:layout_height="wrap_content"
                         android:background="#6AFFFFFF"
                         android:backgroundTint="#283C3C3C"
@@ -506,6 +508,21 @@
                     app:cornerRadius="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="52dp"
+                    android:layout_height="54dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="#00FFFFFF"
+                    app:layout_constraintBottom_toTopOf="@+id/tdStarted"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tiTitleInput"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/searchsmall" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

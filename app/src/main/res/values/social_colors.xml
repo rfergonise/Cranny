@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Background -->
+    <color name="cSocial_background">#4D4A8C</color>
+
+    <!-- Book Display Info -->
+    <color name="cBookDisplay_background">#4D4A8C</color>
+    <color name="cBookDisplay_stroke">#CFD3FC</color>
+    <color name="cBookDisplay_text">#FFFFFF</color>
+    <color name="cBookDisplay_book_stroke">#CFD3FC</color>
+    <color name="cBookDisplay_dividers">#FFFFFF</color>
+    <color name="cBookDisplay_rating_fill">#9B97E8</color>
+    <color name="cBookDisplay_rating_background">#4D4A8C</color>
+    <color name="cBookDisplay_adapter_background">#202540</color>
+    <color name="cBookDisplay_adapter_text">#CFD3FC</color>
+    <color name="cBookDisplay_progressbar_fill_finished">#0DA633</color>
+    <color name="cBookDisplay_progressbar_fill_unfinished">#9B97E8</color>
+    <color name="cBookDisplay_progressbar_stroke">#202540</color>
+
+    <!-- Request Fragment -->
+    <color name="cRequest_button_background">#202540</color>
+    <color name="cRequest_button_stroke">#c392ca</color>
+    <color name="cRequest_searchbar_background">#ACF2F2</color>
+    <color name="cRequest_searchbar_text">#000000</color>
+    <color name="cRequest_recyclerview_background">#202540</color>
+    <color name="cRequest_recyclerview_stroke">#c392ca</color>
+    <color name="cRequest_inform_text">#ACF2F2</color>
+
+    <color name="cRequest_adapter_background">#4D4A8C</color>
+    <color name="cRequest_adapter_stroke">#FFFFFF</color>
+    <color name="cRequest_adapter_username_text">#FFFFFF</color>
+    <color name="cRequest_adapter_pfp_stroke">#CFD3FC</color>
+    <color name="cRequest_adapter_button_background">#4D4A8C</color>
+    <color name="cRequest_adapter_button_stroke">#CFD3FC</color>
+    <color name="cRequest_adapter_button_text">#FFFFFF</color>
+
+    <!-- Profile Fragment -->
+    <color name="cProfile_background">#4D4A8C</color>
+    <color name="cProfile_text_letters">#E2C8E6</color>
+    <color name="cProfile_text_numbers">#CFD3FC</color>
+    <color name="cProfile_pfp_stroke">#c392ca</color>
+    <color name="cProfile_boxes_stroke">#c392ca</color>
+    <color name="cProfile_boxes_background">#202540</color>
+    <color name="cProfile_bio_text">#CFD3FC</color>
+    <color name="cProfile_inform_text">#ACF2F2</color>
+    <color name="cProfile_adapter_book_stroke">#8280c6</color>
+
+    <!-- Friends Fragment -->
+    <color name="cFriend_searchbar_background">#ACF2F2</color>
+    <color name="cFriend_searchbar_text">#000000</color>
+    <color name="cFriend_button_stroke">#c392ca</color>
+    <color name="cFriend_button_background">#202540</color>
+    <color name="cFriend_bar_stroke">#c392ca</color>
+    <color name="cFriend_bar_background">#4D4A8C</color>
+    <color name="cFriend_recycleview_background">#4D4A8C</color>
+    <color name="cFriend_inform_text">#000000</color>
+
+    <color name="cFriend_adapter_background">#4D4A8C</color>
+    <color name="cFriend_adapter_stroke">#FFFFFF</color>
+    <color name="cFriend_adapter_profile_button_background">#4D4A8C</color>
+    <color name="cFriend_adapter_pfp_stroke">#CFD3FC</color>
+    <color name="cFriend_adapter_username_text">#FFFFFF</color>
+    <color name="cFriend_adapter_books_background">#9B97E8</color>
+    <color name="cFriend_adapter_books_stroke">#8280c6</color>
+    <color name="cFriend_adapter_inform_text">#4D4A8C</color>
+
+    <color name="cFriend_profile_manage_button_text">#E2C8E6</color>
+    <color name="cFriend_profile_manage_button_background">#202540</color>
+    <color name="cFriend_profile_manage_button_stroke">#c392ca</color>
+    <color name="cFriend_manage_background">#202540</color>
+    <color name="cFriend_manage_stroke">#CFD3FC</color>
+    <color name="cFriend_manage_button_background">#202540</color>
+    <color name="cFriend_manage_button_stroke">#CFD3FC</color>
+    <color name="cFriend_manage_username_text">#CFD3FC</color>
+</resources>

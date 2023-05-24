@@ -1,14 +1,9 @@
 package com.example.cranny
 
 import android.content.Intent
-import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -108,12 +103,12 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                 BookRepository(database, Friend(currentUser!!.uid, username, false))
             bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
                 if (isBookDataReady) {
-                    val libraryBookList = ArrayList<LibraryBookRecyclerData>()
+                    val libraryBookList = ArrayList<Book>()
                     val bookCount = bookRepository.Library.size
                     if (bookCount > 0) {
                         for (books in bookRepository.Library) {
                             libraryBookList.add(
-                                LibraryBookRecyclerData(
+                                Book(
                                     books.id,
                                     books.title,
                                     books.authorNames,
@@ -121,9 +116,10 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.starRating,
                                     books.publisher,
                                     books.description,
-                                    books.prevReadCount,
+                                    books.pageCount,
                                     books.thumbnail,
                                     books.journalEntry,
+                                    books.userProgress,
                                     books.userFinished,
                                     books.isFav,
                                     books.purchasedFrom,
@@ -135,33 +131,33 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     books.prevReadCount,
                                     books.startDate,
                                     books.endDate,
+                                    books.totalPageCount,
                                     books.totalPagesRead,
-                                    username
-                                )
-                            )
+                            ))
                         }
                     }
                     bookRepository.stopBookListener()
 
                     if (libraryBookList.isNotEmpty()) {
                         val intent = Intent(this, BookPageActivity::class.java)
-                        intent.putExtra("title", libraryBookList[position].bookTitle)
-                        intent.putExtra("author", libraryBookList[position].bookAuthor)
-                        intent.putExtra("publisher", libraryBookList[position].bookPublisher)
-                        intent.putExtra("publicationDate", libraryBookList[position].bookPubDate)
-                        intent.putExtra("rating", libraryBookList[position].bookRating)
-                        intent.putExtra("tags", libraryBookList[position].bookTags)
-                        intent.putExtra("genres", libraryBookList[position].bookGenres)
-                        intent.putExtra("startDate", libraryBookList[position].bookStartDate)
-                        intent.putExtra("finishedDate", libraryBookList[position].bookEndDate)
-                        intent.putExtra("mainCharacters", libraryBookList[position].bookCharacters)
-                        intent.putExtra("purchasedFrom", libraryBookList[position].bookPurchasedFrom)
-                        intent.putExtra("userReview", libraryBookList[position].bookReview)
-                        intent.putExtra("summary", libraryBookList[position].bookSummary)
-                        intent.putExtra("lastPageRead", libraryBookList[position].bookLastPage)
-                        intent.putExtra("id", libraryBookList[position].bookID)
-                        intent.putExtra("isFav", libraryBookList[position].bookIsFav)
-                        intent.putExtra("username", libraryBookList[position].username)
+                        intent.putExtra("title", libraryBookList[position].title)
+                        intent.putExtra("author", libraryBookList[position].authorNames)
+                        intent.putExtra("publisher", libraryBookList[position].publisher)
+                        intent.putExtra("publicationDate", libraryBookList[position].publicationDate)
+                        intent.putExtra("rating", libraryBookList[position].starRating)
+                        intent.putExtra("tags", libraryBookList[position].tags)
+                        intent.putExtra("genres", libraryBookList[position].genres)
+                        intent.putExtra("startDate", libraryBookList[position].startDate)
+                        intent.putExtra("userFinished", libraryBookList[position].userFinished)
+                        intent.putExtra("finishedDate", libraryBookList[position].endDate)
+                        intent.putExtra("mainCharacters", libraryBookList[position].mainCharacters)
+                        intent.putExtra("purchasedFrom", libraryBookList[position].purchasedFrom)
+                        intent.putExtra("userReview", libraryBookList[position].journalEntry)
+                        intent.putExtra("summary", libraryBookList[position].description)
+                        //for some reason page count works but not total pages read, will leave as is for now
+                        intent.putExtra("lastPageRead", libraryBookList[position].pageCount)
+                        intent.putExtra("id", libraryBookList[position].id)
+                        intent.putExtra("isFav", libraryBookList[position].isFav)
                         startActivity(intent)
                     }
                 }

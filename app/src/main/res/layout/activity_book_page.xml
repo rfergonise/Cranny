@@ -36,7 +36,7 @@
                 android:maxLines="2"
                 android:text="Book Page"
                 android:textAlignment="center"
-                android:textColor="#000000"
+                android:textColor="@color/cranny_purple_light"
                 android:textSize="35sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,21 +60,20 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
-                android:id="@+id/ibFavorite"
+                android:id="@+id/bpibFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/favorite_yes"
-                android:contentDescription="Unfavorite"
+                android:contentDescription="Favorite"
                 android:padding="2dp"
-                android:scaleType="centerInside"
                 android:scaleX="2.5"
                 android:scaleY="2.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/favorite_yes"
-                app:tint="@color/cranny_blue_light"
+                app:tint="@color/cranny_purple_blue"
                 tools:ignore="HardcodedText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -92,6 +91,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cranny_seashell"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

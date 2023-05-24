@@ -91,11 +91,11 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         var progressBarColor: Int
         if(book!!.nTotalReadPages == book.nCountPage)
         {
-            progressBarColor = ContextCompat.getColor(context, R.color.cranny_progress_finished)
+            progressBarColor = ContextCompat.getColor(context, R.color.cBookDisplay_progressbar_fill_finished)
         }
         else
         {
-            progressBarColor = ContextCompat.getColor(context, R.color.cranny_darkmode_adapter_foreground)
+            progressBarColor = ContextCompat.getColor(context, R.color.cBookDisplay_progressbar_fill_unfinished)
         }
         pbProgress.indeterminateDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
         pbProgress.progressDrawable.setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN)
@@ -103,8 +103,7 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         val progress = (book!!.nTotalReadPages.toFloat() / book.nCountPage.toFloat()) * 100
         pbProgress.progress = progress.toInt()
 
-        setRatingBarColors(rbRating, R.color.cranny_darkmode_adapter_foreground, R.color.cranny_darkmode_background)
-
+        setRatingBarColors(rbRating, R.color.cBookDisplay_rating_fill, R.color.cBookDisplay_rating_background)
 
         // todo load profile picture into ivBook
 

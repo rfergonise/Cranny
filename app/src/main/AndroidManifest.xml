@@ -35,10 +35,12 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".DrawerBaseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".DashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />

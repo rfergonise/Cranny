@@ -20,7 +20,7 @@
     android:layout_marginEnd="30dp"
     android:layout_marginStart="30dp"
     android:layout_marginTop="30dp"
-    app:cardBackgroundColor="@color/cranny_blue_light"
+    app:cardBackgroundColor="@color/cRequest_searchbar_background"
     app:cardCornerRadius="180dp"
     app:cardElevation="0dp"
     app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
         android:hint="Search"
         android:inputType="textPersonName"
         android:maxLength="15"
-        android:textColor="@color/black"
+        android:textColor="@color/cRequest_searchbar_text"
         android:layout_gravity="center"
         />
 </com.google.android.material.card.MaterialCardView>
@@ -52,8 +52,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginStart="30dp"
         app:strokeWidth="3dp"
-        app:strokeColor="@color/cranny_purple_dark"
-        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:strokeColor="@color/cRequest_button_stroke"
+        app:cardBackgroundColor="@color/cRequest_button_background"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,12 +75,12 @@
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardBackgroundColor="@color/cRequest_button_background"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
-        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeColor="@color/cRequest_button_stroke"
         app:strokeWidth="3dp">
 
         <ImageView
@@ -98,7 +98,7 @@
         android:id="@+id/mcvFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/cranny_darkmode_foreground"
+        app:cardBackgroundColor="@color/cRequest_recyclerview_background"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
         android:layout_marginTop="150dp"
@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/cranny_purple_dark"
+        app:strokeColor="@color/cRequest_recyclerview_stroke"
         app:strokeWidth="3dp">
 
         <TextView
@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No friend requests found"
-            android:textColor="@color/cranny_blue_light"
+            android:textColor="@color/cRequest_inform_text"
             android:fontFamily="@font/raleway_custom"
             android:layout_gravity="center"/>
 
