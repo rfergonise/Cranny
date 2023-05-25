@@ -31,8 +31,11 @@ class SocialFriendFragment : Fragment() {
     private lateinit var mcvSearchButton: MaterialCardView
     private lateinit var mcvClearButton: MaterialCardView
     private lateinit var mcvFavFilterButton: MaterialCardView
+    private lateinit var mcvSimilarFilterButton: MaterialCardView
     private lateinit var ivFavIcon: ImageView
+
     private var isShowingFavorite: Boolean = false
+    private var isShowingSimilar: Boolean = false
 
     lateinit var fragmentView: View
 
@@ -50,6 +53,7 @@ class SocialFriendFragment : Fragment() {
         mcvSearchButton = fragmentView.findViewById(R.id.mcvSearchButton)
         mcvClearButton = fragmentView.findViewById(R.id.mcvClearButton)
         mcvFavFilterButton = fragmentView.findViewById(R.id.mcvFavoriteFilterButton)
+        mcvSimilarFilterButton = fragmentView.findViewById(R.id.mcvSimilarButton)
         ivFavIcon = fragmentView.findViewById(R.id.ivFavFilterButton)
 
         val database = FirebaseDatabase.getInstance()
@@ -86,14 +90,24 @@ class SocialFriendFragment : Fragment() {
                 //order the list from newest to oldest
                 if(repoFriendLibraryData.mlFriendLibraryData.size > 0) {
                     tvNoSocialFeed.visibility = View.INVISIBLE
+                    // adapter can only display 6 books, so filter out the ones we dont wanna show
                     val mlNewest = repoFriendLibraryData.mlFriendLibraryData
-                        //.filter { friendLibraryData -> friendLibraryData.friendLibrary.isNotEmpty() } // Filter out empty friend libraries
                         .sortedByDescending { friendLibraryData -> friendLibraryData.friendLibrary.maxOfOrNull { it.lLastReadTime } }
-                    // set up the list needed for the adapter, but only pass the first 6 books
                     var mlFriendDisplayData = mutableListOf<FriendAdapterData>()
-                    var i = 0
                     for (mlFriendData in mlNewest) {
                         mlFriendDisplayData.add(
+                            FriendAdapterData(
+                                mlFriendData.friendUserID,
+                                mlFriendData.friendUsername,
+                                filterBooksByLastReadTime(mlFriendData.friendLibrary, 6),
+                                mlFriendData.isFriendPrivate,
+                                mlFriendData.isFavorite
+                            )
+                        )
+                    }
+                    var ml6SimilarBooks = mutableListOf<FriendAdapterData>()
+                    for (mlFriendData in repoFriendLibraryData.mlFriendsWillSimilarBooks) {
+                        ml6SimilarBooks.add(
                             FriendAdapterData(
                                 mlFriendData.friendUserID,
                                 mlFriendData.friendUsername,
@@ -122,6 +136,7 @@ class SocialFriendFragment : Fragment() {
                     allowSearch(mlFriendDisplayData, database, user)
                     allowClear(mlFriendDisplayData, database, user)
                     allowFavoriteFilter(mlFriendDisplayData, database, user)
+                    allowSimilarFilter(mlFriendDisplayData, database, user, ml6SimilarBooks)
                 }
                 else tvNoSocialFeed.visibility = View.VISIBLE
 
@@ -129,6 +144,47 @@ class SocialFriendFragment : Fragment() {
         })
     }
 
+    private fun allowSimilarFilter(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase, user: Friend, mlSimilarBooks: MutableList<FriendAdapterData>)
+    {
+        mcvSimilarFilterButton.setOnClickListener {
+            if(!isShowingSimilar)
+            {
+                // change the rv to show similar books
+                rvFriendFeed.adapter = FriendFragmentAdapter(
+                    requireActivity() as DashboardActivity,
+                    this,
+                    requireContext(),
+                    mlSimilarBooks,
+                    database,
+                    resources,
+                    user
+                )
+                rvFriendFeed.adapter?.notifyDataSetChanged()
+                // are if currently displaying favorite friends
+                if(isShowingFavorite)
+                {
+                    ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
+                    isShowingFavorite = false
+                }
+                isShowingSimilar = true
+            }
+            else
+            {
+                // switch it back to the main list
+                rvFriendFeed.adapter = FriendFragmentAdapter(
+                    requireActivity() as DashboardActivity,
+                    this,
+                    requireContext(),
+                    mlAvailableUsersToAdd,
+                    database,
+                    resources,
+                    user
+                )
+                rvFriendFeed.adapter?.notifyDataSetChanged()
+                isShowingSimilar = false
+            }
+        }
+    }
     private fun allowSearch(mlAvailableUsersToAdd: MutableList<FriendAdapterData>, database: FirebaseDatabase, user: Friend) {
         mcvSearchButton.setOnClickListener {
             val strUserTheySearchedFor = etSearchBar.text.toString()
@@ -146,7 +202,11 @@ class SocialFriendFragment : Fragment() {
                     resources,
                     user
                 )
-
+                if(isShowingFavorite)
+                {
+                    ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
+                    isShowingFavorite = false
+                }
                 rvFriendFeed.adapter?.notifyDataSetChanged()
             } else {
                 Toast.makeText(context, "Search bar is empty.", Toast.LENGTH_SHORT).show()
@@ -176,6 +236,7 @@ class SocialFriendFragment : Fragment() {
                         user
                     )
                     rvFriendFeed.adapter?.notifyDataSetChanged()
+                    if(isShowingSimilar) isShowingSimilar = false
                     isShowingFavorite = true
                 }
                 else
@@ -216,6 +277,11 @@ class SocialFriendFragment : Fragment() {
                 resources,
                 user
             )
+            if(isShowingFavorite)
+            {
+                ivFavIcon.setImageResource(R.drawable.unfavorite_filter_icon)
+                isShowingFavorite = false
+            }
         }
     }
 }

@@ -1014,9 +1014,11 @@ class RequestedRepository(private val database: FirebaseDatabase, private val id
 class FriendsLibraryRepository(
     private val database: FirebaseDatabase,
     private val userIdThatHasFriends: String,
-    private val context: Context
+    private val context: Context,
 ) {
     public var mlFriendLibraryData = mutableListOf<FriendLibraryData>()
+    public var mlFriendsWillSimilarBooks = mutableListOf<FriendLibraryData>()
+    public var mlUserBookTitles = mutableListOf<String>()
     private val _isLibraryDataRead = MutableLiveData<Boolean>()
     val isLibraryDataRead: LiveData<Boolean>
         get() = _isLibraryDataRead
@@ -1033,8 +1035,8 @@ class FriendsLibraryRepository(
         userDataRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val friendLibraryDataList = mutableListOf<FriendLibraryData>()
-
                 val userSnapshot = dataSnapshot.child(userIdThatHasFriends) // Fetch the user's snapshot using the provided userIdThatHasFriends
+
                 val friendDataRef = userSnapshot.child("Friends")
 
                 for (friendSnapshot in friendDataRef.children) {
@@ -1098,7 +1100,44 @@ class FriendsLibraryRepository(
                             // Check if all library data has been fetched for all friends
                             if (friendLibraryDataList.size == friendDataRef.childrenCount.toInt()) {
                                 mlFriendLibraryData = friendLibraryDataList // Update the mlFriendLibraryData list with fetched data
-                                _isLibraryDataRead.value = true // Inform the caller that we have filled the list with each FriendLibraryData
+                                // get all the user's book titles
+                                val userLibraryRef = userDataRef.child(userIdThatHasFriends).child("Books")
+                                userLibraryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(userLibrarySnapshot: DataSnapshot) {
+                                        for (bookSnapshot in userLibrarySnapshot.children) {
+                                            val strTitle = bookSnapshot.child("Title").getValue(String::class.java) ?: ""
+                                            mlUserBookTitles.add(strTitle)
+                                        }
+                                        // go through each friend
+                                        for(friend in mlFriendLibraryData)
+                                        {
+                                            // if it's a public profile
+                                            if(!friend.isFriendPrivate)
+                                            {
+                                                var newFriendLibrary =  mutableListOf<DisplayFeedBookInfo>()
+                                                // go through each of there books
+                                                for(book in friend.friendLibrary)
+                                                {
+                                                    // if the book has the same title as a book the user owns, add it
+                                                    if (mlUserBookTitles.any { it.toLowerCase() == book.strTitle.toLowerCase() }) newFriendLibrary.add(book)
+                                                }
+                                                // if they have similar books
+                                                if(newFriendLibrary.size > 0)
+                                                {
+                                                    // create the same friend but pass in the list of books that are similar to the user's books
+                                                    var newFriendData = FriendLibraryData(friend.friendUsername, friend.friendUserID, newFriendLibrary,
+                                                        friend.isFriendPrivate, friend.isFavorite)
+                                                    mlFriendsWillSimilarBooks.add(newFriendData)
+                                                }
+                                            }
+                                        }
+                                        // once we have all the data, we tell the main thread we are ready to use it
+                                        _isLibraryDataRead.value = true
+                                    }
+                                    override fun onCancelled(databaseError: DatabaseError) {
+                                        // Handle the error
+                                    }
+                                })
                             }
                         }
 

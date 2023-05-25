@@ -41,37 +41,61 @@
     <!-- Search Button -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvSearchButton"
-        android:layout_width="90dp"
+        android:layout_width="75dp"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="30dp"
-        app:strokeWidth="3dp"
-        app:strokeColor="@color/cFriend_button_stroke"
+        android:layout_marginTop="15dp"
         app:cardBackgroundColor="@color/cFriend_button_background"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox">
+        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
+        app:strokeColor="@color/cFriend_button_stroke"
+        app:strokeWidth="3dp">
+
         <ImageView
             android:id="@+id/ivSearchButton"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/purple_blue_search" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvSimilarButton"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        app:cardBackgroundColor="@color/cFriend_button_background"
+        app:cardCornerRadius="180dp"
+        android:layout_marginStart="10dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toEndOf="@+id/mcvSearchButton"
+        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
+        app:strokeColor="@color/cFriend_button_stroke"
+        app:strokeWidth="3dp">
+
+        <ImageView
+            android:id="@+id/ivSimilarButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/similar" />
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Favorite Button -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvFavoriteFilterButton"
-        android:layout_width="90dp"
+        android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         app:cardBackgroundColor="@color/cFriend_button_background"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toStartOf="@+id/mcvClearButton"
-        app:layout_constraintStart_toEndOf="@+id/mcvSearchButton"
         app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
         app:strokeColor="@color/cFriend_button_stroke"
         app:strokeWidth="3dp">
@@ -89,7 +113,7 @@
     <!-- Clear Button -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvClearButton"
-        android:layout_width="90dp"
+        android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
