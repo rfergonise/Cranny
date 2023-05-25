@@ -10,35 +10,35 @@
         android:id="@+id/mcvHolder"
         android:layout_width="300dp"
         android:layout_height="150dp"
-        app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
-        app:strokeWidth="0dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:cardBackgroundColor="@color/cranny_mid_green"
+        app:strokeWidth="0dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvFriendBox"
             android:layout_width="300dp"
             android:layout_height="150dp"
-            app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
-            app:strokeWidth="3dp"
-            app:strokeColor="@color/cranny_purple_blue"
-            app:cardElevation="0dp"
             android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp">
+            app:cardBackgroundColor="@color/cranny_mid_green"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/cranny_gold"
+            app:strokeWidth="3dp">
             <!-- Profile Picture -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cvPFPBorder"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
-                app:cardCornerRadius="65dp"
-                android:layout_marginStart="15dp"
                 android:layout_gravity="center_vertical"
-                app:strokeColor="@color/cranny_purple_blue"
+                android:layout_marginStart="15dp"
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="65dp"
+                app:strokeColor="@color/cranny_english_violet"
                 app:strokeWidth="5dp">
 
                 <ImageView
@@ -54,10 +54,10 @@
                 android:id="@+id/mcvAdapterUsernameBorder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
-                app:cardElevation="0dp"
                 android:layout_marginStart="100dp"
-                android:layout_marginTop="35dp">
+                android:layout_marginTop="35dp"
+                app:cardBackgroundColor="@color/cranny_mid_green"
+                app:cardElevation="0dp">
 
                 <TextView
                     android:id="@+id/tvUsername"
@@ -65,9 +65,12 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:fontFamily="@font/raleway_custom"
+                    android:shadowColor="#000000"
+                    android:shadowRadius="0"
                     android:text="\@123456789123456"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textColor="@color/cranny_dark_green"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -76,27 +79,27 @@
                 android:id="@+id/mcvRequestButton"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center_vertical"
-                app:cardBackgroundColor="@color/cranny_darkmode_adapter_background"
+                app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardCornerRadius="25dp"
                 app:cardElevation="5dp"
-                app:strokeColor="@color/cranny_purple_blue"
+                app:strokeColor="@color/cranny_gold"
                 app:strokeWidth="2dp">
 
                 <TextView
                     android:id="@+id/tvRequestButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="@font/raleway_custom"
                     android:text="Send Request"
-                    android:textColor="@color/white"
+                    android:textColor="@color/cranny_gold"
                     android:textSize="20dp" />
 
             </com.google.android.material.card.MaterialCardView>

@@ -20,12 +20,12 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="30dp"
-        app:cardBackgroundColor="@color/cranny_darkmode_background"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardCornerRadius="65dp"
         app:layout_constraintBottom_toTopOf="@+id/cvDisplayName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cvUsername"
-        app:strokeColor="@color/cProfile_pfp_stroke"
+        app:strokeColor="@color/cranny_english_violet"
         app:strokeWidth="5dp">
 
         <ImageView
@@ -39,12 +39,15 @@
         <!-- Username -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvUsername"
-        android:layout_width="200dp"
-        android:layout_marginEnd="38dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="@color/cProfile_background"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cvPFPBorder"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
 
@@ -58,12 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/raleway_custom"
-                android:shadowColor="@color/cranny_darkmode_foreground"
+                android:shadowColor="@color/black"
                 android:shadowDx="0.5"
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="\@Username"
-                android:textColor="@color/cProfile_text_letters"
+                android:textColor="@color/cranny_gold"
                 android:textSize="28sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,12 +81,13 @@
         android:id="@+id/cvFriendCount"
         android:layout_width="100dp"
         android:layout_height="70dp"
-        app:cardBackgroundColor="@color/cProfile_boxes_background"
-        app:cardElevation="0dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        app:cardBackgroundColor="@color/cranny_mid_green"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toStartOf="@+id/cvBookCount"
         app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-        app:strokeColor="@color/cProfile_boxes_stroke"
+        app:strokeColor="@color/cranny_english_violet"
         app:strokeWidth="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -101,7 +105,7 @@
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="Friends"
-                android:textColor="@color/cProfile_text_letters"
+                android:textColor="@color/cranny_gold"
                 android:textSize="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,8 +122,9 @@
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="000,000"
-                android:textColor="@color/cProfile_text_numbers"
+                android:textColor="@color/cranny_bone"
                 android:textSize="18dp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,12 +139,13 @@
         android:id="@+id/cvBookCount"
         android:layout_width="100dp"
         android:layout_height="70dp"
-        app:cardBackgroundColor="@color/cProfile_boxes_background"
-        app:cardElevation="0dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_mid_green"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-        app:strokeColor="@color/cProfile_boxes_stroke"
+        app:strokeColor="@color/cranny_english_violet"
         app:strokeWidth="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -157,7 +163,7 @@
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="Books"
-                android:textColor="@color/cProfile_text_letters"
+                android:textColor="@color/cranny_gold"
                 android:textSize="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -174,8 +180,9 @@
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="000,000"
-                android:textColor="@color/cProfile_text_numbers"
+                android:textColor="@color/cranny_bone"
                 android:textSize="18dp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,11 +196,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvDisplayName"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginTop="10dp"
-        app:cardBackgroundColor="@color/cProfile_background"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -209,14 +216,18 @@
                 android:id="@+id/tvProfileDisplayName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/raleway_custom"
                 android:shadowColor="#000000"
                 android:shadowDx="0.5"
                 android:shadowDy="0.5"
                 android:shadowRadius="5"
                 android:text="\Display Name"
-                android:textColor="@color/cProfile_text_letters"
+                android:textColor="@color/cranny_gold"
                 android:textSize="28sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -224,59 +235,61 @@
     </com.google.android.material.card.MaterialCardView>
 
         <!-- Bio -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvBorder2"
-            android:layout_width="match_parent"
-            app:cardBackgroundColor="@color/cProfile_boxes_background"
-            android:layout_height="70dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cvDisplayName"
-            app:strokeWidth="0dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            app:cardElevation="0dp"
-            android:layout_marginTop="5dp">
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvBio"
-                android:layout_width="match_parent"
-                app:cardBackgroundColor="@color/cProfile_boxes_background"
-                android:layout_height="match_parent"
-                app:cardElevation="0dp"
-                android:layout_gravity="center"
-                app:strokeWidth="2dp"
-                app:strokeColor="@color/cProfile_boxes_stroke">
-                <TextView
-                        android:id="@+id/tvProfileBio"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_centerHorizontal="true"
-                        android:fontFamily="@font/lorenta_custom"
-                        android:text="User BIO"
-                        android:textColor="@color/cProfile_bio_text"
-                        android:textSize="18dp"
-                        android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="10dp"/>
-            </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvBorder2"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_mid_green"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvDisplayName"
+        app:strokeWidth="0dp">
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvBio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/cranny_mid_green"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/cranny_dark_green"
+            app:strokeWidth="2dp">
+
+            <TextView
+                android:id="@+id/tvProfileBio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/lorenta_custom"
+                android:text="User BIO"
+                android:textColor="@color/cranny_bone"
+                android:textSize="18dp" />
         </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.card.MaterialCardView>
 
         <!-- Recent Read Feed -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvFeed"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="400dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cProfile_boxes_background"
+        app:cardBackgroundColor="@color/cranny_mid_brown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvBorder2"
-        app:strokeColor="@color/cProfile_boxes_stroke"
+        app:strokeColor="@color/cranny_dark_green"
         app:strokeWidth="5dp">
 
         <TextView
@@ -286,7 +299,8 @@
             android:layout_gravity="center"
             android:fontFamily="@font/raleway_custom"
             android:text="See your shared books here"
-            android:textColor="@color/cProfile_inform_text" />
+            android:textColor="@color/cranny_dark_green"
+            android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSocial"
@@ -299,18 +313,20 @@
         android:id="@+id/ivSwipeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/left"
         android:layout_marginLeft="5dp"
+        android:src="@drawable/left"
+        app:tint="@color/cranny_dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
     <ImageView
         android:id="@+id/ivSwipeRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:src="@drawable/right"
+        app:tint="@color/cranny_dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>

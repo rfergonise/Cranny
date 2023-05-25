@@ -57,7 +57,7 @@
                 tools:ignore="HardcodedText" />
 
             <ImageButton
-                android:id="@+id/btLibraryActivity"
+                android:id="@+id/ibHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"

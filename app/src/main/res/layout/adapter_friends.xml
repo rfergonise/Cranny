@@ -10,25 +10,25 @@
         android:id="@+id/mcvFriendBox"
         android:layout_width="334dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cFriend_adapter_background"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/cFriend_adapter_stroke"
-        app:cardElevation="0dp"
         android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp">
+        app:cardBackgroundColor="@color/cranny_dark_green"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/cranny_dark_green"
+        app:strokeWidth="1dp">
 
         <!-- Friend Profile Button -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvFriendProfileButton"
             android:layout_width="310dp"
             android:layout_height="90dp"
-            app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/cranny_dark_green"
             app:cardElevation="5dp">
 
             <!-- Profile Picture -->
@@ -36,12 +36,12 @@
                 android:id="@+id/cvPFPBorder"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
-                app:cardCornerRadius="65dp"
                 android:layout_marginStart="7.55dp"
                 android:layout_marginTop="7.5dp"
                 android:layout_marginBottom="7.5dp"
-                app:strokeColor="@color/cFriend_adapter_pfp_stroke"
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="65dp"
+                app:strokeColor="@color/cranny_english_violet"
                 app:strokeWidth="5dp">
 
                 <ImageView
@@ -57,9 +57,9 @@
                 android:id="@+id/mcvAdapterUsernameBorder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_marginStart="100dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_profile_button_background"
+                android:layout_marginTop="32dp"
+                app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardElevation="0dp">
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/raleway_custom"
                     android:text="\@123456789123456"
-                    android:textColor="@color/cFriend_adapter_username_text"
+                    android:textColor="@color/cranny_gold"
                     android:textSize="20dp" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -81,26 +81,27 @@
             android:id="@+id/mcvBooksContainer"
             android:layout_width="310dp"
             android:layout_height="230dp"
-            app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-            android:layout_marginTop="112dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="112dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="@color/cranny_mid_green"
+            app:cardElevation="5dp">
 
             <!-- Book Slot One -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/mcvBook1"
                 android:layout_width="75dp"
                 android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
                 android:layout_gravity="left"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook1"
@@ -117,14 +118,14 @@
                 android:layout_width="75dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="0dp"
                 android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="55dp"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook2"
@@ -140,15 +141,15 @@
                 android:id="@+id/mcvBook3"
                 android:layout_width="75dp"
                 android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="10dp"
+                android:layout_gravity="right"
                 android:layout_marginStart="0dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="0dp"
-                android:layout_gravity="right"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook3"
@@ -164,15 +165,15 @@
                 android:id="@+id/mcvBook4"
                 android:layout_width="75dp"
                 android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
                 android:layout_gravity="left"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="120dp"
                 android:layout_marginStart="22dp"
+                android:layout_marginTop="120dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook4"
@@ -189,14 +190,14 @@
                 android:layout_width="75dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="55dp"
                 android:layout_marginStart="0dp"
+                android:layout_marginTop="55dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook5"
@@ -212,15 +213,15 @@
                 android:id="@+id/mcvBook6"
                 android:layout_width="75dp"
                 android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="@color/cFriend_adapter_books_background"
-                android:layout_marginTop="120dp"
+                android:layout_gravity="right"
                 android:layout_marginStart="0dp"
+                android:layout_marginTop="120dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="0dp"
-                android:layout_gravity="right"
-                app:strokeWidth="3dp"
-                app:strokeColor="@color/cFriend_adapter_books_stroke">
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook6"
@@ -235,12 +236,13 @@
                 android:id="@+id/tvPrivateBooks"
                 android:layout_width="300dp"
                 android:layout_height="30dp"
-                android:text="\@User's books are private"
-                android:fontFamily="@font/raleway_custom"
                 android:layout_gravity="center"
+                android:fontFamily="@font/raleway_custom"
                 android:gravity="center"
-                android:textColor="@color/cFriend_adapter_inform_text"
-                android:visibility="invisible"/>
+                android:text="\@User's books are private"
+                android:textColor="@color/cranny_dark_green"
+                android:textSize="18sp"
+                android:visibility="invisible" />
 
 
         </com.google.android.material.card.MaterialCardView>
