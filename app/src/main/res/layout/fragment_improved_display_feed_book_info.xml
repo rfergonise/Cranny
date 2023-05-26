@@ -12,12 +12,12 @@
         android:layout_width="375dp"
         android:layout_height="600dp"
         android:layout_gravity="center"
-        app:cardBackgroundColor="@color/cBookDisplay_background"
+        app:cardBackgroundColor="@color/cranny_mid_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/cBookDisplay_stroke"
+        app:strokeColor="@color/cranny_gold"
         app:strokeWidth="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,10 +31,10 @@
                 android:layout_height="62dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="15dp"
-                android:fontFamily="@font/raleway_custom"
+                android:fontFamily="@font/lorenta_custom"
                 android:text="Title: 19 max / 2 line"
-                android:textColor="@color/cBookDisplay_text"
-                android:textSize="25dp"
+                android:textColor="@color/cranny_bone"
+                android:textSize="28dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,9 +45,9 @@
                 android:layout_height="62dp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="25dp"
-                android:fontFamily="@font/lorenta_custom"
+                android:fontFamily="@font/raleway_custom"
                 android:text="Author: 19 max / 2 line"
-                android:textColor="@color/cBookDisplay_text"
+                android:textColor="@color/cranny_bone"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
@@ -58,16 +58,15 @@
                 android:layout_width="90dp"
                 android:layout_height="110dp"
                 android:layout_gravity="right"
-                android:layout_marginRight="25dp"
-                android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="@color/cBookDisplay_background"
+                android:layout_marginRight="25dp"
+                app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:layout_constraintBottom_toTopOf="@+id/tvProgressHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/cBookDisplay_book_stroke"
+                app:strokeColor="@color/cranny_gold"
                 app:strokeWidth="1dp">
 
                 <ImageView
@@ -84,13 +83,13 @@
                 android:id="@+id/tvProgressHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
                 android:fontFamily="@font/raleway_custom"
                 android:text="\@123456789123456's Progress"
-                android:textColor="@color/cBookDisplay_text"
+                android:textColor="@color/cranny_bone"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="3dp"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <View
@@ -100,14 +99,9 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:background="@color/cBookDisplay_dividers"
+                android:background="@color/cranny_gold"
                 app:layout_constraintBottom_toTopOf="@+id/tvProgressPages"
                 app:layout_constraintStart_toStartOf="parent" />
-
-
-
-
-
 
 
             <!-- Progress Pages -->
@@ -119,7 +113,7 @@
                 android:fontFamily="@font/raleway_custom"
                 android:gravity="center"
                 android:text="Pages Read: #######/#######"
-                android:textColor="@color/cBookDisplay_text"
+                android:textColor="@color/cranny_bone"
                 android:textSize="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/tvProgressChapters"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -131,12 +125,12 @@
                 android:layout_width="270dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="25dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
                 android:fontFamily="@font/raleway_custom"
                 android:gravity="center"
                 android:text="Chapters Read: ######/######"
-                android:textColor="@color/cBookDisplay_text"
+                android:textColor="@color/cranny_bone"
                 android:textSize="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/materialCardView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,12 +167,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
                 android:fontFamily="@font/raleway_custom"
                 android:gravity="center"
                 android:text="Book Insight"
-                android:layout_marginRight="25dp"
-                android:layout_marginLeft="25dp"
-                android:textColor="@color/cBookDisplay_text"
+                android:textColor="@color/cranny_bone"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -189,11 +183,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
-                android:background="@color/cBookDisplay_dividers"
+                android:layout_marginBottom="10dp"
+                android:background="@color/cranny_gold"
                 app:layout_constraintBottom_toTopOf="@+id/rvBookInsight"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="10dp"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBookInsight"
@@ -212,26 +206,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:layout_gravity="bottom"
-                android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
-                android:background="@color/cBookDisplay_background"
+                android:layout_marginRight="40dp"
+                android:background="@color/cranny_mid_green"
                 app:layout_constraintBottom_toBottomOf="@+id/rvBookInsight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
             <RatingBar
                 android:id="@+id/rbRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:progressTint="@color/cranny_purple"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:isIndicator="true">
+                app:layout_constraintStart_toStartOf="parent">
 
             </RatingBar>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     </com.google.android.material.card.MaterialCardView>

@@ -21,12 +21,12 @@
         android:id="@+id/tvMenu"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/black"
+        android:background="@color/cranny_mid_green"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/cranny_gold" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
@@ -34,13 +34,12 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_weight="1"
-        android:background="@color/cSocial_background"
+        android:background="@color/cranny_bone"
         android:contentDescription="ViewPager content description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMenu">
-    </androidx.viewpager.widget.ViewPager>
+        app:layout_constraintTop_toBottomOf="@+id/tvMenu"></androidx.viewpager.widget.ViewPager>
 
 
 

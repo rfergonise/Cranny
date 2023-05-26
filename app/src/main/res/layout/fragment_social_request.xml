@@ -14,57 +14,60 @@
 
     <!-- Search Bar -->
     <com.google.android.material.card.MaterialCardView
-    android:id="@+id/mcvSearchBox"
-    android:layout_width="match_parent"
-    android:layout_height="35dp"
-    android:layout_marginEnd="30dp"
-    android:layout_marginStart="30dp"
-    android:layout_marginTop="30dp"
-    app:cardBackgroundColor="@color/cRequest_searchbar_background"
-    app:cardCornerRadius="180dp"
-    app:cardElevation="0dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-    <EditText
-        android:id="@+id/etSearchBar"
+        android:id="@+id/mcvSearchBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="4dp"
-        android:background="@null"
-        android:ems="10"
-        android:hint="Search"
-        android:inputType="textPersonName"
-        android:maxLength="15"
-        android:textColor="@color/cRequest_searchbar_text"
-        android:layout_gravity="center"
-        />
-</com.google.android.material.card.MaterialCardView>
+        android:layout_height="35dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/cranny_gold"
+        app:cardCornerRadius="180dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/etSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="2dp"
+            android:background="@null"
+            android:ems="10"
+            android:fontFamily="@font/raleway_custom"
+            android:hint="Search"
+            android:inputType="textPersonName"
+            android:maxLength="15"
+            android:textColor="@color/cRequest_searchbar_text" />
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Search Button -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcvSearchButton"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="30dp"
-        app:strokeWidth="3dp"
-        app:strokeColor="@color/cRequest_button_stroke"
-        app:cardBackgroundColor="@color/cRequest_button_background"
+        android:layout_marginTop="15dp"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox">
+        app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
+        app:strokeColor="@color/cranny_brown"
+        app:strokeWidth="3dp">
+
         <ImageView
             android:id="@+id/ivSearchButton"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/purple_blue_search" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/purple_blue_search"
+            app:tint="@color/cranny_gold" />
     </com.google.android.material.card.MaterialCardView>
 
 
@@ -75,21 +78,22 @@
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cRequest_button_background"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardCornerRadius="180dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mcvSearchBox"
-        app:strokeColor="@color/cRequest_button_stroke"
+        app:strokeColor="@color/cranny_gold"
         app:strokeWidth="3dp">
 
         <ImageView
             android:id="@+id/ivClearButton"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/purple_blue_clear" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/purple_blue_clear"
+            app:tint="@color/cranny_gold" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -98,35 +102,36 @@
         android:id="@+id/mcvFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/cRequest_recyclerview_background"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:cardCornerRadius="50dp"
         app:cardElevation="0dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/cRequest_recyclerview_stroke"
+        app:strokeColor="@color/cranny_brown"
         app:strokeWidth="3dp">
 
         <TextView
             android:id="@+id/tvFeedIsEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No friend requests found"
-            android:textColor="@color/cRequest_inform_text"
+            android:layout_gravity="center"
             android:fontFamily="@font/raleway_custom"
-            android:layout_gravity="center"/>
+            android:text="No friend requests found"
+            android:textColor="@color/cranny_gold"
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUserSearchFeed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -136,6 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:src="@drawable/right"
+        app:tint="@color/cranny_dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>

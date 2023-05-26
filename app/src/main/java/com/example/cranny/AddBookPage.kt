@@ -35,6 +35,7 @@ class AddBookPage : AppCompatActivity() {
     lateinit var genresInput: TextInputLayout
     lateinit var tagsInput: TextInputLayout
     lateinit var ratingsInput: RatingBar
+    lateinit var menuBTN: ImageButton
     lateinit var cancelBottomBTN: Button
     lateinit var saveBottomBTN: Button
     lateinit var cancelTopBTN: ImageButton
@@ -44,7 +45,6 @@ class AddBookPage : AppCompatActivity() {
     lateinit var dateFinishedInput: EditText
     lateinit var lastPageReadTextView: TextView
     lateinit var lastPageReadInput: EditText
-    lateinit var menuBTN: ImageButton
     lateinit var searchButton: ImageButton
 
 
@@ -69,7 +69,7 @@ class AddBookPage : AppCompatActivity() {
         genresInput = findViewById(R.id.tiGenres)
         tagsInput = findViewById(R.id.tiTags)
         ratingsInput = findViewById(R.id.ratingBar)
-        menuBTN = findViewById(R.id.ibMenuButton)
+        menuBTN = findViewById(R.id.ibCancelButton)
         cancelBottomBTN = findViewById(R.id.btnCancel)
         saveBottomBTN = findViewById(R.id.btnSave)
         saveTopBTN = findViewById(R.id.ibSaveButton)
@@ -112,18 +112,13 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
-//        val bookSuggestionAdapter = bookSuggestionAdapter(
-//            this,
-//            mutableListOf(),
-//            AdapterView.OnItemClickListener { parent, view, position, id ->
-//                //boodSuggestionAdapter Body
-//            })
-
-
-        saveTopBTN.setOnClickListener {
-            saveNewBook()
-        }
-
+        //bookSuggestionAdaptor is used to display the list of book suggestions
+        val bookSuggestionAdapter = bookSuggestionAdapter(
+            this,
+            mutableListOf(),
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                //boodSuggestionAdapter Body
+            })
 
         saveTopBTN.setOnClickListener {
             val title = titleInput.text.toString()
@@ -155,13 +150,12 @@ class AddBookPage : AppCompatActivity() {
             }
         }
 
-        cancelBottomBTN.setOnClickListener {
-            val intent = Intent(this, LibraryActivity::class.java)
-            startActivity(intent)
-
-        }
-
         menuBTN.setOnClickListener {
+         val intent = Intent(this, LibraryActivity::class.java)
+         startActivity(intent)
+         }
+
+        cancelBottomBTN.setOnClickListener {
             val intent = Intent(this, LibraryActivity::class.java)
             startActivity(intent)
         }
@@ -177,7 +171,7 @@ class AddBookPage : AppCompatActivity() {
 
     private fun saveNewBook() {
 
-//
+
         if (authorInput.text.isNotEmpty() && titleInput.text.isNotEmpty()) {
             val editText = genresInput.editText
             val genres = editText?.text.toString()
@@ -198,7 +192,6 @@ class AddBookPage : AppCompatActivity() {
                     //boodSuggestionAdapter Body
                 })
 
-
             val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
             Toast.makeText(applicationContext, "Saving book...", Toast.LENGTH_SHORT).show()
             val database = FirebaseDatabase.getInstance()
@@ -208,9 +201,8 @@ class AddBookPage : AppCompatActivity() {
                 val user: Friend = Friend(currentUser!!.uid, username, false)
                 val selectedBookSuggestion: BookSuggestion? = bookSuggestionAdapter?.selectedBook
                 CoroutineScope(Dispatchers.IO).launch {
-
-//                    val selectedBook: Book? =
-//                        selectedBookSuggestion?.let { bookSuggestionToBook(it, user) }
+                    val selectedBook: Book? =
+                        selectedBookSuggestion?.let { bookSuggestionToBook(it, user) }
                     withContext(Dispatchers.Main) {
 
                         val totalPageCount: Int = 400 // todo change to total page count from api
@@ -283,10 +275,11 @@ class AddBookPage : AppCompatActivity() {
                                         )
                                         val status = if (newBook.userFinished) {
                                             "@$username Finished Reading!"
-                                        } else if (lastPageRead > 1) {
-                                            "@$username Read $lastPageRead pages."
+                                        } else if (totalPagesReadInput > 1) {
+                                            //changed lastPageRead to totalPagesRead to try to get accurate page count
+                                            "@$username Read $totalPagesReadInput pages."
                                         } else {
-                                            "@$username Read $lastPageRead page."
+                                            "@$username Read $totalPagesReadInput page."
                                         }
                                         recentRepository.addRecent(
                                             SocialFeed(
@@ -336,13 +329,11 @@ class AddBookPage : AppCompatActivity() {
     //Goes through string and capitalizes the first letter of each word
     fun capitalizeEachWord(input: String): String {
         val words = input.split(" ")
-        val capitalizedWords = words.map {
-            it.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(
-                    Locale.getDefault()
-                ) else it.toString()
-            }
-        }
+        val capitalizedWords = words.map { it.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        } }
         return capitalizedWords.joinToString(" ")
     }
 
@@ -373,14 +364,14 @@ class AddBookPage : AppCompatActivity() {
                 return formattedDate
             } else {
                 val formatter = SimpleDateFormat("MMddyyyy")
-                val dateInput = formatter.parse(finishedDate)
+                val dateInput = formatter.parse(dateFinishedInput.text.toString())
                 val formattedDate = SimpleDateFormat("MM/dd/yyyy").format(dateInput)
                 return formattedDate
             }
-        } else {
-            // Handle the case when the userFinished is false
-            return ""
         }
+
+        // Return an empty string if userFinished is false
+        return ""
     }
 
     // Format publication date or return blank
@@ -395,65 +386,74 @@ class AddBookPage : AppCompatActivity() {
         }
     }
 
-        // If user doesn't input last page read, it will default to 0
-        private fun setPageRead(pageRead: Int): Int {
-            if (pageRead > 0) {
-                return pageRead
-            } else {
-                pageRead.toInt()
-                return pageRead
-            }
+    // If user doesn't input last page read, it will default to 0
+    private fun setPageRead(pageRead: Int): Int {
+        if (pageRead > 0) {
+            return pageRead
+        } else {
+            //pageRead.toInt()
+            //return pageRead
+            return 0
         }
+    }
 
-        //function that allows us to take the book suggestion we click on and turn it into a book so we can populate the required fields.
-        private suspend fun bookSuggestionToBook(suggestion: BookSuggestion, user: Friend): Book {
-            val firebaseDatabase = FirebaseDatabase.getInstance()
-            val bookRepository = BookRepository(firebaseDatabase, user)
-            // Get the book details from the Google Books API
-            val bookDetails = withContext(Dispatchers.IO) {
-                bookRepository.getBookDetails(suggestion.Id)
-            }   // If bookDetails is null, return a default Book
-            if (bookDetails == null) {
-                return Book(
-                    id = "",
-                    title = "Unknown",
-                    authorNames = "Unknown",
-                    publicationDate = "Unknown",
-                    starRating = 0f,
-                    publisher = "Unknown",
-                    description = "Unknown",
-                    pageCount = 0,
-                    thumbnail = "",
-                    journalEntry = "",
-                    userProgress = 0,
-                    userFinished = false,
-                    startDate = "",
-                    endDate = "",
-                    prevReadCount = 0,
-                    purchasedFrom = "",
-                    mainCharacters = "",
-                    genres = "Unknown",
-                    tags = "",
-                    lastReadDate = 0,
-                    lastReadTime = 0,
-                    isFav = false,
-                    totalPageCount = 0,
-                    totalPagesRead = 0
-                )
-            }
+    //function to create a book
+    private fun createBook(
+        title: String, author: String, publicationDate: String, starRating: Float,
+        publisher: String, description: String, pageCount: Int, thumbnail: String,
+        journalEntry: String, finished: Boolean, startDate: String, endDate: String,
+        purchasedFrom: String, mainCharacters: String, genres: String, tags: String
+    ): Book {
+        // need to create new id with each book
+        val id = UUID.randomUUID().toString()
+        val currentMillis = System.currentTimeMillis() // get the current time in milliseconds
+        return Book(
+            id = id,
+            title = title,
+            authorNames = author,
+            publicationDate = publicationDate,
+            starRating = starRating,
+            publisher = publisher,
+            description = description,
+            pageCount = pageCount,
+            thumbnail = thumbnail,
+            journalEntry = journalEntry,
+            userProgress = 0,
+            userFinished = finished,
+            startDate = startDate,
+            endDate = endDate,
+            prevReadCount = 0,
+            purchasedFrom = purchasedFrom,
+            mainCharacters = mainCharacters,
+            genres = genres,
+            tags = tags,
+            lastReadDate = currentMillis,
+            lastReadTime = currentMillis,
+            isFav = false,
+            totalPageCount = 0,
+            totalPagesRead = 0
+        )
+    }
 
-
-            // otherwise Return a new Book with the details filled in
+    //function that allows us to take the book suggestion we click on and turn it into a book so we can populate the required fields.
+    private suspend fun bookSuggestionToBook(suggestion: BookSuggestion, user: Friend): Book {
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val bookRepository = BookRepository(firebaseDatabase, user)
+        // Get the book details from the Google Books API
+        val bookDetails = withContext(Dispatchers.IO) {
+            bookRepository.getBookDetails(suggestion.Id)
+        }   // If bookDetails is null, return a default Book
+        if (bookDetails == null) {
             return Book(
-                id = UUID.randomUUID().toString(),
-                title = bookDetails.title,
-                authorNames = bookDetails.authorNames,
-                publicationDate = bookDetails.publicationDate,
+                id = "",
+                title = "Unknown",
+                authorNames = "Unknown",
+                publicationDate = "Unknown",
                 starRating = 0f,
-                publisher = bookDetails.publisher,
-                description = bookDetails.description,
-                pageCount = bookDetails.pageCount,
-                thumbnail = bookDetails.thumbnail,
+                publisher = "Unknown",
+                description = "Unknown",
+                pageCount = 0,
+                thumbnail = "",
                 journalEntry = "",
                 userProgress = 0,
                 userFinished = false,
@@ -462,7 +462,7 @@ class AddBookPage : AppCompatActivity() {
                 prevReadCount = 0,
                 purchasedFrom = "",
                 mainCharacters = "",
-                genres = " ",
+                genres = "Unknown",
                 tags = "",
                 lastReadDate = 0,
                 lastReadTime = 0,
@@ -472,90 +472,110 @@ class AddBookPage : AppCompatActivity() {
             )
         }
 
-        //    Check if Title and Author match another book before saving
-        private fun checkIfInLibrary(
-            titleCheck: String,
-            authorCheck: String,
-            callback: (Boolean) -> Unit
-        ) {
-            var bookExists = false  // Flag variable to track if the book exists
 
-            val libraryBookList = ArrayList<Book>()
-            val database = FirebaseDatabase.getInstance()
-            val profileRepo = ProfileRepository(database, currentUser!!.uid)
+        // otherwise Return a new Book with the details filled in
+        return Book(
+            id = UUID.randomUUID().toString(),
+            title = bookDetails.title,
+            authorNames = bookDetails.authorNames,
+            publicationDate = bookDetails.publicationDate,
+            starRating = 0f,
+            publisher = bookDetails.publisher,
+            description = bookDetails.description,
+            pageCount = bookDetails.pageCount,
+            thumbnail = bookDetails.thumbnail,
+            journalEntry = "",
+            userProgress = 0,
+            userFinished = false,
+            startDate = "",
+            endDate = "",
+            prevReadCount = 0,
+            purchasedFrom = "",
+            mainCharacters = "",
+            genres = " ",
+            tags = "",
+            lastReadDate = 0,
+            lastReadTime = 0,
+            isFav = false,
+            totalPageCount = 0,
+            totalPagesRead = 0
+        )
+    }
 
-            profileRepo.profileData.observe(this, Observer { userProfile ->
-                val username = userProfile.username
-                val bookRepository =
-                    BookRepository(database, Friend(currentUser!!.uid, username, false))
+    //    Check if Title and Author match another book before saving
+    private fun checkIfInLibrary(titleCheck: String, authorCheck: String, callback: (Boolean) -> Unit) {
+        var bookExists = false  // Flag variable to track if the book exists
 
-                bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
-                    if (isBookDataReady) {
-                        val bookCount = bookRepository.Library.size
+        val libraryBookList = ArrayList<Book>()
+        val database = FirebaseDatabase.getInstance()
+        val profileRepo = ProfileRepository(database, currentUser!!.uid)
 
-                        if (bookCount > 0) {
-                            for (books in bookRepository.Library) {
-                                libraryBookList.add(
-                                    Book(
-                                        books.id,
-                                        books.title,
-                                        books.authorNames,
-                                        books.publicationDate,
-                                        books.starRating,
-                                        books.publisher,
-                                        books.description,
-                                        books.pageCount,
-                                        books.thumbnail,
-                                        books.journalEntry,
-                                        books.userProgress,
-                                        books.userFinished,
-                                        books.isFav,
-                                        books.purchasedFrom,
-                                        books.mainCharacters,
-                                        books.genres,
-                                        books.tags,
-                                        books.lastReadDate,
-                                        books.lastReadTime,
-                                        books.prevReadCount,
-                                        books.startDate,
-                                        books.endDate,
-                                        books.totalPageCount,
-                                        books.totalPagesRead,
-                                    )
+        profileRepo.profileData.observe(this, Observer { userProfile ->
+            val username = userProfile.username
+            val bookRepository =
+                BookRepository(database, Friend(currentUser!!.uid, username, false))
+
+            bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
+                if (isBookDataReady) {
+                    val bookCount = bookRepository.Library.size
+
+                    if (bookCount > 0) {
+                        for (books in bookRepository.Library) {
+                            libraryBookList.add(
+                                Book(
+                                    books.id,
+                                    books.title,
+                                    books.authorNames,
+                                    books.publicationDate,
+                                    books.starRating,
+                                    books.publisher,
+                                    books.description,
+                                    books.pageCount,
+                                    books.thumbnail,
+                                    books.journalEntry,
+                                    books.userProgress,
+                                    books.userFinished,
+                                    books.isFav,
+                                    books.purchasedFrom,
+                                    books.mainCharacters,
+                                    books.genres,
+                                    books.tags,
+                                    books.lastReadDate,
+                                    books.lastReadTime,
+                                    books.prevReadCount,
+                                    books.startDate,
+                                    books.endDate,
+                                    books.totalPageCount,
+                                    books.totalPagesRead,
                                 )
+                            )
 
-                                if (titleCheck.lowercase() == books.title.lowercase() && authorCheck.lowercase() == books.authorNames.lowercase()) {
-                                    bookExists = true
-                                    break
-                                }
+                            if (titleCheck.lowercase() == books.title.lowercase() && authorCheck.lowercase() == books.authorNames.lowercase()) {
+                                bookExists = true
+                                break
                             }
                         }
                     }
+                }
 
-                    bookRepository.stopBookListener()
+                bookRepository.stopBookListener()
 
-                    if (bookExists) {
-                        // Book already exists in the library
-                        Toast.makeText(
-                            applicationContext,
-                            "Book already in library",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        // Book doesn't exist in the library
-                        saveNewBook()
-                    }
+                if (bookExists) {
+                    // Book already exists in the library
+                    Toast.makeText(
+                        applicationContext,
+                        "Book already in library",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Book doesn't exist in the library
+                    saveNewBook()
+                }
 
-                    // Invoke the callback with the result
-                    callback.invoke(bookExists)
-                })
-                profileRepo.stopProfileListener()
+                // Invoke the callback with the result
+                callback.invoke(bookExists)
             })
-        }
-
+            profileRepo.stopProfileListener()
+        })
     }
-
-
-
-
-
+}

@@ -143,10 +143,10 @@ class BookPageActivity : AppCompatActivity() {
                     isBookFavorite = exIsFav
                     if (isBookFavorite) {
                         ibFavorite.setImageResource(R.drawable.favorite_yes)
-                        ibFavorite.setColorFilter(resources.getColor(R.color.cranny_blue_light))
+                        ibFavorite.setColorFilter(resources.getColor(R.color.cranny_gold))
                     } else {
                         ibFavorite.setImageResource(R.drawable.favorite_yes)
-                        ibFavorite.setColorFilter(resources.getColor(R.color.cranny_purple_blue))
+                        ibFavorite.setColorFilter(resources.getColor(R.color.cranny_mid_green))
                     }
 
                     ibFavorite.setOnClickListener {
@@ -243,11 +243,11 @@ class BookPageActivity : AppCompatActivity() {
             isBookFavorite = !isBookFav
             if(!isBookFav) {
                 ibFavorite.setImageResource(R.drawable.favorite_yes) // we are making it a favorite so show the fav button
-                ibFavorite.setColorFilter(resources.getColor(R.color.cranny_blue_light))
+                ibFavorite.setColorFilter(resources.getColor(R.color.cranny_gold))
             }
             else {
                 ibFavorite.setImageResource(R.drawable.favorite_yes) // we are not favorite it so show the not fav button
-                ibFavorite.setColorFilter(resources.getColor(R.color.cranny_purple_blue))
+                ibFavorite.setColorFilter(resources.getColor(R.color.cranny_mid_green))
             }
 
             val database = FirebaseDatabase.getInstance()

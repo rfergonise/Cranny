@@ -6,7 +6,7 @@
 
     android:id="@+id/coordinatorLayout3"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView2"
@@ -15,6 +15,7 @@
         android:text="Dashboard"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

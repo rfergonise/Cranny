@@ -3,7 +3,7 @@ package com.example.cranny
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +26,12 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
         getLibraryRecyclerData()
 
         // Go back to Main Activity until menu is created
-        val menuBTN = findViewById<Button>(R.id.btLibraryActivity)
-        menuBTN.setOnClickListener {
+        val homeBTN = findViewById<ImageButton>(R.id.ibHome)
+        homeBTN.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
         }
+
 
         // Floating add book button, goes to Add Book Page
         val addBookBTN = findViewById<FloatingActionButton>(R.id.fbAddBook)
