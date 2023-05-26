@@ -91,22 +91,25 @@
                 android:id="@+id/mcvBook1"
                 android:layout_width="75dp"
                 android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
                 android:layout_gravity="left"
-                app:cardBackgroundColor="@color/cranny_dark_green"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
-                app:strokeWidth="3dp"
+                app:cardBackgroundColor="@color/cranny_dark_green"
+                app:cardCornerRadius="10dp"
                 app:strokeColor="@color/cranny_gold"
+                app:strokeWidth="3dp">
 
                 <ImageView
                     android:id="@+id/ivBook1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -123,14 +126,17 @@
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp"
                 app:strokeWidth="3dp"
-                app:strokeColor="@color/cranny_gold"
+                app:strokeColor="@color/cranny_gold">
 
                 <ImageView
                     android:id="@+id/ivBook2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -148,12 +154,16 @@
                 android:layout_gravity="right"
                 app:strokeWidth="3dp"
                 app:strokeColor="@color/cranny_gold">
+
                 <ImageView
                     android:id="@+id/ivBook3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -171,12 +181,16 @@
                 android:layout_marginBottom="0dp"
                 app:strokeWidth="3dp"
                 app:strokeColor="@color/cranny_gold">
+
                 <ImageView
                     android:id="@+id/ivBook4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -200,7 +214,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -224,7 +241,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/example_bookcover" />
+                    android:scaleX=".7"
+                    android:scaleY=".7"
+                    app:tint="@color/cranny_mid_green"
+                    app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
 

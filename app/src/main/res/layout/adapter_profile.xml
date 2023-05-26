@@ -23,7 +23,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            app:cardBackgroundColor="@color/cranny_dark_green"
+            app:cardBackgroundColor="@color/cranny_mid_green"
             app:cardCornerRadius="10dp"
             app:strokeColor="@color/cranny_gold"
             app:strokeWidth="3dp">
@@ -33,7 +33,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/example_bookcover" />
+                android:scaleX=".7"
+                android:scaleY=".7"
+                app:tint="@color/black"
+                app:srcCompat="@drawable/logonobkgrd" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -47,7 +50,7 @@
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            app:cardBackgroundColor="@color/cranny_dark_green"
+            app:cardBackgroundColor="@color/cranny_mid_green"
             app:cardCornerRadius="10dp"
             app:strokeColor="@color/cranny_gold"
             app:strokeWidth="3dp">
@@ -57,7 +60,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/example_bookcover" />
+                android:scaleX=".7"
+                android:scaleY=".7"
+                app:tint="@color/black"
+                app:srcCompat="@drawable/logonobkgrd" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -72,7 +78,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="22dp"
             android:layout_marginBottom="0dp"
-            app:cardBackgroundColor="@color/cranny_dark_green"
+            app:cardBackgroundColor="@color/cranny_mid_green"
             app:cardCornerRadius="10dp"
             app:strokeColor="@color/cranny_gold"
             app:strokeWidth="3dp">
@@ -82,7 +88,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/example_bookcover" />
+                android:scaleX=".7"
+                android:scaleY=".7"
+                app:tint="@color/black"
+                app:srcCompat="@drawable/logonobkgrd" />
 
         </com.google.android.material.card.MaterialCardView>
 
