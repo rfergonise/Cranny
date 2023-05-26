@@ -10,16 +10,15 @@
         android:id="@+id/mcvFriendBox"
         android:layout_width="330dp"
         android:layout_height="150dp"
-        app:cardBackgroundColor="@color/cRequest_adapter_background"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/cRequest_adapter_stroke"
-        app:cardElevation="0dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        >
+        android:gravity="center"
+        android:orientation="vertical"
+        app:cardBackgroundColor="@color/cranny_mid_green"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/cRequest_adapter_stroke"
+        app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,13 +29,13 @@
                 android:id="@+id/cvPFPBorder"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                app:cardBackgroundColor="@color/cRequest_adapter_background"
-                app:cardCornerRadius="65dp"
                 android:layout_marginStart="15dp"
+                app:cardBackgroundColor="@color/cranny_purple"
+                app:cardCornerRadius="65dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/cRequest_adapter_pfp_stroke"
+                app:strokeColor="@color/cranny_purple"
                 app:strokeWidth="5dp">
 
                 <ImageView
@@ -53,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                app:cardBackgroundColor="@color/cRequest_adapter_background"
+                app:cardBackgroundColor="@color/cranny_mid_green"
                 app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="@+id/mcvAcceptButton"
                 app:layout_constraintTop_toTopOf="parent">
@@ -65,8 +64,9 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/raleway_custom"
                     android:text="\@123456789123456"
-                    android:textColor="@color/cRequest_adapter_username_text"
-                    android:textSize="20dp" />
+                    android:textColor="@color/cranny_dark_green"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -77,26 +77,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="120dp"
                 android:layout_marginBottom="35dp"
-                app:cardBackgroundColor="@color/cRequest_adapter_button_background"
+                app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardCornerRadius="25dp"
                 app:cardElevation="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:strokeColor="@color/cRequest_adapter_button_stroke"
+                app:strokeColor="@color/cranny_gold"
                 app:strokeWidth="2dp">
 
                 <TextView
                     android:id="@+id/tvAcceptButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="@font/raleway_custom"
                     android:text="Accept"
-                    android:textColor="@color/cRequest_adapter_button_text"
+                    android:textColor="@color/cranny_gold"
                     android:textSize="20dp" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -108,30 +108,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="35dp"
-                app:cardBackgroundColor="@color/cRequest_adapter_button_background"
+                app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardCornerRadius="25dp"
                 app:cardElevation="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:strokeColor="@color/cRequest_adapter_button_stroke"
+                app:strokeColor="@color/cranny_gold"
                 app:strokeWidth="2dp">
 
                 <TextView
                     android:id="@+id/tvDeclineButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="@font/raleway_custom"
                     android:text="Decline"
-                    android:textColor="@color/cRequest_adapter_button_text"
+                    android:textColor="@color/cranny_gold"
                     android:textSize="20dp" />
 
             </com.google.android.material.card.MaterialCardView>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

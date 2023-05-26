@@ -38,7 +38,7 @@
                 android:layout_marginStart="15dp"
                 app:cardBackgroundColor="@color/cranny_dark_green"
                 app:cardCornerRadius="65dp"
-                app:strokeColor="@color/cranny_english_violet"
+                app:strokeColor="@color/cranny_purple"
                 app:strokeWidth="5dp">
 
                 <ImageView

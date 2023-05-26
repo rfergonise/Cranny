@@ -8,7 +8,7 @@
         android:id="@+id/mcvBooksContainer"
         android:layout_width="310dp"
         android:layout_height="120dp"
-        app:cardBackgroundColor="@color/cranny_mid_brown"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

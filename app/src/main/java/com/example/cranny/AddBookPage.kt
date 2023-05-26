@@ -61,7 +61,7 @@ class AddBookPage : AppCompatActivity() {
         genresInput = findViewById(R.id.tiGenres)
         tagsInput = findViewById(R.id.tiTags)
         ratingsInput = findViewById(R.id.ratingBar)
-        menuBTN = findViewById(R.id.ibLibraryButton)
+        menuBTN = findViewById(R.id.ibCancelButton)
         cancelBottomBTN = findViewById(R.id.btnCancel)
         saveBottomBTN = findViewById(R.id.btnSave)
         saveTopBTN = findViewById(R.id.ibSaveButton)

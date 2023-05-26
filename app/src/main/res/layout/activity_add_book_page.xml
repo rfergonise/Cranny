@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/raleway"
                 android:text="@string/AddBook"
-                android:textColor="#000000"
+                android:textColor="@color/cranny_dark_green"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,19 +38,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/ibLibraryButton"
+                android:id="@+id/ibCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="8dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/menu"
                 android:padding="2dp"
-                android:scaleX="2"
-                android:scaleY="2"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_library_books_24"
+                app:srcCompat="@drawable/cancelsmall"
                 app:tint="@color/cranny_gold" />
 
             <ImageButton
@@ -107,7 +107,7 @@
                     android:hint="@string/BookTitle"
                     app:errorEnabled="false"
                     app:helperText="Required"
-                    app:helperTextTextColor="#830101"
+                    app:helperTextTextColor="@color/cranny_dark_red"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -244,7 +244,7 @@
                     android:layout_marginEnd="8dp"
                     android:hint="@string/author"
                     app:helperText="Required"
-                    app:helperTextTextColor="#830101"
+                    app:helperTextTextColor="@color/cranny_dark_red"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvPageRead">
@@ -457,7 +457,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="@string/rating"
-                    android:progressTint="@color/cranny_english_violet"
+                    android:progressTint="@color/cranny_purple"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tiTags" />
 

@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cvDisplayName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cvUsername"
-        app:strokeColor="@color/cranny_english_violet"
+        app:strokeColor="@color/cranny_purple"
         app:strokeWidth="5dp">
 
         <ImageView
@@ -44,7 +44,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cranny_dark_green"
+        app:cardBackgroundColor="@color/cranny_bone"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cvPFPBorder"
@@ -60,14 +60,14 @@
                 android:id="@+id/tvProfileUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway_custom"
+                android:fontFamily="@font/lorenta_custom"
                 android:shadowColor="@color/black"
                 android:shadowDx="0.5"
                 android:shadowDy="0.5"
-                android:shadowRadius="5"
+                android:shadowRadius="0"
                 android:text="\@Username"
-                android:textColor="@color/cranny_gold"
-                android:textSize="28sp"
+                android:textColor="@color/cranny_purple"
+                android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
         app:cardElevation="0dp"
         app:layout_constraintEnd_toStartOf="@+id/cvBookCount"
         app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-        app:strokeColor="@color/cranny_english_violet"
+        app:strokeColor="@color/cranny_purple"
         app:strokeWidth="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,7 +145,7 @@
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvUsername"
-        app:strokeColor="@color/cranny_english_violet"
+        app:strokeColor="@color/cranny_purple"
         app:strokeWidth="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -200,7 +200,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cranny_dark_green"
+        app:cardBackgroundColor="@color/cranny_bone"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -219,14 +219,14 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/raleway_custom"
+                android:fontFamily="@font/lorenta_custom"
                 android:shadowColor="#000000"
                 android:shadowDx="0.5"
                 android:shadowDy="0.5"
-                android:shadowRadius="5"
+                android:shadowRadius="0"
                 android:text="\Display Name"
-                android:textColor="@color/cranny_gold"
-                android:textSize="28sp"
+                android:textColor="@color/cranny_purple"
+                android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -284,12 +284,12 @@
         android:layout_height="400dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        app:cardBackgroundColor="@color/cranny_mid_brown"
+        app:cardBackgroundColor="@color/cranny_dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvBorder2"
-        app:strokeColor="@color/cranny_dark_green"
+        app:strokeColor="@color/cranny_gold"
         app:strokeWidth="5dp">
 
         <TextView
@@ -299,13 +299,14 @@
             android:layout_gravity="center"
             android:fontFamily="@font/raleway_custom"
             android:text="See your shared books here"
-            android:textColor="@color/cranny_dark_green"
+            android:textColor="@color/cranny_gold"
             android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSocial"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingTop="5dp" />
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Swipe Indicators -->
