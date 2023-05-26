@@ -85,6 +85,7 @@ class BookDetails : AppCompatActivity() {
                     book.startDate = ""
                     book.purchasedFrom = ""
                     book.totalPageCount = 0
+                    book.thumbnail = ""
 
 
                     //Saves the created book and places it in the users library

@@ -2,13 +2,19 @@ package com.example.cranny
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import javax.sql.DataSource
 
 
 class BookPageActivity : AppCompatActivity() {
@@ -33,6 +39,7 @@ class BookPageActivity : AppCompatActivity() {
     private lateinit var tvFinishedReading: TextView
     private var isBookFavorite: Boolean = false
     private var userFinished: Boolean = true
+    private lateinit var exThumbnail: ImageView  //added by will to show thumbnail in library book info
 
 
     private val auth = FirebaseAuth.getInstance()
@@ -68,6 +75,7 @@ class BookPageActivity : AppCompatActivity() {
                     lastPage = findViewById(R.id.tvbpLastPageRead)
                     userPageRead = findViewById(R.id.tvbpUserPageRead)
                     ibFavorite = findViewById(R.id.bpibFavorite)
+                    exThumbnail = findViewById(R.id.imageView)  //added by will to show thumbnail in library book info
 
                     val bundle: Bundle? = intent.extras
                     val exTitle = bundle!!.getString("title")
@@ -89,6 +97,11 @@ class BookPageActivity : AppCompatActivity() {
                     val exIsFav = bundle.getBoolean("isFav")
                     val exUserFinished = bundle.getBoolean("userFinished")
                     //username = bundle.getString("username")!!
+                    val exThumbnailUrl = intent.getStringExtra("thumbnail") //added by will to show thumbnail in library book info
+
+                    //added by will to show thumbnail in library book info
+                    println("Thumbnail URL: $exThumbnailUrl")
+                    Glide.with(this).load(exThumbnailUrl).into(exThumbnail)
 
                     abTitle.text = exTitle
                     title.text = exTitle
@@ -108,7 +121,6 @@ class BookPageActivity : AppCompatActivity() {
                     userFinished = exUserFinished
 
                     nullCheck()
-
 
 
                     //last page read returning 0
@@ -136,9 +148,11 @@ class BookPageActivity : AppCompatActivity() {
                         startDate.toString(), //var startDate: String,
                         "", //var endDate: String,
                         0, //var totalPageCount: Int,
-                        exUserPageRead //var totalPagesRead: Int
+                        exUserPageRead, //var totalPagesRead: Int
+                        exThumbnailUrl, //var thumbnail: String?,  //added by will to show thumbnail in library book info
 
                     )
+
 
                     isBookFavorite = exIsFav
                     if (isBookFavorite) {
@@ -171,6 +185,7 @@ class BookPageActivity : AppCompatActivity() {
                     val backBTN = findViewById<ImageButton>(R.id.bpBackButton)
                     backBTN.setOnClickListener {
                         val intent = Intent(this, LibraryActivity::class.java)
+                        intent.putExtra("thumbnail", currentBook.thumbnail)
                         startActivity(intent)
                     }
 
@@ -195,6 +210,7 @@ class BookPageActivity : AppCompatActivity() {
                                 })
                                 profileRepo.stopProfileListener()
                                 val intent = Intent(this, LibraryActivity::class.java)
+                                intent.putExtra("thumbnail", currentBook.thumbnail)
                                 startActivity(intent)
                                 Toast.makeText(
                                     applicationContext,

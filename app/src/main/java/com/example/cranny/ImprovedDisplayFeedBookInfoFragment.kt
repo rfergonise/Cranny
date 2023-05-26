@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.FirebaseDatabase
 
@@ -87,6 +88,11 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         var rvBookInsight: RecyclerView = fragmentView.findViewById(R.id.rvBookInsight)
         var rbRating: RatingBar = fragmentView.findViewById(R.id.rbRating)
 
+        // Load book cover
+        Glide.with(this)
+            .load(book!!.strCoverURL)
+            .into(ivBookCover)
+
         val context = requireContext()
         var progressBarColor: Int
         if(book!!.nTotalReadPages == book.nCountPage)
@@ -105,7 +111,7 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
 
         setRatingBarColors(rbRating, R.color.cranny_purple, R.color.cBookDisplay_rating_background)
 
-        // todo load profile picture into ivBook
+
 
         var title = formatStringLength(book!!.strTitle, 19, 2, false)
         var author = formatStringLength(book!!.strAuthor, 19, 2, false)
