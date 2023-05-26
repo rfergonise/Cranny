@@ -489,41 +489,32 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
 
     fun updateBookData(book: Book)
     {
-        // todo update the update function to match new data types
-        // gets the path reference to the user's book we are updating
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val bookDataRef = database.getReference("UserData").child(currentUser!!.uid).child("Books").child(book.id)
-        // creates a HashMap of the new data we are setting
-        val bookData = HashMap<String, Any>()
-        bookData["AuthorNames"] = book.authorNames.toString()
-        bookData["Description"] = book.description.toString()
-        bookData["EndDate"] = book.endDate.toString()
-        bookData["Genres"] = book.genres.toString()
-        bookData["Id"] = book.id
-        bookData["JournalEntry"] = book.journalEntry.toString()
-        bookData["LastReadDate"] = book.lastReadDate!!
-        bookData["LastReadTime"] = book.lastReadTime!!
-        bookData["MainCharacters"] = book.mainCharacters.toString()
-        bookData["PageCount"] = book.pageCount!!.toInt()
-        bookData["PrevReadCount"] = book.prevReadCount.toString()
-        bookData["PublicationDate"] = book.publicationDate.toString()
-        bookData["Publisher"] = book.publisher.toString()
-        bookData["PurchaseFrom"] = book.purchasedFrom.toString()
-        bookData["StarRating"] = book.starRating!!.toInt()
-        bookData["StartDate"] = book.startDate
-        bookData["Tags"] = book.tags.toString()
-        bookData["Thumbnail"] = book.thumbnail.toString()
-        bookData["Title"] = book.title
-        bookData["UserFinished"] = book.userFinished
-        bookData["UserProgress"] = book.userProgress!!.toInt()
-        bookData["IsFavorite"] = book.isFav!!
-        bookData["ISBN"] = book.isbn.toString()
+        val bookDataRef = database.getReference("UserData").child(user.id).child("Books").child(book.id)
 
-        //val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int
-        //val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int
-
-        // updates the book's current HashMap with the new one
-        bookDataRef.updateChildren(bookData)
+        bookDataRef.child("AuthorNames").setValue(book.authorNames)
+        bookDataRef.child("Description").setValue(book.description)
+        bookDataRef.child("EndDate").setValue(book.endDate)
+        bookDataRef.child("Genres").setValue(book.genres)
+        bookDataRef.child("JournalEntry").setValue(book.journalEntry)
+        bookDataRef.child("LastReadDate").setValue(book.lastReadDate)
+        bookDataRef.child("LastReadTime").setValue(book.lastReadTime)
+        bookDataRef.child("MainCharacters").setValue(book.mainCharacters)
+        bookDataRef.child("PageCount").setValue(book.pageCount)
+        bookDataRef.child("PrevReadCount").setValue(book.prevReadCount)
+        bookDataRef.child("PublicationDate").setValue(book.publicationDate)
+        bookDataRef.child("Publisher").setValue(book.publisher)
+        bookDataRef.child("PurchaseFrom").setValue(book.purchasedFrom)
+        bookDataRef.child("StarRating").setValue(book.starRating)
+        bookDataRef.child("StartDate").setValue(book.startDate)
+        bookDataRef.child("Tags").setValue(book.tags)
+        bookDataRef.child("Thumbnail").setValue(book.thumbnail)
+        bookDataRef.child("Title").setValue(book.title)
+        bookDataRef.child("UserFinished").setValue(book.userFinished)
+        bookDataRef.child("UserProgress").setValue(book.userProgress)
+        bookDataRef.child("IsFavorite").setValue(book.isFav)
+        bookDataRef.child("TotalPageCount").setValue(book.totalPageCount)
+        bookDataRef.child("TotalPageRead").setValue(book.totalPagesRead)
+        bookDataRef.child("ISBN").setValue(book.isbn)
     }
 
     fun addBook(book: Book, owner: LifecycleOwner)
