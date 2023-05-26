@@ -159,6 +159,8 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("lastPageRead", libraryBookList[position].pageCount)
                         intent.putExtra("id", libraryBookList[position].id)
                         intent.putExtra("isFav", libraryBookList[position].isFav)
+                        //adding thumbnail to the intent
+                        intent.putExtra("thumbnail", libraryBookList[position].thumbnail)
                         startActivity(intent)
                     }
                 }
