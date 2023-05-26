@@ -21,6 +21,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.FirebaseDatabase
 
 
+
 class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
 
     lateinit var fragmentView: View
@@ -90,7 +91,8 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
 
         // Load book cover
         Glide.with(this)
-            .load(book!!.strCoverURL)
+            .load(book?.strCoverURL)
+            .error(R.drawable.logonobkgrd)
             .into(ivBookCover)
 
         val context = requireContext()

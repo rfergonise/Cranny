@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 
 class LibraryBookAdapter(
@@ -40,6 +41,11 @@ class LibraryBookAdapter(
         holder.libAuthors.text = libraryDataToDisplay[position].bookAuthor
         // Need to fix when we figure out images
         //holder.libBookImage.imageview = libraryDataToDisplay[position].libraryBookImage
+        //added by will for thumbnail
+        Glide.with(holder.itemView.context)
+            .load(libraryDataToDisplay[position].bookImage)  // Assuming bookCoverURL is the name of the field containing the URL of the book cover image
+            .error(R.drawable.logonobkgrd)  // A placeholder image in case of any error while loading the actual image
+            .into(holder.libBookImage)
 
         }
 
@@ -49,6 +55,8 @@ class LibraryBookAdapter(
             val libBookTitle: TextView = itemView.findViewById(R.id.tvrvBookTitle)
             val libAuthors: TextView = itemView.findViewById(R.id.tvrvAuthorName)
             val libBookImage: ImageView = itemView.findViewById(R.id.rvBookImagePreview)
+
+
 
             init {
                 itemView.setOnClickListener(this)

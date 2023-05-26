@@ -101,7 +101,11 @@ class BookPageActivity : AppCompatActivity() {
 
                     //added by will to show thumbnail in library book info
                     println("Thumbnail URL: $exThumbnailUrl")
-                    Glide.with(this).load(exThumbnailUrl).into(exThumbnail)
+                    Glide.with(this)
+                        .load(exThumbnailUrl)
+                        .error(R.drawable.logonobkgrd)
+                        .into(exThumbnail)
+
 
                     abTitle.text = exTitle
                     title.text = exTitle

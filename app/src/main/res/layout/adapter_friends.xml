@@ -108,7 +108,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -135,7 +135,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -162,7 +162,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -189,7 +189,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -216,7 +216,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -243,7 +243,7 @@
                     android:scaleType="fitXY"
                     android:scaleX=".7"
                     android:scaleY=".7"
-                    app:tint="@color/cranny_mid_green"
+
                     app:srcCompat="@drawable/logonobkgrd" />
 
             </com.google.android.material.card.MaterialCardView>

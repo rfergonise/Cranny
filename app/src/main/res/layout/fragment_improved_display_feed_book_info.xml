@@ -71,11 +71,10 @@
 
                 <ImageView
                     android:id="@+id/ivBook"
-                    android:layout_width="89dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/logonobkgrd"
-                    app:tint="@color/cranny_dark_green" />
+                   />
 
             </com.google.android.material.card.MaterialCardView>
 
