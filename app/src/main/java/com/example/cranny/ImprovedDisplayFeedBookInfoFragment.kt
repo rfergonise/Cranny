@@ -1,25 +1,16 @@
 package com.example.cranny
 
-import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.card.MaterialCardView
-import com.google.firebase.database.FirebaseDatabase
-
 
 
 class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
@@ -92,7 +83,7 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         // Load book cover
         Glide.with(this)
             .load(book?.strCoverURL)
-            .error(R.drawable.logonobkgrd)
+            .error(R.drawable.logo_mid_green)
             .into(ivBookCover)
 
         val context = requireContext()

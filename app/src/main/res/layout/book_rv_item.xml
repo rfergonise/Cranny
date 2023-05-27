@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
+    android:background="@color/cranny_mid_brown"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp">
+        android:layout_height="170dp"
+        android:background="@color/cranny_mid_brown">
 
         <ImageView
             android:id="@+id/idIVbook"
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/idIVbook"
+            android:fontFamily="@font/raleway_custom"
             android:padding="3dp"
             android:text="Book Title"
             android:textColor="@color/black"
@@ -39,6 +41,7 @@
             android:layout_below="@id/idTVBookTitle"
             android:layout_marginTop="3dp"
             android:layout_toEndOf="@id/idIVbook"
+            android:fontFamily="@font/raleway_custom"
             android:padding="3dp"
             android:text="Publisher"
             android:textColor="@color/black"
@@ -51,6 +54,7 @@
             android:layout_below="@id/idTVpublisher"
             android:layout_marginTop="3dp"
             android:layout_toEndOf="@id/idIVbook"
+            android:fontFamily="@font/raleway_custom"
             android:padding="3dp"
             android:text="Page count"
             android:textColor="@color/black"
@@ -63,6 +67,7 @@
             android:layout_below="@id/idTVPageCount"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="5dp"
+            android:fontFamily="@font/raleway_custom"
             android:padding="3dp"
             android:text="date"
             android:textColor="@color/black"

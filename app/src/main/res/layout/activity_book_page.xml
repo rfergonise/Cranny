@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/raleway_custom"
-                android:maxEms="7"
+                android:maxEms="6"
                 android:maxLines="2"
                 android:text="Book Page"
                 android:textAlignment="center"
@@ -112,7 +112,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logonobkgrd" />
+                    app:srcCompat="@drawable/logo_dark_green" />
 
                 <TextView
                     android:id="@+id/tvbpBookTitle"

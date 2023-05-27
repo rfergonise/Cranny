@@ -73,8 +73,9 @@
                     android:id="@+id/ivBook"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/cranny_dark_green"
                     android:scaleType="fitXY"
-                   />
+                    app:srcCompat="@drawable/logo_mid_green" />
 
             </com.google.android.material.card.MaterialCardView>
 

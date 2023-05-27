@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cranny_bone"
     android:orientation="vertical"
     tools:context=".BookDetails">
 
@@ -111,18 +111,22 @@
             <Button
                 android:id="@+id/idBtnAdd"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/raleway_custom"
                 android:text="Add"
-                android:textAllCaps="false" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/idBtnBack"
                 android:layout_width="4dp"
-                android:layout_height="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Back" />
+                android:fontFamily="@font/raleway_custom"
+                android:text="Back"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </LinearLayout>

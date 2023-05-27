@@ -13,7 +13,7 @@
         android:layout_gravity="center|top"
         android:scaleX=".7"
         android:scaleY=".7"
-        android:src="@drawable/logoedit"
+        android:src="@drawable/logo"
         app:tint="@color/cranny_dark_green" />
 
     <!--        <TextView-->

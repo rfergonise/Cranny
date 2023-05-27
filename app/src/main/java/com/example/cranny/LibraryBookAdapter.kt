@@ -2,17 +2,11 @@ package com.example.cranny
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.database.FirebaseDatabase
 
 class LibraryBookAdapter(
     private val libraryDataToDisplay: ArrayList<LibraryBookRecyclerData>,
@@ -44,7 +38,7 @@ class LibraryBookAdapter(
         //added by will for thumbnail
         Glide.with(holder.itemView.context)
             .load(libraryDataToDisplay[position].bookImage)  // Assuming bookCoverURL is the name of the field containing the URL of the book cover image
-            .error(R.drawable.logonobkgrd)  // A placeholder image in case of any error while loading the actual image
+            .error(R.drawable.logo_mid_green)  // A placeholder image in case of any error while loading the actual image
             .into(holder.libBookImage)
 
         }
