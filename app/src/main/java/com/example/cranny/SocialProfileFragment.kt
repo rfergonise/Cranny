@@ -1,9 +1,12 @@
 package com.example.cranny
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -39,6 +43,7 @@ class SocialProfileFragment : Fragment() {
     // Used to store what will displayed in the user feed
     private val userSocialFeed = ArrayList<SocialFeed>()
 
+    private lateinit var database: FirebaseDatabase
     lateinit var username: String
     lateinit var userId: String
     lateinit var fragmentView: View
@@ -82,10 +87,27 @@ class SocialProfileFragment : Fragment() {
         return fragmentView
     }
 
+
+    private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val selectedImageUri = result.data?.data
+            if (selectedImageUri != null) {
+                val profilePictureRepository = ProfilePictureRepository(database, userId)
+                profilePictureRepository.updateProfilePicture(selectedImageUri, ivProfilePicture)
+            }
+        }
+    }
+    fun allowProfileChange(database: FirebaseDatabase, userId: String) {
+        ivProfilePicture.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            selectImageLauncher.launch(intent)
+        }
+    }
+
     fun SetUpProfile()
     {
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        val database = FirebaseDatabase.getInstance()
+        database = FirebaseDatabase.getInstance()
         val context = requireContext()
         val setupRepo = SetupProfileRepository(database, userId!!, true, context)
         setupRepo.isProfileReady.observe(requireActivity()) { isProfileReady ->
@@ -101,6 +123,7 @@ class SocialProfileFragment : Fragment() {
                 // Load the profile picture from the database into the image view
                 val profilePictureRepository = ProfilePictureRepository(database, userId)
                 profilePictureRepository.loadProfilePictureIntoImageView(ivProfilePicture)
+                allowProfileChange(database, setupRepo.profile.userId)
 
                 val countOfThree = setupRepo.profile.books.size / 3
                 val totalBooksMinusTheLoners = countOfThree * 3
