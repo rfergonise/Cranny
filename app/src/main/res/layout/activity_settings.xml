@@ -62,7 +62,7 @@
     <FrameLayout
         android:id="@+id/setting_container"
         android:layout_width="396dp"
-        android:layout_height="338dp"
+        android:layout_height="370dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.466"
