@@ -1,5 +1,6 @@
 package com.example.cranny
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -42,12 +43,15 @@ class BookPageActivity : AppCompatActivity() {
     private lateinit var username: String
 
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_page)
 
         val database = FirebaseDatabase.getInstance()
         val profileRepo = ProfileRepository(database, currentUser!!.uid)
+
+
         profileRepo.profileData.observe(this, Observer { userProfile ->
             username = userProfile.username
             val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
@@ -181,10 +185,18 @@ class BookPageActivity : AppCompatActivity() {
                         userPageRead.visibility = View.VISIBLE
                     }
 
+
                     val backBTN = findViewById<ImageButton>(R.id.bpBackButton)
                     backBTN.setOnClickListener {
                         val intent = Intent(this, LibraryActivity::class.java)
                         intent.putExtra("thumbnail", currentBook.thumbnail)
+                        startActivity(intent)
+                    }
+
+                    //edit activity button
+                    val editBTN = findViewById<Button>(R.id.btnbpEditBook)
+                    editBTN.setOnClickListener {
+                        val intent = Intent(this, EditBook::class.java)
                         startActivity(intent)
                     }
 
