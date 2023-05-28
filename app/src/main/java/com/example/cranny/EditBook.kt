@@ -36,7 +36,6 @@ class EditBook : AppCompatActivity() {
     private var currentUser = auth.currentUser
     private lateinit var username: String
 
-
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
