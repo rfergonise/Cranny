@@ -28,9 +28,18 @@ class EditBook : AppCompatActivity() {
     private lateinit var editTextMainCharacters: EditText
     private lateinit var rbReview: RatingBar
 
+
+    // new EditText fields for book info:
+    private lateinit var editJournalEntry: EditText
+    private lateinit var editTotalPagesRead: EditText
+    private lateinit var editTotalPageCount: EditText
+
+
+
+    // save button
     private lateinit var saveButton: Button
 
-    //Firebase Access
+    // Firebase Access
     private val auth = FirebaseAuth.getInstance()
     private var currentUser = auth.currentUser
 
@@ -56,8 +65,11 @@ class EditBook : AppCompatActivity() {
         editTextMainCharacters = findViewById(R.id.tvbpMainCharacters)
         rbReview = findViewById(R.id.tvbpReview)
 
-        // set the edit text fields to the current saved text
+//        editJournalEntry = findViewById(R.id.tvbpMyJournal)
+//        editTotalPagesRead = findViewById(R.id.)
+//        editTotalPageCount = findViewById(R.id.)
 
+        // set the edit text fields to the current saved text
         if (bookOriginal.title!!.isNotEmpty()) editTextTitle.setText(bookOriginal.title)
         else editTextTitle.setText("Title Unknown")
 
@@ -89,18 +101,17 @@ class EditBook : AppCompatActivity() {
         rbReview.rating = bookOriginal.starRating!!
 
         val database = FirebaseDatabase.getInstance()
+
         // get profile details
         val profileRepo = ProfileRepository(database, currentUser!!.uid)
         profileRepo.profileData.observe(this, Observer { userProfile ->
             // once we have profile details, create library firebase access
             val bookRepository = BookRepository(database, Friend(userProfile.userId, userProfile.username, false))
+
             // when we have the book repo and profile details, allow the logic for buttons
             AllowButtonAccess(bookRepository)
         })
         profileRepo.stopProfileListener()
-
-
-
     }
 
     private fun AllowButtonAccess(bookRepository: BookRepository)
@@ -171,8 +182,8 @@ class EditBook : AppCompatActivity() {
             /* todo
                 add:
                 written review (save inside journalEntry variable)
-                page they are on (save inside totalPagesRead variable)
-                did they finish it (save inside userFinished variable)
+                page they are on (save inside totalPagesRead & totalPageCount variable)
+                did they finish it (save inside totalPagesRead variable)
              */
 
             val updatedBook = Book(
@@ -225,8 +236,6 @@ class EditBook : AppCompatActivity() {
             intent.putExtra("isFav", updatedBook.isFav)
             intent.putExtra("thumbnail", updatedBook.thumbnail)
             startActivity(intent)
-
         }
     }
-
 }
