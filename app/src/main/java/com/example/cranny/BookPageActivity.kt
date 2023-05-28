@@ -1,5 +1,6 @@
 package com.example.cranny
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -42,12 +43,15 @@ class BookPageActivity : AppCompatActivity() {
     private lateinit var username: String
 
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_page)
 
         val database = FirebaseDatabase.getInstance()
         val profileRepo = ProfileRepository(database, currentUser!!.uid)
+
+
         profileRepo.profileData.observe(this, Observer { userProfile ->
             username = userProfile.username
             val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
@@ -125,26 +129,26 @@ class BookPageActivity : AppCompatActivity() {
                     //last page read returning 0
                     val currentBook = Book(
                         exBookID.toString(), //@PrimaryKey val id: String,
-                        title.toString(), //var title: String,
-                        author.toString(), //var authorNames: String?,
-                        publicationDate.toString(), //var publicationDate: String?,
-                        rating.rating, //var starRating: Float?,
-                        publisher.toString(), //var publisher: String?,
-                        summary.toString(), //var description: String?,
+                        exTitle!!, //var title: String,
+                        exAuthor!!, //var authorNames: String?,
+                        exPublicationDate, //var publicationDate: String?,
+                        exRating, //var starRating: Float?,
+                        exPublisher, //var publisher: String?,
+                        exSummary, //var description: String?,
                         0, //var pageCount: Int?,
                         "", //var thumbnail: String?,
-                        userReview.toString(),  //var journalEntry: String?,
+                        exReview,  //var journalEntry: String?,
                         0, //var userProgress: Int?,
-                        userFinished, //var userFinished: Boolean,
+                        exUserFinished, //var userFinished: Boolean,
                         isBookFavorite, //var isFav: Boolean?,
-                        purchasedFrom.toString(), //var purchasedFrom: String?,
-                        mainCharacters.toString(), //var mainCharacters: String?,
-                        genres.toString(), //var genres: String?,
-                        tags.toString(), //var tags: String?,
+                        exPurchasedFrom, //var purchasedFrom: String?,
+                        exMainCharacters, //var mainCharacters: String?,
+                        exGenres, //var genres: String?,
+                        exTags, //var tags: String?,
                         0, //var lastReadDate: Long?,
                         0, //var lastReadTime: Long?,
                         0, //var prevReadCount: Int?,
-                        startDate.toString(), //var startDate: String,
+                        exStartDate!!, //var startDate: String,
                         "", //var endDate: String,
                         0, //var totalPageCount: Int,
                         exUserPageRead, //var totalPagesRead: Int
@@ -181,12 +185,22 @@ class BookPageActivity : AppCompatActivity() {
                         userPageRead.visibility = View.VISIBLE
                     }
 
+
                     val backBTN = findViewById<ImageButton>(R.id.bpBackButton)
                     backBTN.setOnClickListener {
                         val intent = Intent(this, LibraryActivity::class.java)
                         intent.putExtra("thumbnail", currentBook.thumbnail)
                         startActivity(intent)
                     }
+
+                    //edit activity button
+                    val editBTN = findViewById<Button>(R.id.btnbpEditBook)
+                    editBTN.setOnClickListener {
+                        val intent = Intent(this, EditBook::class.java)
+                        intent.putExtra("book", currentBook) // pass the original book
+                        startActivity(intent)
+                    }
+
 
                     val deleteBTN = findViewById<Button>(R.id.btnbpDelete)
                     deleteBTN.setOnClickListener {

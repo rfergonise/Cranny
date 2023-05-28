@@ -75,7 +75,6 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         var ivBookCover: ImageView = fragmentView.findViewById(R.id.ivBook)
         var tvProgressHeader: TextView = fragmentView.findViewById(R.id.tvProgressHeader)
         var tvProgressPages: TextView = fragmentView.findViewById(R.id.tvProgressPages)
-        var tvProgressChapters: TextView = fragmentView.findViewById(R.id.tvProgressChapters)
         var pbProgress: ProgressBar = fragmentView.findViewById(R.id.pbProgress)
         var rvBookInsight: RecyclerView = fragmentView.findViewById(R.id.rvBookInsight)
         var rbRating: RatingBar = fragmentView.findViewById(R.id.rbRating)
@@ -87,8 +86,11 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
             .into(ivBookCover)
 
         val context = requireContext()
+        var totalPages = 1
+        if(book!!.nCountPage == 0 && book.nTotalReadPages > 0) totalPages = book.nTotalReadPages
+
         var progressBarColor: Int
-        if(book!!.nTotalReadPages == book.nCountPage)
+        if(totalPages == book.nCountPage)
         {
             progressBarColor = ContextCompat.getColor(context, R.color.cranny_dark_red)
         }
@@ -109,8 +111,7 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
         var title = formatStringLength(book!!.strTitle, 19, 2, false)
         var author = formatStringLength(book!!.strAuthor, 19, 2, false)
         var progressHeader = "@${book.strBookOwnerUsername}'s Progress"
-        var pagesRead = "Pages Read:\t${book.nTotalReadPages}/${book.nCountPage}"
-        var chaptersRead = "Chapters Read:\t${book.nTotalReadChapters}/${book.nCountChapter}"
+        var pagesRead = "Pages Read:\t${book.nTotalReadPages}/${totalPages}"
 
         formatTextViewSize(getNumberOfLines(title), tvTitle, 0)
         formatTextViewSize(getNumberOfLines(author), tvAuthor, 1)
@@ -121,7 +122,6 @@ class ImprovedDisplayFeedBookInfoFragment : DialogFragment() {
            // rbRating.rating = book?.fRating ?: 0.0f
             tvProgressHeader.text = progressHeader
             tvProgressPages.text = pagesRead
-            tvProgressChapters.text = chaptersRead
             rbRating.rating = book.fRating
         }
 
