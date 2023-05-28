@@ -512,7 +512,7 @@
                     app:layout_constraintStart_toEndOf="@+id/bpReviewDivider"
                     app:layout_constraintTop_toBottomOf="@+id/tvbpMainCharacters" />
 
-                <EditText
+                <RatingBar
                     android:id="@+id/tvbpReview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
