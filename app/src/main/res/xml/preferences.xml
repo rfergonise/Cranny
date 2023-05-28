@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-
-
-
     //setting the account to private or public
     <SwitchPreferenceCompat
     android:key="account_private"
@@ -24,9 +20,26 @@
     <EditTextPreference
         android:key="username"
         android:title="Change Username"
-        android:summary="Click to change your Username"
+        android:summary="Click to change your username"
         android:dialogTitle="Enter new Username"
         android:inputType="text" />
+
+    //changing display name
+    <EditTextPreference
+        android:key="display"
+        android:title="Change Display Name"
+        android:summary="Click to change your display name"
+        android:dialogTitle="Enter new Username"
+        android:inputType="text" />
+
+    //changing bio
+    <EditTextPreference
+        android:key="bio"
+        android:title="Change Bio"
+        android:summary="Click to change your bio"
+        android:dialogTitle="Enter new Username"
+        android:inputType="text"
+        />
 
 
 </PreferenceScreen>

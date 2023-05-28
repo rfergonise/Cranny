@@ -60,6 +60,37 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        //account change display name
+        val displayPreference: EditTextPreference? = findPreference("display")
+        displayPreference?.setOnPreferenceChangeListener { _, newValue ->
+            val newDisplayName = newValue as String
+            val userId = getUserId()
+            if (userId != null) {
+                val database = FirebaseDatabase.getInstance()
+                val profileRepo = ProfileRepository(database, userId)
+                profileRepo.profileData.observe(this, Observer { userProfile ->
+                    profileRepo.updateProfileData(userProfile.username, newDisplayName, userId, userProfile.bio, userProfile.friendCount, userProfile.bookCount)
+                })
+                profileRepo.stopProfileListener()
+            }
+            true
+        }
+
+        //account change bio
+        val bioPreference: EditTextPreference? = findPreference("bio")
+        bioPreference?.setOnPreferenceChangeListener { _, newValue ->
+            val newBio = newValue as String
+            val userId = getUserId()
+            if (userId != null) {
+                val database = FirebaseDatabase.getInstance()
+                val profileRepo = ProfileRepository(database, userId)
+                profileRepo.profileData.observe(this, Observer { userProfile ->
+                    profileRepo.updateProfileData(userProfile.username, userProfile.name, userId, newBio, userProfile.friendCount, userProfile.bookCount)
+                })
+                profileRepo.stopProfileListener()
+            }
+            true
+        }
 
     }
 

@@ -1,10 +1,14 @@
 package com.example.cranny
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -890,6 +894,16 @@ class ProfilePictureRepository(private val database: FirebaseDatabase, val userI
             }
             .addOnFailureListener { exception ->
             }
+    }
+
+    fun updateProfilePicture(imageUri: Uri, ivPFP: ImageView) {
+        // Delete the existing profile picture
+        deleteProfilePicture()
+
+        // Upload the new profile picture
+        uploadProfilePicture(imageUri)
+
+        ivPFP.setImageURI(imageUri)
     }
 }
 
