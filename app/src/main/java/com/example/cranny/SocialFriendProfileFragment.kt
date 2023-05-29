@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.FirebaseDatabase
 
@@ -268,6 +269,7 @@ class FriendProfileFragmentAdapter(private val activity: DashboardActivity, val 
                     // show book container
                     holder.mcvBookButton1.visibility = View.VISIBLE
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
+                    LoadBookCover(books.book1, holder.ivBook1)
                 }
                 2 -> {
                     // show book containers
@@ -275,6 +277,8 @@ class FriendProfileFragmentAdapter(private val activity: DashboardActivity, val 
                     holder.mcvBookButton2.visibility = View.VISIBLE
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
                     StartBookOnClick(books.book2, holder.mcvBookButton2)
+                    LoadBookCover(books.book1, holder.ivBook1)
+                    LoadBookCover(books.book2, holder.ivBook2)
                 }
                 3 -> {
                     // show book containers
@@ -284,6 +288,9 @@ class FriendProfileFragmentAdapter(private val activity: DashboardActivity, val 
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
                     StartBookOnClick(books.book2, holder.mcvBookButton2)
                     StartBookOnClick(books.book3, holder.mcvBookButton3)
+                    LoadBookCover(books.book1, holder.ivBook1)
+                    LoadBookCover(books.book2, holder.ivBook2)
+                    LoadBookCover(books.book3, holder.ivBook3)
                 }
                 else -> {
                     // you should not be here, how did you get here?? \_(x_x)_/
@@ -298,6 +305,17 @@ class FriendProfileFragmentAdapter(private val activity: DashboardActivity, val 
             tvInformUser.visibility = View.VISIBLE
         }
 
+    }
+    private fun LoadBookCover(book: DisplayFeedBookInfo, ivBook: ImageView)
+    {
+        if(!book.strCoverURL.isNullOrBlank())
+        {
+            // load thumbnail
+            Glide.with(context).load(book.strCoverURL).into(ivBook)
+            // reset the scale
+            ivBook.scaleX = 1.0f
+            ivBook.scaleY = 1.0f
+        }
     }
     private fun StartBookOnClick(book: DisplayFeedBookInfo, button: MaterialCardView)
     {

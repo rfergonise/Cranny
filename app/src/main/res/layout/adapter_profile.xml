@@ -35,7 +35,6 @@
                 android:scaleType="fitXY"
                 android:scaleX=".7"
                 android:scaleY=".7"
-
                 app:srcCompat="@drawable/logo_dark_green" />
 
         </com.google.android.material.card.MaterialCardView>

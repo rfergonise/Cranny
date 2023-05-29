@@ -228,17 +228,15 @@ class ProfileFragmentAdapter(private val activity: DashboardActivity, val contex
                 1 -> {
                     // show book container
                     holder.mcvBookButton1.visibility = View.VISIBLE
-                    // load thumbnail
-                    Glide.with(context).load(books.book1.strCoverURL).into(holder.ivBook1)
+                    LoadBookCover(books.book1, holder.ivBook1)
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
                 }
                 2 -> {
                     // show book containers
                     holder.mcvBookButton1.visibility = View.VISIBLE
                     holder.mcvBookButton2.visibility = View.VISIBLE
-                    // load thumbnails
-                    Glide.with(context).load(books.book1.strCoverURL).into(holder.ivBook1)
-                    Glide.with(context).load(books.book2.strCoverURL).into(holder.ivBook2)
+                    LoadBookCover(books.book1, holder.ivBook1)
+                    LoadBookCover(books.book2, holder.ivBook2)
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
                     StartBookOnClick(books.book2, holder.mcvBookButton2)
                 }
@@ -247,10 +245,9 @@ class ProfileFragmentAdapter(private val activity: DashboardActivity, val contex
                     holder.mcvBookButton1.visibility = View.VISIBLE
                     holder.mcvBookButton2.visibility = View.VISIBLE
                     holder.mcvBookButton3.visibility = View.VISIBLE
-                    // load thumbnails
-                    Glide.with(context).load(books.book1.strCoverURL).into(holder.ivBook1)
-                    Glide.with(context).load(books.book2.strCoverURL).into(holder.ivBook2)
-                    Glide.with(context).load(books.book3.strCoverURL).into(holder.ivBook3)
+                    LoadBookCover(books.book1, holder.ivBook1)
+                    LoadBookCover(books.book2, holder.ivBook2)
+                    LoadBookCover(books.book3, holder.ivBook3)
                     StartBookOnClick(books.book1, holder.mcvBookButton1)
                     StartBookOnClick(books.book2, holder.mcvBookButton2)
                     StartBookOnClick(books.book3, holder.mcvBookButton3)
@@ -262,6 +259,17 @@ class ProfileFragmentAdapter(private val activity: DashboardActivity, val contex
             }
         }
 
+    }
+    private fun LoadBookCover(book: DisplayFeedBookInfo, ivBook: ImageView)
+    {
+        if(!book.strCoverURL.isNullOrBlank())
+        {
+            // load thumbnail
+            Glide.with(context).load(book.strCoverURL).into(ivBook)
+            // reset the scale
+            ivBook.scaleX = 1.0f
+            ivBook.scaleY = 1.0f
+        }
     }
     private fun StartBookOnClick(book: DisplayFeedBookInfo, button: MaterialCardView)
     {

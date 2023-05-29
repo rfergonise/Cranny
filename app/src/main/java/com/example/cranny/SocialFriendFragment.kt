@@ -19,6 +19,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 
 
 class SocialFriendFragment : Fragment() {
@@ -369,6 +370,7 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     holder.mcvBookButton1.visibility = View.VISIBLE
                     StartBookOnClick(books[0], holder.mcvBookButton1)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
+                    LoadBookCover(books[0], holder.ivBook1)
                 }
                 2 -> {
                     // show book containers
@@ -377,6 +379,8 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     StartBookOnClick(books[0], holder.mcvBookButton1)
                     StartBookOnClick(books[1], holder.mcvBookButton2)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
+                    LoadBookCover(books[0], holder.ivBook1)
+                    LoadBookCover(books[1], holder.ivBook2)
                 }
                 3 -> {
                     // show book containers
@@ -387,6 +391,9 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     StartBookOnClick(books[1], holder.mcvBookButton2)
                     StartBookOnClick(books[2], holder.mcvBookButton3)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_1row)
+                    LoadBookCover(books[0], holder.ivBook1)
+                    LoadBookCover(books[1], holder.ivBook2)
+                    LoadBookCover(books[2], holder.ivBook3)
                 }
                 4 -> {
                     // show book containers
@@ -399,6 +406,10 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     StartBookOnClick(books[2], holder.mcvBookButton3)
                     StartBookOnClick(books[3], holder.mcvBookButton4)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
+                    LoadBookCover(books[0], holder.ivBook1)
+                    LoadBookCover(books[1], holder.ivBook2)
+                    LoadBookCover(books[2], holder.ivBook3)
+                    LoadBookCover(books[3], holder.ivBook4)
                 }
                 5 -> {
                     // show book containers
@@ -413,6 +424,11 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     StartBookOnClick(books[3], holder.mcvBookButton4)
                     StartBookOnClick(books[4], holder.mcvBookButton5)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
+                    LoadBookCover(books[0], holder.ivBook1)
+                    LoadBookCover(books[1], holder.ivBook2)
+                    LoadBookCover(books[2], holder.ivBook3)
+                    LoadBookCover(books[3], holder.ivBook4)
+                    LoadBookCover(books[4], holder.ivBook5)
                 }
                 6 -> {
                     // show book containers
@@ -429,6 +445,12 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
                     StartBookOnClick(books[4], holder.mcvBookButton5)
                     StartBookOnClick(books[5], holder.mcvBookButton6)
                     newHeight = resource.getDimensionPixelSize(R.dimen.bookfriend_2row)
+                    LoadBookCover(books[0], holder.ivBook1)
+                    LoadBookCover(books[1], holder.ivBook2)
+                    LoadBookCover(books[2], holder.ivBook3)
+                    LoadBookCover(books[3], holder.ivBook4)
+                    LoadBookCover(books[4], holder.ivBook5)
+                    LoadBookCover(books[5], holder.ivBook6)
                 }
                 else -> {
                     // you should not be here, how did you get here?? \_(x_x)_/
@@ -446,6 +468,18 @@ class FriendFragmentAdapter(private val activity: DashboardActivity,private val 
 
         holder.mcvBookContainer.layoutParams.height = newHeight
         holder.mcvBookContainer.requestLayout()
+    }
+
+    private fun LoadBookCover(book: DisplayFeedBookInfo, ivBook: ImageView)
+    {
+        if(!book.strCoverURL.isNullOrBlank())
+        {
+            // load thumbnail
+            Glide.with(context).load(book.strCoverURL).into(ivBook)
+            // reset the scale
+            ivBook.scaleX = 1.0f
+            ivBook.scaleY = 1.0f
+        }
     }
     private fun StartBookOnClick(book: DisplayFeedBookInfo, button: MaterialCardView)
     {
