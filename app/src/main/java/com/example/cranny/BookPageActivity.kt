@@ -91,10 +91,14 @@ class BookPageActivity : AppCompatActivity() {
                     val exReview = bundle.getString("userReview")
                     val exPurchasedFrom = bundle.getString("purchasedFrom")
                     //last page not importing properly
+
                     val exUserPageRead = bundle.getInt("lastPageRead")
+                    val exTotalPageCount = bundle.getInt("totalPageCount")
+
                     val exBookID = bundle.getString("id")
                     val exIsFav = bundle.getBoolean("isFav")
                     val exUserFinished = bundle.getBoolean("userFinished")
+                    val exTime = bundle.getLong("time")
                     //username = bundle.getString("username")!!
                     val exThumbnailUrl = intent.getStringExtra("thumbnail") //added by will to show thumbnail in library book info
 
@@ -135,23 +139,23 @@ class BookPageActivity : AppCompatActivity() {
                         exRating, //var starRating: Float?,
                         exPublisher, //var publisher: String?,
                         exSummary, //var description: String?,
-                        0, //var pageCount: Int?,
-                        "", //var thumbnail: String?,
+                        exTotalPageCount, // "PageCount"
+                        exThumbnailUrl, //var thumbnail: String?,
                         exReview,  //var journalEntry: String?,
-                        0, //var userProgress: Int?,
+                        exUserPageRead, // "UserProgress"
                         exUserFinished, //var userFinished: Boolean,
                         isBookFavorite, //var isFav: Boolean?,
                         exPurchasedFrom, //var purchasedFrom: String?,
                         exMainCharacters, //var mainCharacters: String?,
                         exGenres, //var genres: String?,
                         exTags, //var tags: String?,
-                        0, //var lastReadDate: Long?,
-                        0, //var lastReadTime: Long?,
+                        exTime, //var lastReadDate: Long?,
+                        exTime, //var lastReadTime: Long?,
                         0, //var prevReadCount: Int?,
                         exStartDate!!, //var startDate: String,
                         "", //var endDate: String,
-                        0, //var totalPageCount: Int,
-                        exUserPageRead, //var totalPagesRead: Int
+                        exTotalPageCount, // "TotalPageCount"
+                        exUserPageRead, // "TotalPageRead"
                         exThumbnailUrl, //var thumbnail: String?,  //added by will to show thumbnail in library book info
 
                     )

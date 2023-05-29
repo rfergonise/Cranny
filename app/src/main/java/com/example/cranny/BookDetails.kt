@@ -83,6 +83,7 @@ class BookDetails : AppCompatActivity() {
                 // get access to the user's book data
                 val bookRepository = BookRepository(database, user)
                 // add the new book
+                //book.id = UUID.randomUUID().toString()
                 bookRepository.addBook(book, this)
                 Toast.makeText(this, "Book added", Toast.LENGTH_SHORT).show()
                 //take user back to their library

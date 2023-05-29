@@ -114,31 +114,33 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         for (books in bookRepository.Library) {
                             libraryBookList.add(
                                 Book(
-                                    books.id,
-                                    books.title,
-                                    books.authorNames,
-                                    books.publicationDate,
-                                    books.starRating,
-                                    books.publisher,
-                                    books.description,
-                                    books.pageCount,
-                                    books.thumbnail,
-                                    books.journalEntry,
-                                    books.userProgress,
-                                    books.userFinished,
-                                    books.isFav,
-                                    books.purchasedFrom,
-                                    books.mainCharacters,
-                                    books.genres,
-                                    books.tags,
-                                    books.lastReadDate,
-                                    books.lastReadTime,
-                                    books.prevReadCount,
-                                    books.startDate,
-                                    books.endDate,
-                                    books.totalPageCount,
-                                    books.totalPagesRead,
-                            ))
+                                    books.id, // id
+                                    books.title, //title
+                                    books.authorNames, // author
+                                    books.publicationDate, // pub date
+                                    books.starRating, // star rating
+                                    books.publisher, // pub
+                                    books.description, //summary
+                                    books.pageCount, // PAGE COUNT
+                                    books.thumbnail, // thumbnail
+                                    books.journalEntry, // journal entry
+                                    books.userProgress, // PAGES READ
+                                    books.userFinished, // isFinished
+                                    books.isFav, // isFavorite
+                                    books.purchasedFrom, // purchase from
+                                    books.mainCharacters, // main characters
+                                    books.genres, // genres
+                                    books.tags, // tags
+                                    books.lastReadDate, // time
+                                    books.lastReadTime, // time
+                                    books.prevReadCount, // PREV
+                                    books.startDate, // started
+                                    books.endDate, // ended
+                                    books.totalPageCount, // PAGE COUNT
+                                    books.totalPagesRead, // PAGES READ
+                                    books.isbn // isbn
+                                )
+                            )
                         }
                     }
                     bookRepository.stopBookListener()
@@ -160,10 +162,13 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                         intent.putExtra("purchasedFrom", libraryBookList[position].purchasedFrom)
                         intent.putExtra("userReview", libraryBookList[position].journalEntry)
                         intent.putExtra("summary", libraryBookList[position].description)
-                        //for some reason page count works but not total pages read, will leave as is for now
-                        intent.putExtra("lastPageRead", libraryBookList[position].pageCount)
+
+                        intent.putExtra("lastPageRead", libraryBookList[position].totalPagesRead)
+                        intent.putExtra("totalPageCount", libraryBookList[position].totalPageCount)
+
                         intent.putExtra("id", libraryBookList[position].id)
                         intent.putExtra("isFav", libraryBookList[position].isFav)
+                        intent.putExtra("time", libraryBookList[position].lastReadTime)
                         //adding thumbnail to the intent
                         intent.putExtra("thumbnail", libraryBookList[position].thumbnail)
                         startActivity(intent)

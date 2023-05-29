@@ -463,25 +463,54 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
                     val Tags = bookSnapshot.child("Tags").value as? String ?: ""
                     val Thumbnail = bookSnapshot.child("Thumbnail").value as? String ?: ""
                     val Title = bookSnapshot.child("Title").value as? String ?: ""
+
                     val userProgress = bookSnapshot.child("UserProgress").value as? Long
                     val UserProgressInt = userProgress?.toInt()
+
                     val StarRating = bookSnapshot.child("StarRating").getValue(Double::class.java)
                     val StarRatingFloat = StarRating?.toFloat()
                     val UserFinished = bookSnapshot.child("UserFinished").value as? Boolean ?: false
                     val IsFavorite = bookSnapshot.child("IsFavorite").value as? Boolean ?: false
                     val StartDate = bookSnapshot.child("StartDate").value as? String ?: ""
+
                     val pageCount = bookSnapshot.child("PageCount").value as? Long
                     val pageCountInt = pageCount?.toInt() ?: 0
+
                     val PrevReadCount = bookSnapshot.child("PrevReadCount").value as? Long
                     val PrevReadCountInt = PrevReadCount?.toInt() ?: 0
+
                     val TotalPageCount = bookSnapshot.child("TotalPageCount").value as? Int ?: 0
                     val TotalPageRead = bookSnapshot.child("TotalPageRead").value as? Int ?: 0
+
                     val ISBN = bookSnapshot.child("ISBN").value as? String ?: ""
 
 
-                    var book: Book = Book(Id, Title, AuthorNames, PublicationDate, StarRatingFloat, Publisher, Description, pageCountInt, Thumbnail,
-                    JournalEntry, UserProgressInt, UserFinished, IsFavorite, PurchaseFrom, MainCharacters, Genres, Tags, LastReadDate, LastReadTime,
-                    PrevReadCountInt, StartDate, EndDate, TotalPageCount!!, TotalPageRead!!, ISBN)
+                    var book = Book(
+                        Id,
+                        Title,
+                        AuthorNames,
+                        PublicationDate,
+                        StarRatingFloat,
+                        Publisher,
+                        Description,
+                        TotalPageCount!!, // PAGE COUNT // "PageCount"
+                        Thumbnail,
+                        JournalEntry,
+                        TotalPageRead!!, // PAGES READ // "UserProgress"
+                        UserFinished,
+                        IsFavorite,
+                        PurchaseFrom,
+                        MainCharacters,
+                        Genres,
+                        Tags,
+                        LastReadDate,
+                        LastReadTime,
+                        PrevReadCountInt,
+                        StartDate,
+                        EndDate,
+                        TotalPageCount!!, // PAGE COUNT  // "TotalPageCount"
+                        TotalPageRead!!, // PAGES READ // "TotalPageRead"
+                        ISBN)
                     Library.add(book)
                 }
                 _isBookDataReady.postValue(true) // inform the caller we have filled the list with each book
@@ -493,8 +522,10 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
 
     fun updateBookData(book: Book)
     {
-        val bookDataRef = database.getReference("UserData").child(user.id).child("Books").child(book.id)
+        val bookRef = database.reference.child("UserData").child(user.id).child("Books").child(book.id)
+        bookRef.removeValue()
 
+        val bookDataRef = database.getReference("UserData").child(user.id).child("Books").child(book.id)
         bookDataRef.child("AuthorNames").setValue(book.authorNames)
         bookDataRef.child("Description").setValue(book.description)
         bookDataRef.child("EndDate").setValue(book.endDate)
@@ -503,7 +534,7 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.child("LastReadDate").setValue(book.lastReadDate)
         bookDataRef.child("LastReadTime").setValue(book.lastReadTime)
         bookDataRef.child("MainCharacters").setValue(book.mainCharacters)
-        bookDataRef.child("PageCount").setValue(book.pageCount)
+        bookDataRef.child("PageCount").setValue(book.totalPageCount)
         bookDataRef.child("PrevReadCount").setValue(book.prevReadCount)
         bookDataRef.child("PublicationDate").setValue(book.publicationDate)
         bookDataRef.child("Publisher").setValue(book.publisher)
@@ -514,41 +545,42 @@ class BookRepository(private val database: FirebaseDatabase, private val user: F
         bookDataRef.child("Thumbnail").setValue(book.thumbnail)
         bookDataRef.child("Title").setValue(book.title)
         bookDataRef.child("UserFinished").setValue(book.userFinished)
-        bookDataRef.child("UserProgress").setValue(book.userProgress)
+        bookDataRef.child("UserProgress").setValue(book.totalPagesRead)
         bookDataRef.child("IsFavorite").setValue(book.isFav)
         bookDataRef.child("TotalPageCount").setValue(book.totalPageCount)
         bookDataRef.child("TotalPageRead").setValue(book.totalPagesRead)
+        bookDataRef.child("Id").setValue(book.id)
         bookDataRef.child("ISBN").setValue(book.isbn)
     }
 
     fun addBook(book: Book, owner: LifecycleOwner)
     {
-        val bookDataRef = database.getReference("UserData").child(user.id).child("Books")
-        bookDataRef.child(book.id).child("AuthorNames").setValue(book.authorNames)
-        bookDataRef.child(book.id).child("Description").setValue(book.description)
-        bookDataRef.child(book.id).child("EndDate").setValue(book.endDate)
-        bookDataRef.child(book.id).child("Genres").setValue(book.genres)
-        bookDataRef.child(book.id).child("Id").setValue(book.id)
-        bookDataRef.child(book.id).child("JournalEntry").setValue(book.journalEntry)
-        bookDataRef.child(book.id).child("LastReadDate").setValue(book.lastReadDate)
-        bookDataRef.child(book.id).child("LastReadTime").setValue(book.lastReadTime)
-        bookDataRef.child(book.id).child("MainCharacters").setValue(book.mainCharacters)
-        bookDataRef.child(book.id).child("PageCount").setValue(book.pageCount)
-        bookDataRef.child(book.id).child("PrevReadCount").setValue(book.prevReadCount)
-        bookDataRef.child(book.id).child("PublicationDate").setValue(book.publicationDate)
-        bookDataRef.child(book.id).child("Publisher").setValue(book.publisher)
-        bookDataRef.child(book.id).child("PurchaseFrom").setValue(book.purchasedFrom)
-        bookDataRef.child(book.id).child("StarRating").setValue(book.starRating)
-        bookDataRef.child(book.id).child("StartDate").setValue(book.startDate)
-        bookDataRef.child(book.id).child("Tags").setValue(book.tags)
-        bookDataRef.child(book.id).child("Thumbnail").setValue(book.thumbnail)
-        bookDataRef.child(book.id).child("Title").setValue(book.title)
-        bookDataRef.child(book.id).child("UserFinished").setValue(book.userFinished)
-        bookDataRef.child(book.id).child("UserProgress").setValue(book.userProgress)
-        bookDataRef.child(book.id).child("IsFavorite").setValue(book.isFav)
-        bookDataRef.child(book.id).child("TotalPageCount").setValue(book.totalPageCount)
-        bookDataRef.child(book.id).child("TotalPageRead").setValue(book.totalPagesRead)
-        bookDataRef.child(book.id).child("ISBN").setValue(book.isbn)
+        val bookDataRef = database.getReference("UserData").child(user.id).child("Books").child(book.id)
+        bookDataRef.child("AuthorNames").setValue(book.authorNames)
+        bookDataRef.child("Description").setValue(book.description)
+        bookDataRef.child("EndDate").setValue(book.endDate)
+        bookDataRef.child("Genres").setValue(book.genres)
+        bookDataRef.child("JournalEntry").setValue(book.journalEntry)
+        bookDataRef.child("LastReadDate").setValue(book.lastReadDate)
+        bookDataRef.child("LastReadTime").setValue(book.lastReadTime)
+        bookDataRef.child("MainCharacters").setValue(book.mainCharacters)
+        bookDataRef.child("PageCount").setValue(book.totalPageCount)
+        bookDataRef.child("PrevReadCount").setValue(book.prevReadCount)
+        bookDataRef.child("PublicationDate").setValue(book.publicationDate)
+        bookDataRef.child("Publisher").setValue(book.publisher)
+        bookDataRef.child("PurchaseFrom").setValue(book.purchasedFrom)
+        bookDataRef.child("StarRating").setValue(book.starRating)
+        bookDataRef.child("StartDate").setValue(book.startDate)
+        bookDataRef.child("Tags").setValue(book.tags)
+        bookDataRef.child("Thumbnail").setValue(book.thumbnail)
+        bookDataRef.child("Title").setValue(book.title)
+        bookDataRef.child("UserFinished").setValue(book.userFinished)
+        bookDataRef.child("UserProgress").setValue(book.totalPagesRead)
+        bookDataRef.child("IsFavorite").setValue(book.isFav)
+        bookDataRef.child("TotalPageCount").setValue(book.totalPageCount)
+        bookDataRef.child("TotalPageRead").setValue(book.totalPagesRead)
+        bookDataRef.child("Id").setValue(book.id)
+        bookDataRef.child("ISBN").setValue(book.isbn)
 
         // update user's book count
         val userProfileRepo = ProfileRepository(database, user.id)
@@ -1202,9 +1234,9 @@ class SetupProfileRepository(
                     val title = child.child("Title").value as String
                     val author = child.child("AuthorNames").value as String
                     val coverURL = child.child("Thumbnail").value as String
-                    val lReadPages = child.child("TotalPageRead").value as? Long ?: 0L
+                    val lReadPages = child.child("TotalPageRead").value as Long ?: 0L
                     val readPages = lReadPages.toInt()
-                    val lTotalPages = child.child("TotalPageCount").value as? Long ?: 0L
+                    val lTotalPages = child.child("TotalPageCount").value as Long ?: 0L
                     val totalPages = lTotalPages.toInt()
                     val nTotalReadChapters = 1 // todo remove hard coded values for chapter
                     val nCountChapter = 3
@@ -1219,7 +1251,6 @@ class SetupProfileRepository(
                         is Double -> ratingValue.toFloat()
                         else -> 0f // Set a default value here, or choose a suitable fallback value
                     }
-                    val isFinished = child.child("UserFinished").value as Boolean
                     val lastReadTime = child.child("LastReadTime").value as Long
                     val book = DisplayFeedBookInfo(
                         username,

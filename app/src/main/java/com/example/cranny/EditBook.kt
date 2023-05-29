@@ -188,25 +188,23 @@ class EditBook : AppCompatActivity() {
             var bookJournalEntry: String = if(bookOriginal.journalEntry != editJournalEntry.text.toString()) editJournalEntry.text.toString()
             else bookOriginal.journalEntry!!
 
-            var bookTotalPageCount: Int = if(bookOriginal.totalPageCount != editTotalPageCount.text.toString().toInt()) editTotalPageCount.text.toString().toInt()
-            else bookOriginal.totalPageCount!!
+            val originalCount: Int = bookOriginal.totalPageCount!!
+            val newCount: Int = editTotalPageCount.text.toString().toInt()
+            var saveCount: Int = if(originalCount != newCount) newCount
+            else originalCount
 
-            var bookTotalPageRead: Int = if(bookOriginal.totalPagesRead != editTotalPagesRead.text.toString().toInt()) editTotalPagesRead.text.toString().toInt()
-            else bookOriginal.totalPagesRead!!
+            val originalRead: Int = bookOriginal.totalPagesRead!!
+            val newRead: Int = editTotalPagesRead.text.toString().toInt()
+            var saveRead: Int = if(originalRead != newRead) newRead
+            else originalRead
 
             var isUserFinished = false
             var bookEndDate: String = bookOriginal.endDate!!
             // if they finished the book
-            if(bookTotalPageCount == bookTotalPageRead)
+            if(saveRead == saveCount)
             {
                 isUserFinished = true
                 bookEndDate = bookLastTimeRead.toString()
-            }
-
-            var bookPrevReadCount: Int = bookOriginal.prevReadCount!!
-            if(bookOriginal.totalPagesRead < bookTotalPageRead)
-            {
-                bookPrevReadCount = bookOriginal.totalPagesRead
             }
 
             val updatedBook = Book(
@@ -217,10 +215,10 @@ class EditBook : AppCompatActivity() {
                 bookStarRating,
                 bookPublisher,
                 bookSummary,
-                bookTotalPageCount,
+                saveCount, // "PageCount"
                 bookOriginal.thumbnail,
                 bookJournalEntry,
-                bookTotalPageRead,
+                saveRead, // "UserProgress"
                 isUserFinished,
                 bookOriginal.isFav,
                 bookPurchasedFrom,
@@ -229,11 +227,11 @@ class EditBook : AppCompatActivity() {
                 bookTags,
                 bookLastTimeRead,
                 bookLastTimeRead,
-                bookPrevReadCount,
+                0,
                 bookOriginal.startDate,
                 bookEndDate,
-                bookTotalPageCount,
-                bookTotalPageRead,
+                saveCount, // "TotalPageCount"
+                saveRead, // "TotalPageRead"
                 bookOriginal.isbn
             )
             // now that we have the update book, let's update it on the database

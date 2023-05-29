@@ -8,15 +8,15 @@ import java.util.*
 
 @Entity(tableName = "books")
 data class Book(
-    @PrimaryKey val id: String,
-    var title: String ,
+    @PrimaryKey var id: String,
+    var title: String,
     var authorNames: String = "",
     var publicationDate: String? = "",
     var starRating: Float? = 0f,
     var publisher: String? = "",
     var description: String?,
     var pageCount: Int? = 0,
-    var thumbnail: String? ,
+    var thumbnail: String?,
     var journalEntry: String? = "",
     var userProgress: Int? = 0,
     var userFinished: Boolean = false,
@@ -35,5 +35,5 @@ data class Book(
     var isbn: String? = "",
 
 
-) : Serializable
+    ) : Serializable
 
