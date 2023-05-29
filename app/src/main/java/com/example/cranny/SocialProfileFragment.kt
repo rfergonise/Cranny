@@ -67,12 +67,6 @@ class SocialProfileFragment : Fragment() {
         tvNoRecent = fragmentView .findViewById(R.id.tvNoRecent)
         rvFeed = fragmentView.findViewById(R.id.rvSocial)
 
-        val friendButton = fragmentView.findViewById<MaterialCardView>(R.id.cvFriendCount)
-        friendButton.setOnClickListener{
-            val i = Intent(requireContext(), MainActivity::class.java)
-            startActivity(i)
-        }
-
         // load user data from database into profile text views / image view
         //setUpSocialProfile()
         SetUpProfile()
