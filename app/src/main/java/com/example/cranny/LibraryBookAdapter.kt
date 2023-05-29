@@ -40,7 +40,6 @@ class LibraryBookAdapter(
             .load(libraryDataToDisplay[position].bookImage)  // Assuming bookCoverURL is the name of the field containing the URL of the book cover image
             .error(R.drawable.logo_mid_green)  // A placeholder image in case of any error while loading the actual image
             .into(holder.libBookImage)
-
         }
 
         inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),

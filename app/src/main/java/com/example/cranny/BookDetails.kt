@@ -31,11 +31,10 @@ class BookDetails : AppCompatActivity() {
     private lateinit var bookIV: ImageView
     private lateinit var backButton: Button
 
-    private lateinit var profileRepo: ProfileRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // attach to the ui elements
         setContentView(R.layout.activity_book_details)
         titleTV = findViewById(R.id.idTVTitle)
         authorTV = findViewById(R.id.idTVSubTitle)
@@ -47,69 +46,55 @@ class BookDetails : AppCompatActivity() {
         bookIV = findViewById(R.id.idIVbook)
         backButton = findViewById(R.id.idBtnBack)
 
+        // get the book they clicked on
         val book: Book? = intent.getSerializableExtra("book") as? Book
-        if(book != null){
+
+        if (book != null) {
+            // if the pass was successful
+            // load the book's info into the ui
             titleTV.text = book.title
             authorTV.text = book.authorNames
             publisherTV.text = book.publisher
             descriptionTV.text = book.description
             pageCountTV.text = book.pageCount.toString()
             publishDateTV.text = book.publicationDate
-
-
             Picasso.get().load(book.thumbnail).into(bookIV)
-
+            // all them to click add or back after loading info
+            AllowButtonLogic(book)
         }
+        else finish()
+    }
 
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            // handle this case if needed
-        } else {
-            val userId = currentUser.uid
+    private fun AllowButtonLogic(book: Book)
+    {
+        // Add Button On Click Listener
+        addBtn.setOnClickListener { view: View ->
+            Toast.makeText(this, "Adding book...", Toast.LENGTH_SHORT).show()
+            // declare and initialize needed firebase variables
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser!!.uid
             val database = FirebaseDatabase.getInstance()
-            profileRepo = ProfileRepository(database, userId)
-
-            // Initialize addBtn here before setting the observer
-            addBtn.setOnClickListener { view: View ->
-                val book = intent.getSerializableExtra("book") as Book?
-                if (book != null) {
-                    book.totalPagesRead = 0
-                    book.starRating = 0f
-                    book.journalEntry = ""
-                    book.userFinished = false
-                    book.userProgress = 0
-                    book.isFav = false
-                    book.tags = ""
-                    book.lastReadTime = 0
-                    book.lastReadDate = 0
-                    book.startDate = ""
-                    book.purchasedFrom = ""
-                    book.totalPageCount = 0
-                    book.thumbnail = ""
-
-
-                    //Saves the created book and places it in the users library
-                    val username: String? = profileRepo.profileData.value?.username
-                    val user: Friend = Friend(userId, username as String, false)
-                    val bookRepository = BookRepository(database, user)
-                    bookRepository.addBook(book, this)
-                    Toast.makeText(this, "Book added", Toast.LENGTH_SHORT).show()
-
-                    //take user back to their library
-                    val intent = Intent(this, LibraryActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, "No book to add", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            profileRepo.profileData.observe(this@BookDetails, Observer { userProfile ->
-                // Do something with userProfile if needed
+            // get the user's username
+            val profileRepo = ProfileRepository(database, userId)
+            profileRepo.profileData.observe(this, Observer { userProfile ->
+                val username: String = userProfile.username
+                // create a user object
+                val user = Friend(userId, username, false)
+                // get access to the user's book data
+                val bookRepository = BookRepository(database, user)
+                // add the new book
+                bookRepository.addBook(book, this)
+                Toast.makeText(this, "Book added", Toast.LENGTH_SHORT).show()
+                //take user back to their library
+                val intent = Intent(this, LibraryActivity::class.java)
+                startActivity(intent)
             })
+            profileRepo.stopProfileListener()
         }
+
+        // Back Button On Click Listener
         backButton.setOnClickListener {
             finish()
         }
     }
-
 }

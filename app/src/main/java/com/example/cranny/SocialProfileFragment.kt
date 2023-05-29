@@ -213,7 +213,6 @@ class ProfileFragmentAdapter(private val activity: DashboardActivity, val contex
         return data.bookGrouping.size
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        // todo load book covers
         SetUpBooks(holder, data.bookGrouping[position])
     }
 

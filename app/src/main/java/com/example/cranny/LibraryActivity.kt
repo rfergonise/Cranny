@@ -41,20 +41,24 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
         }
     }
 
-    private fun getLibraryRecyclerData() {
+    private fun getLibraryRecyclerData()
+    {
         val libraryRecyclerBookList = ArrayList<LibraryBookRecyclerData>()
+        // get user profile data
         val database = FirebaseDatabase.getInstance()
         val profileRepo = ProfileRepository(database, currentUser!!.uid)
         profileRepo.profileData.observe(this, Observer { userProfile ->
             username = userProfile.username
+            // get user book data
             val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
             bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
+                // when the book data is ready
                 if (isBookDataReady) {
+                    // get book count
                     val bookCount = bookRepository.Library.size
-
                     if (bookCount > 0) {
+                        // if we have books, set them up for the recycler view
                         for (books in bookRepository.Library) {
-
                             libraryRecyclerBookList.add(
                                 LibraryBookRecyclerData(
                                     books.id,
@@ -82,6 +86,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                                     username,
                                 )
                             )}
+                        // once we have the book data needed for the rv, attach the adapter
                             libraryRecycler.adapter =
                                 LibraryBookAdapter(libraryRecyclerBookList, this@LibraryActivity)
                             libraryRecycler.layoutManager = LinearLayoutManager(this)
@@ -100,8 +105,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
         if (username != "admin") {
 
             val database = FirebaseDatabase.getInstance()
-            val bookRepository =
-                BookRepository(database, Friend(currentUser!!.uid, username, false))
+            val bookRepository = BookRepository(database, Friend(currentUser!!.uid, username, false))
             bookRepository.isBookDataReady.observe(this, Observer { isBookDataReady ->
                 if (isBookDataReady) {
                     val libraryBookList = ArrayList<Book>()
@@ -139,6 +143,7 @@ class LibraryActivity : AppCompatActivity(), LibraryBookAdapter.onBookClickListe
                     }
                     bookRepository.stopBookListener()
 
+                    // display book details when clicked on
                     if (libraryBookList.isNotEmpty()) {
                         val intent = Intent(this, BookPageActivity::class.java)
                         intent.putExtra("title", libraryBookList[position].title)
