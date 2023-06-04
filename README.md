@@ -5,8 +5,8 @@
 <p>Cranny's development is finished.</p>
 
 <h3>Development Videos</h3>
-Month One: https://youtu.be/kXXkAOJansc
-Month Two(final build): https://youtu.be/JsOYlmfvhsg
+<P>Month One: https://youtu.be/kXXkAOJansc</P>
+<P>Month Two(final build): https://youtu.be/JsOYlmfvhsg</P>
 
 <h3>Acknowledgments</h3>
 <p>We would like to thank <u>Austin Cordle</u> for his guidance and support during the development of the Cranny app.</p>
